@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
@@ -31,11 +31,22 @@ const campusHighlights = [
   },
 ]
 
+const AUTO_SLIDE_DELAY = 4500
+
 export default function CampusPreview() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [direction, setDirection] = useState(0)
 
   const current = campusHighlights[activeIndex]
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setDirection(1)
+      setActiveIndex((prev) => (prev + 1) % campusHighlights.length)
+    }, AUTO_SLIDE_DELAY)
+
+    return () => window.clearTimeout(timer)
+  }, [activeIndex])
 
   const goNext = () => {
     setDirection(1)
@@ -49,9 +60,13 @@ export default function CampusPreview() {
 
   return (
     <>
-      <style>{`
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
-      `}</style>
+      `,
+        }}
+      />
 
       <section className="relative py-24 md:py-32 px-4 overflow-hidden">
         {/* Decorative background glow */}
@@ -97,57 +112,76 @@ export default function CampusPreview() {
               boxShadow: "0 30px 80px -40px rgba(0,0,0,0.6)",
             }}
           >
-            <AnimatePresence mode="wait" custom={direction}>
-              <motion.div
-                key={activeIndex}
-                custom={direction}
-                variants={{
-                  enter: (d: number) => ({ opacity: 0, x: d > 0 ? 50 : -50, filter: "blur(4px)" }),
-                  center: { opacity: 1, x: 0, filter: "blur(0px)" },
-                  exit: (d: number) => ({ opacity: 0, x: d > 0 ? -50 : 50, filter: "blur(4px)" }),
-                }}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16 flex-1"
-              >
-                {/* Visual */}
-                <div className="relative w-full lg:w-1/2 h-[280px] md:h-[400px] rounded-[24px] overflow-hidden group">
-                  <div
-                    className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700"
-                    style={{ backgroundImage: `url(${current.image})` }}
-                  />
+            <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16 flex-1">
+              {/* Visual */}
+              <div className="relative w-full lg:w-1/2 h-[280px] md:h-[400px] rounded-[24px] overflow-hidden group">
+                <AnimatePresence initial={false} custom={direction}>
+                  <motion.div
+                    key={current.image}
+                    custom={direction}
+                    variants={{
+                      enter: (d: number) => ({ opacity: 0, x: d > 0 ? 48 : -48, filter: "blur(6px)" }),
+                      center: { opacity: 1, x: 0, filter: "blur(0px)" },
+                      exit: (d: number) => ({ opacity: 0, x: d > 0 ? -48 : 48, filter: "blur(6px)" }),
+                    }}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute inset-0"
+                  >
+                    <div
+                      className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700"
+                      style={{ backgroundImage: `url(${current.image})` }}
+                    />
+                  </motion.div>
+                </AnimatePresence>
                   <div className="absolute inset-0 bg-gradient-to-t from-[#060d16]/60 via-transparent to-transparent pointer-events-none" />
-                </div>
+              </div>
 
-                {/* Information */}
-                <div className="w-full lg:w-1/2 flex flex-col justify-center">
-                  <span
-                    className="text-[10px] tracking-[0.25em] font-bold uppercase mb-3"
-                    style={{ color: "#C8A96E" }}
+              {/* Information */}
+              <div className="relative w-full lg:w-1/2 min-h-[300px] md:min-h-[320px] lg:min-h-[360px]">
+                <AnimatePresence initial={false} custom={direction}>
+                  <motion.div
+                    key={current.id}
+                    custom={direction}
+                    variants={{
+                      enter: (d: number) => ({ opacity: 0, x: d > 0 ? 32 : -32, filter: "blur(4px)" }),
+                      center: { opacity: 1, x: 0, filter: "blur(0px)" },
+                      exit: (d: number) => ({ opacity: 0, x: d > 0 ? -32 : 32, filter: "blur(4px)" }),
+                    }}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute inset-0 flex flex-col justify-center"
                   >
-                    {current.subtitle}
-                  </span>
+                    <span
+                      className="text-[10px] tracking-[0.25em] font-bold uppercase mb-3"
+                      style={{ color: "#C8A96E" }}
+                    >
+                      {current.subtitle}
+                    </span>
 
-                  <h3
-                    className="text-3xl md:text-5xl font-semibold text-white mb-6 leading-[1.1]"
-                    style={{ fontFamily: "'Cormorant Garamond', serif" }}
-                  >
-                    {current.title}
-                  </h3>
+                    <h3
+                      className="text-3xl md:text-5xl font-semibold text-white mb-6 leading-[1.1]"
+                      style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                    >
+                      {current.title}
+                    </h3>
 
-                  <p
-                    className="text-white/45 text-sm md:text-base font-light leading-relaxed mb-8 max-w-xl"
-                    style={{ fontFamily: "'DM Sans', sans-serif" }}
-                  >
-                    {current.description}
-                  </p>
+                    <p
+                      className="text-white/45 text-sm md:text-base font-light leading-relaxed mb-8 max-w-xl"
+                      style={{ fontFamily: "'DM Sans', sans-serif" }}
+                    >
+                      {current.description}
+                    </p>
 
-                  <div className="h-px w-full max-w-[200px] bg-gradient-to-r from-[#C8A96E]/40 to-transparent" />
-                </div>
-              </motion.div>
-            </AnimatePresence>
+                    <div className="h-px w-full max-w-[200px] bg-gradient-to-r from-[#C8A96E]/40 to-transparent" />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
 
             {/* Slider Navigation */}
             <div className="flex items-center justify-between mt-10 pt-6 border-t border-white/[0.04]">

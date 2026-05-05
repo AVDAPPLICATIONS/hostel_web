@@ -354,11 +354,15 @@ export default function Gallery() {
   return (
     <>
       {/* Google Font import */}
-      <style>{`
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap');
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-      `}</style>
+      `,
+        }}
+      />
 
       <section
         id="gallery"

@@ -172,9 +172,13 @@ export default function Contact() {
 
   return (
     <>
-      <style>{`
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
-      `}</style>
+      `,
+        }}
+      />
 
       <section
         id="contact"

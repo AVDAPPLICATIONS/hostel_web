@@ -64,9 +64,13 @@ export default function QuickLinks() {
 
   return (
     <>
-      <style>{`
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
-      `}</style>
+      `,
+        }}
+      />
       
       <section className="relative z-20 py-16 md:py-24 px-4">
         <div className="container mx-auto max-w-7xl">

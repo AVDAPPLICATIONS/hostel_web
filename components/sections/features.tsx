@@ -231,11 +231,15 @@ export default function Features() {
 
   return (
     <>
-      <style>{`
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
         .features-scroll::-webkit-scrollbar { display: none; }
         .features-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-      `}</style>
+      `,
+        }}
+      />
 
       <section
         className="relative py-24 md:py-36 overflow-hidden"

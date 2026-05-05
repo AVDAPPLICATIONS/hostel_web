@@ -76,7 +76,9 @@ export default function Rooms() {
 
   return (
     <>
-      <style>{`
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap');
         .rooms-grain {
           position: absolute; inset: 0; pointer-events: none; opacity: 0.04;
@@ -85,7 +87,9 @@ export default function Rooms() {
         }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      `}</style>
+      `,
+        }}
+      />
 
       <section
         id="rooms"
