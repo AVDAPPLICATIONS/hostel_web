@@ -26,7 +26,7 @@ const reviews = [
       "Stepping out from the protected environment was a challenge. Admitting me here was a blessing. I secured my academics and gained cultural values.",
     tag: "Current Resident",
     badge: "BLESSED ENVIRONMENT",
-    accent: "#8EB4D4",
+    accent: "#C8A96E",
   },
   {
     id: 3,
@@ -37,7 +37,8 @@ const reviews = [
       "Till date, if I miss anything in my academic life is staying at AVD. The atmosphere helped me crack CAT. I didn't make friends instead came out with a family.",
     tag: "Alumni · Batch 2018",
     badge: "LIFE IMPACT",
-    accent: "#A8B87A",
+    accent: "#C8A96E",
+    imagePosition: "object-top",
   },
 ]
 
@@ -229,7 +230,7 @@ export default function Reviews() {
                           alt={review.name}
                           width={200}
                           height={200}
-                          className="w-full h-full object-cover grayscale-[0.15] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
+                          className={`w-full h-full object-cover ${review.imagePosition || "object-center"} grayscale-[0.15] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500`}
                         />
                       </div>
                     </div>

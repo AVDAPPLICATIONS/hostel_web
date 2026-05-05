@@ -281,7 +281,7 @@ export default function Contact() {
                     className="text-2xl md:text-3xl font-semibold text-white mb-1"
                     style={{ fontFamily: "'Cormorant Garamond', serif" }}
                   >
-                    Registration Form
+                    ENQUIRY FORM
                   </h3>
                   <p className="text-white/30 text-xs md:text-sm font-light">
                     Please fill in all the details carefully
@@ -340,115 +340,84 @@ export default function Contact() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onSubmit={handleSubmit}
-                    className="space-y-10"
+                    className="space-y-8"
                   >
-                    {/* Section 1: Student Info */}
-                    <div>
-                      <SectionHeader icon={User} title="Student Information" step="01" />
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <FormInput
-                          name="firstName"
-                          label="First Name"
-                          placeholder="e.g. Rahul"
-                          required
-                        />
-                        <FormInput
-                          name="lastName"
-                          label="Surname / Last Name"
-                          placeholder="e.g. Patel"
-                          required
-                        />
-                      </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+                      <FormInput
+                        name="firstName"
+                        label="First Name (Student Name)"
+                        placeholder="e.g. Rahul"
+                        required
+                      />
+                      <FormInput
+                        name="middleName"
+                        label="Middle Name (Father Name)"
+                        placeholder="Full Name"
+                        required
+                      />
+                      <FormInput
+                        name="lastName"
+                        label="Last Name (Surname)"
+                        placeholder="e.g. Patel"
+                        required
+                      />
+                      <FormInput
+                        name="contactNo"
+                        label="Contact No."
+                        placeholder="+91 00000 00000"
+                        type="tel"
+                        required
+                      />
+                      <FormInput
+                        name="fatherContactNo"
+                        label="Father's Contact No."
+                        placeholder="+91 00000 00000"
+                        type="tel"
+                        required
+                      />
+                      <FormInput
+                        name="city"
+                        label="City / Village"
+                        placeholder="City"
+                        required
+                      />
+                      <FormInput
+                        name="district"
+                        label="District"
+                        placeholder="District"
+                        required
+                      />
+                      <FormInput
+                        name="state"
+                        label="State"
+                        placeholder="State"
+                        required
+                      />
+                      <FormInput
+                        name="school"
+                        label="School / College"
+                        placeholder="Current Institution"
+                        required
+                      />
+                      <FormInput
+                        name="course"
+                        label="Course / Std"
+                        placeholder="e.g. B.Tech / 12th"
+                        required
+                      />
+                      <FormInput
+                        name="semester"
+                        label="Semester"
+                        placeholder="e.g. 1st Sem"
+                      />
+                      <FormInput
+                        name="reference"
+                        label="Reference"
+                        placeholder="How did you hear about us?"
+                      />
                     </div>
 
-                    {/* Divider */}
-                    <div className="h-px bg-white/[0.04]" />
 
-                    {/* Section 2: Contact */}
-                    <div>
-                      <SectionHeader icon={Phone} title="Contact Information" step="02" />
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <FormInput
-                          name="contactNo"
-                          label="Student Contact"
-                          placeholder="+91 00000 00000"
-                          type="tel"
-                          required
-                        />
-                        <FormInput
-                          name="middleName"
-                          label="Father's Name"
-                          placeholder="Full Name"
-                          required
-                        />
-                        <FormInput
-                          name="fatherContactNo"
-                          label="Father's Contact"
-                          placeholder="+91 00000 00000"
-                          type="tel"
-                          required
-                          colSpan="md:col-span-2"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="h-px bg-white/[0.04]" />
-
-                    {/* Section 3: Address */}
-                    <div>
-                      <SectionHeader icon={MapPin} title="Address Details" step="03" />
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                        <FormInput
-                          name="city"
-                          label="City / Village"
-                          placeholder="City"
-                          required
-                        />
-                        <FormInput
-                          name="district"
-                          label="District"
-                          placeholder="District"
-                          required
-                        />
-                        <FormInput
-                          name="state"
-                          label="State"
-                          placeholder="State"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <div className="h-px bg-white/[0.04]" />
-
-                    {/* Section 4: Academic */}
-                    <div>
-                      <SectionHeader icon={GraduationCap} title="Academic Details" step="04" />
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <FormInput
-                          name="school"
-                          label="School / College"
-                          placeholder="Current Institution"
-                          required
-                        />
-                        <FormInput
-                          name="course"
-                          label="Course / Standard"
-                          placeholder="e.g. B.Tech / 12th"
-                          required
-                        />
-                        <FormInput
-                          name="semester"
-                          label="Semester / Year"
-                          placeholder="e.g. 1st Sem"
-                        />
-                        <FormInput
-                          name="reference"
-                          label="Reference"
-                          placeholder="How did you hear about us?"
-                        />
-                      </div>
-                    </div>
 
                     {/* Submit */}
                     <div className="pt-4">

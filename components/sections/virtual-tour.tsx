@@ -18,9 +18,9 @@ function Room3D({ roomType }: { roomType: string }) {
 
   const roomColors: Record<string, string> = {
     ac: "#C8A96E",
-    "non-ac": "#8EB4D4",
-    dormitory: "#A8B87A",
-    junior: "#D4A5A5",
+    "non-ac": "#C8A96E",
+    dormitory: "#C8A96E",
+    junior: "#C8A96E",
   }
 
   const color = roomColors[roomType] || "#C8A96E"
@@ -131,7 +131,7 @@ const tourOptions = [
     duration: "4 min",
     image: "https://www.avdvvn.org/assets/images/final%20room%204.jpg",
     highlights: ["Study Table", "Personal Wardrobe", "Balcony", "Ventilated"],
-    accent: "#8EB4D4",
+    accent: "#C8A96E",
   },
   {
     id: "dormitory",
@@ -141,7 +141,7 @@ const tourOptions = [
     duration: "5 min",
     image: "https://www.avdvvn.org/assets/images/d1.jpg",
     highlights: ["6 Sharing", "Spacious Layout", "Attached Bathroom", "Common Area"],
-    accent: "#A8B87A",
+    accent: "#C8A96E",
   },
   {
     id: "junior",
@@ -151,7 +151,7 @@ const tourOptions = [
     duration: "4 min",
     image: "https://www.avdvvn.org/assets/images/jr1.jpg",
     highlights: ["3 Sharing", "Study Environment", "Supervised", "Personal Wardrobe"],
-    accent: "#D4A5A5",
+    accent: "#C8A96E",
   },
 ]
 

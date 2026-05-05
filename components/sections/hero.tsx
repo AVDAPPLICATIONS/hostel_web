@@ -126,130 +126,154 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 h-screen flex items-center">
-        <motion.div className="max-w-5xl" style={{ y: textY }}>
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-10"
-          >
-            <span
-              className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full text-xs font-bold tracking-[0.2em] uppercase"
-              style={{
-                background: "rgba(200,169,110,0.08)",
-                border: "1px solid rgba(200,169,110,0.2)",
-                color: "#C8A96E",
-                backdropFilter: "blur(12px)",
-              }}
-            >
-              <motion.span
-                animate={{ opacity: [0.4, 1, 0.4] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="w-2 h-2 rounded-full bg-amber-400"
-              />
-              Redefining Student Living
-            </span>
-          </motion.div>
-
-          {/* Title */}
-          <div className="mb-10 space-y-1">
-            <TextReveal>
-              <h1
-                className="text-6xl md:text-8xl lg:text-9xl font-bold text-white leading-[0.92] tracking-tight"
-                style={{ fontFamily: "'Cormorant Garamond', serif" }}
-              >
-                Atmiya Vidya
-              </h1>
-            </TextReveal>
-            <TextReveal delay={0.2}>
-              <h1
-                className="text-6xl md:text-8xl lg:text-9xl font-bold leading-[0.92] tracking-tight"
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  color: "#C8A96E",
-                }}
-              >
-                Dham Hostel.
-              </h1>
-            </TextReveal>
-          </div>
-
-          {/* Description with staggered words */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="text-lg md:text-xl text-white/40 mb-14 max-w-2xl leading-relaxed font-light"
-          >
-            Not just a residence, but a platform to instill cultural and moral values alongside academic excellence in the lap of nature.
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col sm:flex-row gap-5 mb-20"
-          >
-            <Magnetic>
-              <motion.button
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => scrollToSection("#contact")}
-                className="relative group flex items-center justify-center gap-2.5 px-8 py-4 h-14 rounded-2xl font-semibold text-base overflow-hidden"
-                style={{
-                  background: "#C8A96E",
-                  color: "#0a1220",
-                  boxShadow: "0 16px 40px -10px rgba(200,169,110,0.4)",
-                }}
-              >
-                <span className="relative z-10">Book Your Stay</span>
-                <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-600 skew-x-12" />
-              </motion.button>
-            </Magnetic>
-
-            <Magnetic>
-              <motion.button
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => scrollToSection("#virtual-tour")}
-                className="flex items-center justify-center gap-2.5 px-8 py-4 h-14 rounded-2xl font-semibold text-base transition-all duration-300"
-                style={{
-                  background: "transparent",
-                  color: "#C8A96E",
-                  border: "1px solid rgba(200,169,110,0.35)",
-                  backdropFilter: "blur(8px)",
-                }}
-              >
-                <Play className="h-4 w-4" />
-                Virtual Tour
-              </motion.button>
-            </Magnetic>
-          </motion.div>
-
-          {/* Scroll Indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.5 }}
-            className="flex flex-col items-start gap-3"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-px h-10 bg-gradient-to-b from-[#C8A96E]/50 to-transparent" />
-              <span className="text-white/25 text-[10px] tracking-[0.25em] uppercase font-medium">
-                Scroll to explore
-              </span>
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
+          {/* Text Content */}
+          <motion.div className="max-w-2xl" style={{ y: textY }}>
+            {/* Badge */}
             <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="ml-[1px]"
+              initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="mb-10"
             >
-              <ArrowDown className="h-4 w-4 text-white/20" />
+              <span
+                className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full text-xs font-bold tracking-[0.2em] uppercase"
+                style={{
+                  background: "rgba(200,169,110,0.08)",
+                  border: "1px solid rgba(200,169,110,0.2)",
+                  color: "#C8A96E",
+                  backdropFilter: "blur(12px)",
+                }}
+              >
+                <motion.span
+                  animate={{ opacity: [0.4, 1, 0.4] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="w-2 h-2 rounded-full bg-amber-400"
+                />
+                Redefining Student Living
+              </span>
+            </motion.div>
+
+            {/* Title */}
+            <div className="mb-10 space-y-1">
+              <TextReveal>
+                <h1
+                  className="text-6xl md:text-8xl font-bold text-white leading-[0.92] tracking-tight"
+                  style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                >
+                  Atmiya Vidya
+                </h1>
+              </TextReveal>
+              <TextReveal delay={0.2}>
+                <h1
+                  className="text-6xl md:text-8xl font-bold leading-[0.92] tracking-tight"
+                  style={{
+                    fontFamily: "'Cormorant Garamond', serif",
+                    color: "#C8A96E",
+                  }}
+                >
+                  Dham Hostel.
+                </h1>
+              </TextReveal>
+            </div>
+
+            {/* Description with staggered words */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="text-lg md:text-xl text-white/40 mb-14 max-w-xl leading-relaxed font-light"
+            >
+              Not just a residence, but a platform to instill cultural and moral values alongside academic excellence in the lap of nature.
+            </motion.p>
+
+            {/* CTA Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 1, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col sm:flex-row gap-5 mb-20"
+            >
+              <Magnetic>
+                <motion.button
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => scrollToSection("#contact")}
+                  className="relative group flex items-center justify-center gap-2.5 px-8 py-4 h-14 rounded-2xl font-semibold text-base overflow-hidden"
+                  style={{
+                    background: "#C8A96E",
+                    color: "#0a1220",
+                    boxShadow: "0 16px 40px -10px rgba(200,169,110,0.4)",
+                  }}
+                >
+                  <span className="relative z-10">Book Your Stay</span>
+                  <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-600 skew-x-12" />
+                </motion.button>
+              </Magnetic>
+
+              <Magnetic>
+                <motion.button
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => scrollToSection("#virtual-tour")}
+                  className="flex items-center justify-center gap-2.5 px-8 py-4 h-14 rounded-2xl font-semibold text-base transition-all duration-300"
+                  style={{
+                    background: "transparent",
+                    color: "#C8A96E",
+                    border: "1px solid rgba(200,169,110,0.35)",
+                    backdropFilter: "blur(8px)",
+                  }}
+                >
+                  <Play className="h-4 w-4" />
+                  Virtual Tour
+                </motion.button>
+              </Magnetic>
+            </motion.div>
+
+            {/* Scroll Indicator */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 1.5 }}
+              className="flex flex-col items-start gap-3"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-px h-10 bg-gradient-to-b from-[#C8A96E]/50 to-transparent" />
+                <span className="text-white/25 text-[10px] tracking-[0.25em] uppercase font-medium">
+                  Scroll to explore
+                </span>
+              </div>
+              <motion.div
+                animate={{ y: [0, 8, 0] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="ml-[1px]"
+              >
+                <ArrowDown className="h-4 w-4 text-white/20" />
+              </motion.div>
             </motion.div>
           </motion.div>
-        </motion.div>
+
+          {/* Image Content */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="hidden lg:flex justify-end items-center relative"
+            style={{ y: textY }}
+          >
+            {/* Glowing backdrop for the image */}
+            <div className="absolute inset-0 bg-[#C8A96E]/10 blur-[100px] rounded-full" />
+            <img
+              src="https://www.avdvvn.org/assets/images/demo-content/swamiji.png"
+              alt="Swamiji"
+              className="relative z-10 max-h-[85vh] w-auto object-contain drop-shadow-[0_0_30px_rgba(200,169,110,0.3)] filter brightness-110"
+              style={{
+                maskImage: "linear-gradient(to bottom, black 80%, transparent 100%)",
+                WebkitMaskImage: "linear-gradient(to bottom, black 80%, transparent 100%)"
+              }}
+            />
+          </motion.div>
+        </div>
       </div>
 
       {/* Bottom gradient fade into next section */}

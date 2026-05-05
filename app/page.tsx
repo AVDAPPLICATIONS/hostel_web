@@ -3,6 +3,9 @@
 import { useEffect } from "react"
 import Navbar from "@/components/layout/navbar"
 import Hero from "@/components/sections/hero"
+import QuickLinks from "@/components/sections/quick-links"
+import CampusPreview from "@/components/sections/campus-preview"
+
 import Features from "@/components/sections/features"
 import Rooms from "@/components/sections/rooms"
 import VirtualTour from "@/components/sections/virtual-tour"
@@ -14,7 +17,7 @@ import Footer from "@/components/layout/footer"
 import ScrollProgress from "@/components/layout/scroll-progress"
 import FloatingElements from "@/components/layout/floating-elements"
 
-export default function Home() {
+export default function Home() {  
   useEffect(() => {
     // Only run on client side
     if (typeof window === "undefined" || typeof document === "undefined") return
@@ -80,6 +83,9 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <QuickLinks />
+        <CampusPreview />
+
         <Features />
         <Rooms />
         <VirtualTour />

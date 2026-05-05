@@ -29,7 +29,7 @@ const rooms = [
       "Well-ventilated rooms with premium furniture and all essential amenities — comfort that breathes with you.",
     image: "https://www.avdvvn.org/assets/images/final%20room%204.jpg",
     features: ["2 Sharing", "Attached Bathroom", "Ventilated", "Personal Wardrobe", "Study Table", "Laundry Bag"],
-    accent: "#8EB4D4",
+    accent: "#C8A96E",
     tourAvailable: true,
   },
   {
@@ -42,7 +42,7 @@ const rooms = [
       "Budget-friendly shared spaces that foster lifelong friendships and a culture of collaborative growth.",
     image: "https://www.avdvvn.org/assets/images/d1.jpg",
     features: ["6 Sharing", "Attached Bathroom", "Spacious", "Personal Wardrobe", "Study Table", "Laundry Bag"],
-    accent: "#A8B87A",
+    accent: "#C8A96E",
     tourAvailable: false,
   },
   {
@@ -55,7 +55,7 @@ const rooms = [
       "Dedicated spaces for high school students with extra care and supervision for a smooth transition.",
     image: "https://www.avdvvn.org/assets/images/jr1.jpg",
     features: ["3 Sharing", "Personal Wardrobe", "Study Table", "Laundry Bag"],
-    accent: "#D4A5A5",
+    accent: "#C8A96E",
     tourAvailable: true,
   },
 ]

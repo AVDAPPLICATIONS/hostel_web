@@ -15,6 +15,7 @@ const transportOptions = [
     route: "Via GJ SH 60 & 100 Feet Rd",
     mode: "Auto / Bus",
     accent: "#C8A96E",
+    originQuery: "Anand+Railway+Station,+Gujarat",
   },
   {
     icon: Bus,
@@ -23,7 +24,8 @@ const transportOptions = [
     distance: "6 km",
     route: "Via Zydus Hospital & GJ SH 60 Rd",
     mode: "Public Transport",
-    accent: "#8EB4D4",
+    accent: "#C8A96E",
+    originQuery: "New+Anand+Bus+Station,+Gujarat",
   },
   {
     icon: Car,
@@ -32,7 +34,8 @@ const transportOptions = [
     distance: "Highway",
     route: "Via Samarkha Chokdi & Bhalej Rd",
     mode: "Self Drive",
-    accent: "#A8B87A",
+    accent: "#C8A96E",
+    originQuery: "Samarkha+Chokdi,+Anand,+Gujarat",
   },
 ]
 
@@ -148,80 +151,27 @@ export default function Arrival() {
                   }}
                 />
 
-                {/* Decorative route lines */}
-                <svg
-                  className="absolute inset-0 w-full h-full opacity-[0.08]"
-                  viewBox="0 0 500 500"
-                  preserveAspectRatio="xMidYMid slice"
-                >
-                  <motion.path
-                    d="M50,400 C150,350 200,200 250,250 S350,150 450,100"
-                    fill="none"
-                    stroke={current.accent}
-                    strokeWidth="1.5"
-                    strokeDasharray="8,8"
-                    initial={{ pathLength: 0 }}
-                    whileInView={{ pathLength: 1 }}
-                    transition={{ duration: 2, delay: 0.5 }}
-                    viewport={{ once: true }}
+                {/* Interactive Google Maps - Preloaded for instant switching */}
+                {transportOptions.map((option, index) => (
+                  <iframe
+                    key={option.from}
+                    title={`Interactive Route Map - ${option.from}`}
+                    src={`https://maps.google.com/maps?saddr=${option.originQuery}&daddr=Atmiya+Vidya+Dham,+Bakrol+Road,+VV+Nagar,+Gujarat&output=embed`}
+                    className="absolute inset-0 w-full h-full border-0 transition-opacity duration-500 ease-in-out"
+                    allowFullScreen={false}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    style={{ 
+                      opacity: selected === index ? 1 : 0,
+                      pointerEvents: selected === index ? "auto" : "none",
+                      filter: "invert(90%) hue-rotate(180deg) brightness(85%) contrast(110%)",
+                      zIndex: selected === index ? 10 : 0
+                    }}
                   />
-                  <motion.path
-                    d="M30,300 C130,250 180,150 280,200 S380,100 480,50"
-                    fill="none"
-                    stroke="rgba(255,255,255,0.3)"
-                    strokeWidth="1"
-                    strokeDasharray="4,6"
-                    initial={{ pathLength: 0 }}
-                    whileInView={{ pathLength: 1 }}
-                    transition={{ duration: 2.5, delay: 0.8 }}
-                    viewport={{ once: true }}
-                  />
-                </svg>
+                ))}
 
-                {/* Center location marker */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="relative">
-                    {/* Pulse ring */}
-                    <motion.div
-                      animate={{ scale: [1, 2.5, 1], opacity: [0.4, 0, 0.4] }}
-                      transition={{ duration: 2.5, repeat: Infinity, ease: "easeOut" }}
-                      className="absolute inset-0 rounded-full"
-                      style={{ background: current.accent }}
-                    />
-                    <motion.div
-                      animate={{ scale: [1, 1.8, 1], opacity: [0.2, 0, 0.2] }}
-                      transition={{ duration: 2.5, repeat: Infinity, ease: "easeOut", delay: 0.3 }}
-                      className="absolute inset-0 rounded-full"
-                      style={{ background: current.accent }}
-                    />
-
-                    {/* Main card */}
-                    <div
-                      className="relative z-10 p-5 md:p-6 rounded-2xl backdrop-blur-md flex items-center gap-4"
-                      style={{
-                        background: "rgba(255,255,255,0.06)",
-                        border: `1px solid ${current.accent}30`,
-                        boxShadow: `0 20px 50px -15px ${current.accent}30`,
-                      }}
-                    >
-                      <div
-                        className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-                        style={{ background: `${current.accent}20`, border: `1px solid ${current.accent}35` }}
-                      >
-                        <MapPin className="h-5 w-5" style={{ color: current.accent }} />
-                      </div>
-                      <div>
-                        <h4
-                          className="font-semibold text-white text-sm md:text-base"
-                          style={{ fontFamily: "'Cormorant Garamond', serif" }}
-                        >
-                          Atmiya Vidya Dham
-                        </h4>
-                        <p className="text-white/35 text-xs">Bakrol Road, V.V. Nagar, Gujarat</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {/* Subtle dark overlay to blend the map with the theme */}
+                <div className="absolute inset-0 bg-[#0a1220]/20 pointer-events-none mix-blend-overlay" />
 
                 {/* Bottom status bar */}
                 <div className="absolute bottom-5 left-5 right-5">

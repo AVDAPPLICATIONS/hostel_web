@@ -32,25 +32,25 @@ const features = [
     icon: Car,
     title: "Free Parking",
     description: "Spacious parking facilities within campus grounds",
-    accent: "#8EB4D4",
+    accent: "#C8A96E",
   },
   {
     icon: Video,
     title: "CCTV Surveillance",
     description: "24/7 monitoring for complete student safety",
-    accent: "#A8B87A",
+    accent: "#C8A96E",
   },
   {
     icon: Shirt,
     title: "Laundry Service",
     description: "Comprehensive washing and ironing included",
-    accent: "#D4A5A5",
+    accent: "#C8A96E",
   },
   {
     icon: Dumbbell,
     title: "Gymnasium",
     description: "Fully equipped gym for physical fitness",
-    accent: "#7BA7BC",
+    accent: "#C8A96E",
   },
   {
     icon: Utensils,
@@ -62,31 +62,31 @@ const features = [
     icon: BookOpen,
     title: "Reading Room",
     description: "Dedicated quiet space for focused study",
-    accent: "#D4956A",
+    accent: "#C8A96E",
   },
   {
     icon: Users,
     title: "Hospitality",
     description: "Warm staff dedicated to student wellbeing",
-    accent: "#8EB4D4",
+    accent: "#C8A96E",
   },
   {
     icon: Smile,
     title: "Weekly Sabha",
     description: "Regular spiritual and cultural gatherings",
-    accent: "#A8B87A",
+    accent: "#C8A96E",
   },
   {
     icon: ArrowUpDown,
     title: "Lift Access",
     description: "24/7 elevator access across all floors",
-    accent: "#D4A5A5",
+    accent: "#C8A96E",
   },
   {
     icon: Trophy,
     title: "Sports Ground",
     description: "Spacious grounds for sports and activities",
-    accent: "#7BA7BC",
+    accent: "#C8A96E",
   },
   {
     icon: Tv,
@@ -98,21 +98,21 @@ const features = [
     icon: HeartPulse,
     title: "First-Aid",
     description: "Medical facilities available round the clock",
-    accent: "#D4956A",
+    accent: "#C8A96E",
   },
   {
     icon: Droplets,
     title: "Water Cooler",
     description: "Purified drinking water on every floor",
-    accent: "#8EB4D4",
+    accent: "#C8A96E",
   },
 ]
 
 const stats = [
   { number: "1000+", label: "Prayer Hall Capacity", accent: "#C8A96E" },
-  { number: "100%", label: "Vegetarian Meals", accent: "#A8B87A" },
-  { number: "24/7", label: "Medical Support", accent: "#D4956A" },
-  { number: "5★", label: "Hostel Rating", accent: "#7BA7BC" },
+  { number: "100%", label: "Vegetarian Meals", accent: "#C8A96E" },
+  { number: "24/7", label: "Medical Support", accent: "#C8A96E" },
+  { number: "5★", label: "Hostel Rating", accent: "#C8A96E" },
 ]
 
 // Tilt card with magnetic hover
