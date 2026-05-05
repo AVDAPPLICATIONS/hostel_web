@@ -1,7 +1,15 @@
 "use client"
 
+import type React from "react"
+
 import { useRef, useState, useCallback, useEffect } from "react"
-import { motion, useMotionValue, useTransform, useSpring, useInView } from "framer-motion"
+import {
+  motion,
+  useMotionValue,
+  useTransform,
+  useSpring,
+  useInView,
+} from "framer-motion"
 import {
   BookOpen,
   Users,
@@ -20,102 +28,88 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react"
+import { COLORS, UI } from "@/lib/theme"
 
 const features = [
   {
     icon: Landmark,
     title: "Temple",
     description: "A serene temple where peace and spirituality prevails",
-    accent: "#C8A96E",
   },
   {
     icon: Car,
     title: "Free Parking",
     description: "Spacious parking facilities within campus grounds",
-    accent: "#C8A96E",
   },
   {
     icon: Video,
     title: "CCTV Surveillance",
     description: "24/7 monitoring for complete student safety",
-    accent: "#C8A96E",
   },
   {
     icon: Shirt,
     title: "Laundry Service",
     description: "Comprehensive washing and ironing included",
-    accent: "#C8A96E",
   },
   {
     icon: Dumbbell,
     title: "Gymnasium",
     description: "Fully equipped gym for physical fitness",
-    accent: "#C8A96E",
   },
   {
     icon: Utensils,
     title: "Dining Hall",
     description: "Hygienic vegetarian food served fresh daily",
-    accent: "#C8A96E",
   },
   {
     icon: BookOpen,
     title: "Reading Room",
     description: "Dedicated quiet space for focused study",
-    accent: "#C8A96E",
   },
   {
     icon: Users,
     title: "Hospitality",
     description: "Warm staff dedicated to student wellbeing",
-    accent: "#C8A96E",
   },
   {
     icon: Smile,
     title: "Weekly Sabha",
     description: "Regular spiritual and cultural gatherings",
-    accent: "#C8A96E",
   },
   {
     icon: ArrowUpDown,
     title: "Lift Access",
     description: "24/7 elevator access across all floors",
-    accent: "#C8A96E",
   },
   {
     icon: Trophy,
     title: "Sports Ground",
     description: "Spacious grounds for sports and activities",
-    accent: "#C8A96E",
   },
   {
     icon: Tv,
     title: "TV Room",
     description: "Entertainment room for downtime and relaxation",
-    accent: "#C8A96E",
   },
   {
     icon: HeartPulse,
     title: "First-Aid",
     description: "Medical facilities available round the clock",
-    accent: "#C8A96E",
   },
   {
     icon: Droplets,
     title: "Water Cooler",
     description: "Purified drinking water on every floor",
-    accent: "#C8A96E",
   },
 ]
 
 const stats = [
-  { number: "1000+", label: "Prayer Hall Capacity", accent: "#C8A96E" },
-  { number: "100%", label: "Vegetarian Meals", accent: "#C8A96E" },
-  { number: "24/7", label: "Medical Support", accent: "#C8A96E" },
-  { number: "5★", label: "Hostel Rating", accent: "#C8A96E" },
+  { number: "1000+", label: "Prayer Hall Capacity" },
+  { number: "100%", label: "Vegetarian Meals" },
+  { number: "24/7", label: "Medical Support" },
+  { number: "5★", label: "Hostel Rating" },
 ]
 
-// Tilt card with magnetic hover
 function TiltCard({
   children,
   className,
@@ -126,17 +120,27 @@ function TiltCard({
   const ref = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)
-  const rotateX = useTransform(y, [-50, 50], [8, -8])
-  const rotateY = useTransform(x, [-50, 50], [-8, 8])
-  const springX = useSpring(rotateX, { stiffness: 300, damping: 30 })
-  const springY = useSpring(rotateY, { stiffness: 300, damping: 30 })
+
+  const rotateX = useTransform(y, [-50, 50], [6, -6])
+  const rotateY = useTransform(x, [-50, 50], [-6, 6])
+
+  const springX = useSpring(rotateX, {
+    stiffness: 300,
+    damping: 30,
+  })
+
+  const springY = useSpring(rotateY, {
+    stiffness: 300,
+    damping: 30,
+  })
 
   const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => {
+    (event: React.MouseEvent) => {
       if (!ref.current) return
+
       const rect = ref.current.getBoundingClientRect()
-      x.set(e.clientX - rect.left - rect.width / 2)
-      y.set(e.clientY - rect.top - rect.height / 2)
+      x.set(event.clientX - rect.left - rect.width / 2)
+      y.set(event.clientY - rect.top - rect.height / 2)
     },
     [x, y]
   )
@@ -151,7 +155,11 @@ function TiltCard({
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{ rotateX: springX, rotateY: springY, transformStyle: "preserve-3d" }}
+      style={{
+        rotateX: springX,
+        rotateY: springY,
+        transformStyle: "preserve-3d",
+      }}
       className={className}
     >
       {children}
@@ -159,17 +167,21 @@ function TiltCard({
   )
 }
 
-// Animated counting stat
-function AnimatedStat({ value, accent }: { value: string; accent: string }) {
+function AnimatedStat({ value }: { value: string }) {
   const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, margin: "-50px" })
+
+  const isInView = useInView(ref, {
+    once: true,
+    margin: "-50px",
+  })
+
   const [displayValue, setDisplayValue] = useState("0")
 
   useEffect(() => {
     if (!isInView) return
 
-    // Parse the numeric portion
     const numericMatch = value.match(/(\d+)/)
+
     if (!numericMatch) {
       setDisplayValue(value)
       return
@@ -177,23 +189,26 @@ function AnimatedStat({ value, accent }: { value: string; accent: string }) {
 
     const target = parseInt(numericMatch[1])
     const suffix = value.replace(numericMatch[1], "").trim()
-    const prefix = value.indexOf(numericMatch[1]) > 0 ? value.substring(0, value.indexOf(numericMatch[1])) : ""
+    const prefix =
+      value.indexOf(numericMatch[1]) > 0
+        ? value.substring(0, value.indexOf(numericMatch[1]))
+        : ""
+
     const duration = 1500
     const steps = 40
-    const increment = target / steps
-    let current = 0
     let step = 0
 
     const timer = setInterval(() => {
       step++
-      // Ease-out cubic
+
       const progress = 1 - Math.pow(1 - step / steps, 3)
-      current = Math.round(target * progress)
+      let current = Math.round(target * progress)
 
       if (step >= steps) {
         current = target
         clearInterval(timer)
       }
+
       setDisplayValue(`${prefix}${current}${suffix}`)
     }, duration / steps)
 
@@ -203,10 +218,10 @@ function AnimatedStat({ value, accent }: { value: string; accent: string }) {
   return (
     <div
       ref={ref}
-      className="text-4xl md:text-6xl font-bold mb-2 transition-colors duration-500 tabular-nums"
+      className="mb-2 text-4xl font-black tabular-nums transition-colors duration-500 md:text-6xl"
       style={{
         fontFamily: "'Cormorant Garamond', serif",
-        color: accent,
+        color: UI.text.muted,
       }}
     >
       {isInView ? displayValue : "0"}
@@ -219,14 +234,15 @@ export default function Features() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
   const scroll = (direction: "left" | "right") => {
-    if (scrollContainerRef.current) {
-      const { current } = scrollContainerRef
-      const scrollAmount = current.clientWidth * 0.6
-      current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      })
-    }
+    if (!scrollContainerRef.current) return
+
+    const { current } = scrollContainerRef
+    const scrollAmount = current.clientWidth * 0.6
+
+    current.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    })
   }
 
   return (
@@ -234,285 +250,354 @@ export default function Features() {
       <style
         dangerouslySetInnerHTML={{
           __html: `
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
-        .features-scroll::-webkit-scrollbar { display: none; }
-        .features-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-      `,
+            @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+            .features-scroll::-webkit-scrollbar {
+              display: none;
+            }
+
+            .features-scroll {
+              -ms-overflow-style: none;
+              scrollbar-width: none;
+            }
+          `,
         }}
       />
 
       <section
-        className="relative py-24 md:py-36 overflow-hidden"
+        className="relative overflow-hidden py-24 md:py-36"
         style={{
-          background: "linear-gradient(170deg, #060d16 0%, #0d1b2a 50%, #091520 100%)",
+          background: UI.section.dark,
           fontFamily: "'DM Sans', sans-serif",
         }}
       >
-        {/* Grain texture */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.04]"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-            backgroundSize: "180px",
-          }}
-        />
-
-        {/* Ambient glow orbs */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div
-            className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full opacity-[0.06]"
-            style={{ background: "radial-gradient(circle, #C8A96E, transparent 70%)" }}
-          />
-          <div
-            className="absolute bottom-0 -left-40 w-[600px] h-[600px] rounded-full opacity-[0.04]"
-            style={{ background: "radial-gradient(circle, #7BA7BC, transparent 70%)" }}
-          />
-        </div>
-
-        {/* Thin top rule */}
-        <div
-          className="absolute top-0 left-0 right-0 h-px opacity-[0.08]"
-          style={{ background: "linear-gradient(90deg, transparent, #fff, transparent)" }}
-        />
-
-        <div className="relative container mx-auto px-4 max-w-7xl">
-          {/* ── Section Header ── */}
+        <div className="relative container mx-auto max-w-7xl px-4">
+          {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.9,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             viewport={{ once: true }}
-            className="text-center mb-16 md:mb-20"
+            className="mb-16 text-center md:mb-20"
           >
-            {/* Eyebrow */}
             <motion.div
               initial={{ opacity: 0, scaleX: 0 }}
               whileInView={{ opacity: 1, scaleX: 1 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               viewport={{ once: true }}
-              className="flex items-center justify-center gap-3 mb-6"
+              className="mb-6 flex items-center justify-center gap-3"
             >
-              <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#C8A96E]" />
-              <span
-                className="text-[10px] tracking-[0.3em] uppercase font-medium"
-                style={{ color: "#C8A96E" }}
+              <div
+                className="h-px w-12"
+                style={{ background: UI.text.muted }}
+              />
+
+              <motion.span
+                className="rounded-full px-5 py-2 text-[10px] font-bold uppercase tracking-[0.3em]"
+                style={{
+                  background: UI.card.light,
+                  color: UI.text.accent,
+                  border: `1px solid ${UI.border.white}`,
+                  boxShadow: UI.shadow.light,
+                }}
+                animate={{ y: [0, -4, 0] }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
               >
                 Amenities
-              </span>
-              <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#C8A96E]" />
+              </motion.span>
+
+              <div
+                className="h-px w-12"
+                style={{ background: UI.text.muted }}
+              />
             </motion.div>
 
-            <h2
-              className="text-5xl md:text-7xl font-semibold text-white mb-5 leading-[1.05]"
-              style={{ fontFamily: "'Cormorant Garamond', serif" }}
+            <motion.h2
+              className="mb-5 text-5xl font-semibold leading-[1.05] md:text-7xl"
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                color: UI.text.light,
+              }}
+              initial={{ opacity: 0, scale: 0.94 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.75, delay: 0.15 }}
+              viewport={{ once: true }}
             >
               Why Choose{" "}
-              <em className="not-italic" style={{ color: "#C8A96E" }}>
+              <motion.em
+                className="inline-block not-italic"
+                style={{
+                  color: UI.text.muted,
+                }}
+                animate={{
+                  opacity: [0.75, 1, 0.75],
+                  y: [0, -2, 0],
+                }}
+                transition={{
+                  duration: 2.6,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
                 Us?
-              </em>
-            </h2>
-            <p className="text-white/40 text-base md:text-lg max-w-xl mx-auto leading-relaxed font-light">
+              </motion.em>
+            </motion.h2>
+
+            <motion.p
+              className="mx-auto max-w-xl text-base font-light leading-relaxed md:text-lg"
+              style={{ color: UI.text.muted }}
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
               Every detail is crafted to create a home away from home — fostering
               growth, discipline, and community.
-            </p>
+            </motion.p>
           </motion.div>
 
-          {/* ── Amenities Scroll Grid ── */}
+          {/* Feature Cards */}
           <div className="relative">
-            {/* Left fade */}
-            <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#0d1b2a] to-transparent z-10 pointer-events-none hidden md:block" />
-            {/* Right fade */}
-            <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#0d1b2a] to-transparent z-10 pointer-events-none hidden md:block" />
-
             <div
               ref={scrollContainerRef}
-              className="features-scroll grid grid-rows-2 grid-flow-col gap-4 md:gap-5 overflow-x-auto snap-x snap-mandatory pb-6 pt-2 px-2 auto-cols-[calc(50%-0.5rem)] md:auto-cols-[calc(33.333%-0.875rem)] lg:auto-cols-[calc(25%-0.9375rem)] scroll-smooth"
+              className="features-scroll grid auto-cols-[calc(50%-0.5rem)] grid-flow-col grid-rows-2 gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory px-2 pb-6 pt-2 md:auto-cols-[calc(33.333%-0.875rem)] md:gap-5 lg:auto-cols-[calc(25%-0.9375rem)]"
             >
-              {features.map((feature, index) => (
-                <motion.div
-                  key={feature.title}
-                  className="snap-center h-full"
-                  initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{
-                    duration: 0.5,
-                    delay: index * 0.04,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  viewport={{ once: true }}
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                >
-                  <TiltCard className="h-full">
-                    <div
-                      className="relative h-full rounded-2xl overflow-hidden p-5 md:p-6 flex flex-col items-start transition-all duration-500 group cursor-default"
-                      style={{
-                        background:
-                          hoveredIndex === index
-                            ? "rgba(255,255,255,0.07)"
-                            : "rgba(255,255,255,0.03)",
-                        border: `1px solid ${
-                          hoveredIndex === index
-                            ? `${feature.accent}40`
-                            : "rgba(255,255,255,0.06)"
-                        }`,
-                        boxShadow:
-                          hoveredIndex === index
-                            ? `0 20px 50px -15px ${feature.accent}25`
-                            : "none",
-                      }}
-                    >
-                      {/* Accent glow on hover */}
-                      <div
-                        className="absolute -top-10 -right-10 w-32 h-32 rounded-full opacity-0 group-hover:opacity-[0.12] transition-opacity duration-700 blur-2xl"
-                        style={{ background: feature.accent }}
-                      />
+              {features.map((feature, index) => {
+                const isHovered = hoveredIndex === index
+                const Icon = feature.icon
 
-                      {/* Icon */}
+                return (
+                  <motion.div
+                    key={feature.title}
+                    className="h-full snap-center"
+                    initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{
+                      duration: 0.5,
+                      delay: index * 0.04,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    viewport={{ once: true }}
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(null)}
+                  >
+                    <TiltCard className="h-full">
                       <div
-                        className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 transition-all duration-500 flex-shrink-0"
+                        className="group relative flex h-full cursor-default flex-col items-start overflow-hidden rounded-2xl p-5 transition-all duration-500 md:p-6"
                         style={{
-                          background:
-                            hoveredIndex === index
-                              ? `${feature.accent}25`
-                              : "rgba(255,255,255,0.06)",
+                          background: isHovered
+                            ? UI.card.light
+                            : UI.card.darkSoft,
                           border: `1px solid ${
-                            hoveredIndex === index
-                              ? `${feature.accent}40`
-                              : "rgba(255,255,255,0.08)"
+                            isHovered ? UI.border.white : UI.border.soft
                           }`,
+                          boxShadow: isHovered
+                            ? UI.shadow.soft
+                            : "0 10px 26px rgba(0, 0, 0, 0.08)",
                         }}
                       >
-                        <feature.icon
-                          className="h-5 w-5 transition-colors duration-500"
+                        <motion.div
+                          className="mb-4 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl transition-all duration-500"
                           style={{
-                            color:
-                              hoveredIndex === index
-                                ? feature.accent
-                                : "rgba(255,255,255,0.5)",
+                            background: isHovered
+                              ? UI.button.primary
+                              : UI.card.soft,
+                            border: `1px solid ${
+                              isHovered
+                                ? UI.button.primary
+                                : UI.border.white
+                            }`,
+                          }}
+                          whileHover={{ rotate: 4, scale: 1.08 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 18,
+                          }}
+                        >
+                          <Icon
+                            className="h-5 w-5 transition-colors duration-500"
+                            style={{
+                              color: isHovered
+                                ? UI.button.primaryText
+                                : UI.text.dark,
+                            }}
+                          />
+                        </motion.div>
+
+                        <h3
+                          className="mb-1.5 text-sm font-bold leading-tight transition-colors duration-500 md:text-base"
+                          style={{
+                            color: isHovered ? UI.text.dark : UI.text.light,
+                            fontFamily: "'Cormorant Garamond', serif",
+                            fontSize: "clamp(16px, 1.15vw, 19px)",
+                          }}
+                        >
+                          {feature.title}
+                        </h3>
+
+                        <p
+                          className="text-xs leading-relaxed transition-colors duration-500"
+                          style={{
+                            color: isHovered ? UI.text.accent : UI.text.muted,
+                          }}
+                        >
+                          {feature.description}
+                        </p>
+
+                        <motion.div
+                          className="absolute bottom-0 left-0 h-[3px] rounded-full"
+                          style={{ background: UI.button.light }}
+                          initial={{ width: 0 }}
+                          animate={{
+                            width: isHovered ? "70px" : "0px",
+                          }}
+                          transition={{
+                            duration: 0.4,
+                            ease: "easeOut",
                           }}
                         />
                       </div>
-
-                      {/* Title */}
-                      <h3
-                        className="text-sm md:text-base font-semibold mb-1.5 transition-colors duration-500 leading-tight"
-                        style={{
-                          color:
-                            hoveredIndex === index ? "white" : "rgba(255,255,255,0.7)",
-                          fontFamily: "'Cormorant Garamond', serif",
-                          fontSize: "clamp(14px, 1.1vw, 18px)",
-                        }}
-                      >
-                        {feature.title}
-                      </h3>
-
-                      {/* Description */}
-                      <p
-                        className="text-xs leading-relaxed transition-colors duration-500"
-                        style={{
-                          color:
-                            hoveredIndex === index
-                              ? "rgba(255,255,255,0.55)"
-                              : "rgba(255,255,255,0.3)",
-                        }}
-                      >
-                        {feature.description}
-                      </p>
-
-                      {/* Bottom accent line */}
-                      <motion.div
-                        className="absolute bottom-0 left-0 h-[2px] rounded-full"
-                        style={{ background: feature.accent }}
-                        initial={{ width: 0 }}
-                        animate={{
-                          width: hoveredIndex === index ? "60px" : "0px",
-                        }}
-                        transition={{ duration: 0.4, ease: "easeOut" }}
-                      />
-                    </div>
-                  </TiltCard>
-                </motion.div>
-              ))}
+                    </TiltCard>
+                  </motion.div>
+                )
+              })}
             </div>
           </div>
 
-          {/* ── Navigation ── */}
+          {/* Scroll Controls */}
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
             viewport={{ once: true }}
-            className="flex justify-center items-center gap-3 mt-6"
+            className="mt-6 flex items-center justify-center gap-3"
           >
             <motion.button
-              whileHover={{ scale: 1.1 }}
+              whileHover={{
+                scale: 1.1,
+                backgroundColor: UI.card.light,
+                color: UI.text.dark,
+              }}
               whileTap={{ scale: 0.92 }}
               onClick={() => scroll("left")}
-              className="w-10 h-10 rounded-full flex items-center justify-center border border-white/10 bg-white/5 text-white/50 hover:text-white hover:border-white/25 transition-all"
+              className="flex h-10 w-10 items-center justify-center rounded-full border transition-all"
+              style={{
+                borderColor: UI.border.soft,
+                background: UI.card.darkStrong,
+                color: UI.text.muted,
+              }}
+              aria-label="Scroll amenities left"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="h-4 w-4" />
             </motion.button>
 
-            <span className="text-white/15 text-[10px] tracking-[0.2em] uppercase font-medium mx-2">
+            <span
+              className="mx-2 text-[10px] font-bold uppercase tracking-[0.2em]"
+              style={{ color: UI.text.muted }}
+            >
               Scroll
             </span>
 
             <motion.button
-              whileHover={{ scale: 1.1 }}
+              whileHover={{
+                scale: 1.1,
+                backgroundColor: UI.card.light,
+                color: UI.text.dark,
+              }}
               whileTap={{ scale: 0.92 }}
               onClick={() => scroll("right")}
-              className="w-10 h-10 rounded-full flex items-center justify-center border border-white/10 bg-white/5 text-white/50 hover:text-white hover:border-white/25 transition-all"
+              className="flex h-10 w-10 items-center justify-center rounded-full border transition-all"
+              style={{
+                borderColor: UI.border.soft,
+                background: UI.card.darkSoft,
+                color: UI.text.muted,
+              }}
+              aria-label="Scroll amenities right"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="h-4 w-4" />
             </motion.button>
           </motion.div>
 
-          {/* ── Stats Section ── */}
+          {/* Stats */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={{
+              duration: 0.8,
+              delay: 0.3,
+            }}
             viewport={{ once: true }}
             className="mt-24 md:mt-32"
           >
-            {/* Divider */}
-            <div className="flex items-center gap-4 justify-center mb-14">
-              <div className="h-px flex-1 max-w-[120px] bg-white/[0.06]" />
+            <div className="mb-14 flex items-center justify-center gap-4">
+              <div
+                className="h-px max-w-[120px] flex-1"
+                style={{ background: UI.border.soft }}
+              />
+
               <span
-                className="text-[10px] tracking-[0.3em] uppercase font-medium"
-                style={{ color: "#C8A96E" }}
+                className="rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.3em]"
+                style={{
+                  background: UI.card.light,
+                  color: UI.text.accent,
+                  border: `1px solid ${UI.border.white}`,
+                }}
               >
                 At a Glance
               </span>
-              <div className="h-px flex-1 max-w-[120px] bg-white/[0.06]" />
+
+              <div
+                className="h-px max-w-[120px] flex-1"
+                style={{ background: UI.border.soft }}
+              />
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
+            <div className="grid grid-cols-2 gap-6 md:grid-cols-4 md:gap-10">
               {stats.map((stat, index) => (
                 <motion.div
                   key={stat.label}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  transition={{
+                    duration: 0.6,
+                    delay: index * 0.1,
+                  }}
                   viewport={{ once: true }}
-                  className="text-center group"
+                  className="group text-center"
                 >
                   <motion.div
-                    whileHover={{ scale: 1.08, y: -4 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    className="relative"
+                    whileHover={{
+                      scale: 1.08,
+                      y: -4,
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 20,
+                    }}
+                    className="relative rounded-3xl px-4 py-6"
+                    style={{
+                      background: UI.card.darkSoft,
+                      border: `1px solid ${UI.border.soft}`,
+                    }}
                   >
-                    {/* Glow behind number */}
+                    <AnimatedStat value={stat.number} />
+
                     <div
-                      className="absolute inset-0 opacity-0 group-hover:opacity-[0.15] blur-2xl transition-opacity duration-700 rounded-full"
-                      style={{ background: stat.accent }}
-                    />
-                    <AnimatedStat value={stat.number} accent={stat.accent} />
+                      className="text-xs font-semibold tracking-wide md:text-sm"
+                      style={{ color: UI.card.light }}
+                    >
+                      {stat.label}
+                    </div>
                   </motion.div>
-                  <div className="text-white/30 text-xs md:text-sm font-medium tracking-wide">
-                    {stat.label}
-                  </div>
                 </motion.div>
               ))}
             </div>

@@ -1,53 +1,89 @@
 "use client"
 
-import { useState, useRef } from "react"
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
-import { CheckCircle2, ArrowRight, ChevronLeft, ChevronRight, Wifi, Wind, Bath, BookOpen } from "lucide-react"
+import { useRef, useState } from "react"
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+} from "framer-motion"
+import {
+  CheckCircle2,
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  Wind,
+  Bath,
+  BookOpen,
+  Shirt,
+  Wifi,
+  BedDouble,
+  Sparkles,
+} from "lucide-react"
 import Image from "next/image"
+import { COLORS, UI } from "@/lib/theme"
 
 const rooms = [
   {
     id: 1,
-    category: "PREMIUM",
+    category: "Premium",
     label: "01",
     title: "A/C Room",
     tagline: "Maximum comfort, zero compromise.",
     description:
       "Spacious air-conditioned rooms designed for deep focus and restful nights — because great academics start with great sleep.",
     image: "https://www.avdvvn.org/assets/images/final_room%202.jpg",
-    features: ["2 Sharing", "Attached Bathroom", "Smart AC", "Personal Wardrobe", "Study Table", "Laundry Bag"],
-    accent: "#C8A96E",
+    features: [
+      "2 Sharing",
+      "Attached Bathroom",
+      "Smart AC",
+      "Personal Wardrobe",
+      "Study Table",
+      "Laundry Bag",
+    ],
     tourAvailable: true,
   },
   {
     id: 2,
-    category: "STANDARD",
+    category: "Standard",
     label: "02",
     title: "Non-AC Room",
     tagline: "Naturally ventilated, thoughtfully designed.",
     description:
       "Well-ventilated rooms with premium furniture and all essential amenities — comfort that breathes with you.",
     image: "https://www.avdvvn.org/assets/images/final%20room%204.jpg",
-    features: ["2 Sharing", "Attached Bathroom", "Ventilated", "Personal Wardrobe", "Study Table", "Laundry Bag"],
-    accent: "#C8A96E",
+    features: [
+      "2 Sharing",
+      "Attached Bathroom",
+      "Ventilated",
+      "Personal Wardrobe",
+      "Study Table",
+      "Laundry Bag",
+    ],
     tourAvailable: true,
   },
   {
     id: 3,
-    category: "ECONOMY",
+    category: "Economy",
     label: "03",
     title: "Dormitory",
     tagline: "Community living at its finest.",
     description:
       "Budget-friendly shared spaces that foster lifelong friendships and a culture of collaborative growth.",
     image: "https://www.avdvvn.org/assets/images/d1.jpg",
-    features: ["6 Sharing", "Attached Bathroom", "Spacious", "Personal Wardrobe", "Study Table", "Laundry Bag"],
-    accent: "#C8A96E",
+    features: [
+      "6 Sharing",
+      "Attached Bathroom",
+      "Spacious",
+      "Personal Wardrobe",
+      "Study Table",
+      "Laundry Bag",
+    ],
     tourAvailable: false,
   },
   {
     id: 4,
-    category: "JUNIORS",
+    category: "Juniors",
     label: "04",
     title: "Junior Room",
     tagline: "Safe, supervised, and made for young minds.",
@@ -55,10 +91,11 @@ const rooms = [
       "Dedicated spaces for high school students with extra care and supervision for a smooth transition.",
     image: "https://www.avdvvn.org/assets/images/jr1.jpg",
     features: ["3 Sharing", "Personal Wardrobe", "Study Table", "Laundry Bag"],
-    accent: "#C8A96E",
     tourAvailable: true,
   },
 ]
+
+const featureIcons = [BedDouble, Bath, Wind, Shirt, BookOpen, Wifi]
 
 export default function Rooms() {
   const [active, setActive] = useState(0)
@@ -69,383 +106,557 @@ export default function Rooms() {
     target: sectionRef,
     offset: ["start end", "end start"],
   })
-  const imageY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"])
 
-  const next = () => setActive((p) => (p + 1) % rooms.length)
-  const prev = () => setActive((p) => (p - 1 + rooms.length) % rooms.length)
+  const imageY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"])
+
+  const next = () => setActive((prev) => (prev + 1) % rooms.length)
+
+  const prev = () =>
+    setActive((prev) => (prev - 1 + rooms.length) % rooms.length)
 
   return (
     <>
       <style
         dangerouslySetInnerHTML={{
           __html: `
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap');
-        .rooms-grain {
-          position: absolute; inset: 0; pointer-events: none; opacity: 0.04;
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-          background-size: 180px;
-        }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      `,
+            @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+            .no-scrollbar::-webkit-scrollbar {
+              display: none;
+            }
+
+            .no-scrollbar {
+              -ms-overflow-style: none;
+              scrollbar-width: none;
+            }
+          `,
         }}
       />
 
       <section
         id="rooms"
         ref={sectionRef}
-        className="relative overflow-hidden py-24 md:py-36"
+        className="relative overflow-hidden px-4 py-24 md:py-36"
         style={{
-          background: "linear-gradient(170deg, #0a1220 0%, #0f1c2e 50%, #0a1220 100%)",
+          background: UI.section.dark,
           fontFamily: "'DM Sans', sans-serif",
         }}
       >
-        {/* Texture */}
-        <div className="rooms-grain" />
-
-        {/* Ambient glow — CSS transition on accent */}
-        <div
-          className="absolute inset-0 pointer-events-none overflow-hidden"
-          style={{ transition: "all 0.9s ease" }}
-        >
-          <div
-            className="absolute -top-40 right-0 w-[600px] h-[600px] rounded-full opacity-[0.06] blur-3xl"
-            style={{ background: room.accent, transition: "background 0.9s ease" }}
-          />
-          <div
-            className="absolute bottom-0 -left-40 w-[500px] h-[500px] rounded-full opacity-[0.05] blur-3xl"
-            style={{ background: room.accent, transition: "background 0.9s ease" }}
-          />
-        </div>
-
-        {/* Thin horizontal rule */}
-        <div className="absolute top-0 left-0 right-0 h-px opacity-[0.08]"
-          style={{ background: "linear-gradient(90deg, transparent, #fff, transparent)" }} />
-
-        <div className="relative container mx-auto px-4 max-w-7xl">
-
-          {/* ── Header ── */}
+        <div className="relative container mx-auto max-w-7xl">
+          {/* Header */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 36 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.85,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             viewport={{ once: true }}
-            className="mb-16 md:mb-20"
+            className="mb-14 text-center md:mb-16"
           >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="h-px w-8 bg-white/20" />
-              <span className="text-[10px] tracking-[0.35em] uppercase font-medium text-white/40">
-                Accommodation
-              </span>
-            </div>
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-              <h2
-                className="text-5xl md:text-7xl font-semibold text-white leading-[1.05]"
-                style={{ fontFamily: "'Cormorant Garamond', serif" }}
+            <motion.div
+              className="mb-5 inline-flex items-center gap-2 rounded-full px-5 py-2 text-[10px] font-bold uppercase tracking-[0.28em]"
+              style={{
+                background: UI.card.light,
+                color: UI.text.accent,
+              }}
+              animate={{ y: [0, -5, 0] }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <Sparkles size={14} />
+              Accommodation
+            </motion.div>
+
+            <h2
+              className="text-5xl font-semibold leading-[1.05] md:text-7xl"
+              style={{
+                color: UI.text.light,
+                fontFamily: "'Cormorant Garamond', serif",
+              }}
+            >
+              Our Living{" "}
+              <motion.span
+                className="inline-block"
+                style={{ color: UI.text.muted }}
+                animate={{
+                  opacity: [0.75, 1, 0.75],
+                  y: [0, -2, 0],
+                }}
+                transition={{
+                  duration: 2.8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
               >
-                Our Living
-                <br />
-                <em
-                  className="not-italic font-normal"
-                  style={{ color: room.accent, transition: "color 0.7s ease" }}
-                >
-                  Spaces
-                </em>
-              </h2>
-              <p className="text-white/35 text-sm md:text-base max-w-xs leading-relaxed font-light">
-                Four room types, each crafted for a distinct student life — pick what suits your chapter.
-              </p>
-            </div>
+                Spaces
+              </motion.span>
+            </h2>
+
+            <p
+              className="mx-auto mt-5 max-w-2xl text-base font-light leading-relaxed md:text-lg"
+              style={{ color: UI.text.muted }}
+            >
+              Four room types, each crafted for a distinct student life — pick
+              what suits your chapter.
+            </p>
           </motion.div>
 
-          {/* ── Main layout: sidebar tabs + content ── */}
-          <div className="grid lg:grid-cols-[220px_1fr] gap-6 md:gap-10 items-start">
-
-            {/* LEFT — Vertical room list */}
+          {/* Main Layout */}
+          <div className="grid items-start gap-7 lg:grid-cols-[260px_1fr] lg:gap-10">
+            {/* Room Tabs */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: -28 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                duration: 0.7,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               viewport={{ once: true }}
-              className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible no-scrollbar pb-2 lg:pb-0"
+              className="no-scrollbar flex gap-3 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0"
             >
-              {rooms.map((r, i) => (
-                <button
-                  key={r.id}
-                  onClick={() => setActive(i)}
-                  className="flex-shrink-0 lg:flex-shrink text-left group relative"
-                >
-                  <motion.div
-                    className="relative px-4 py-4 rounded-2xl overflow-hidden transition-all duration-300"
+              {rooms.map((item, index) => {
+                const activeTab = index === active
+
+                return (
+                  <motion.button
+                    key={item.id}
+                    onClick={() => setActive(index)}
+                    whileHover={{ x: 4 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="relative min-w-[220px] overflow-hidden rounded-2xl p-4 text-left transition-all lg:min-w-0"
                     style={{
-                      background: i === active ? "rgba(255,255,255,0.07)" : "transparent",
-                      border: `1px solid ${i === active ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.05)"}`,
+                      background: activeTab ? UI.card.light : UI.card.darkSoft,
+                      border: `1.5px solid ${
+                        activeTab ? UI.border.white : UI.border.soft
+                      }`,
+                      boxShadow: activeTab ? UI.shadow.soft : "none",
                     }}
-                    whileHover={{ background: "rgba(255,255,255,0.06)" }}
                   >
-                    {/* Active accent left bar */}
                     <AnimatePresence>
-                      {i === active && (
+                      {activeTab && (
                         <motion.div
-                          layoutId="roomTabBar"
-                          className="absolute left-0 top-3 bottom-3 w-[3px] rounded-full"
-                          style={{ background: room.accent }}
-                          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                          layoutId="activeRoomTab"
+                          className="absolute bottom-0 left-0 top-0 w-1"
+                          style={{ background: UI.button.primary }}
+                          transition={{
+                            duration: 0.4,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
                         />
                       )}
                     </AnimatePresence>
 
                     <div className="pl-2">
                       <span
-                        className="text-[9px] font-bold tracking-[0.2em] uppercase block mb-0.5 transition-colors duration-500"
-                        style={{ color: i === active ? room.accent : "rgba(255,255,255,0.25)" }}
+                        className="mb-1 block text-[10px] font-black uppercase tracking-[0.22em]"
+                        style={{
+                          color: activeTab ? UI.text.accent : UI.text.muted,
+                        }}
                       >
-                        {r.label} — {r.category}
+                        {item.label} — {item.category}
                       </span>
+
                       <span
-                        className="font-medium text-sm transition-colors duration-300"
-                        style={{ color: i === active ? "white" : "rgba(255,255,255,0.45)" }}
+                        className="block text-base font-bold"
+                        style={{
+                          color: activeTab ? UI.text.dark : UI.text.light,
+                        }}
                       >
-                        {r.title}
+                        {item.title}
+                      </span>
+
+                      <span
+                        className="mt-2 block text-xs leading-5"
+                        style={{
+                          color: activeTab ? UI.text.accent : UI.text.muted,
+                        }}
+                      >
+                        {item.tagline}
                       </span>
                     </div>
-                  </motion.div>
-                </button>
-              ))}
+                  </motion.button>
+                )
+              })}
 
-              {/* Nav arrows below tabs on desktop */}
-              <div className="hidden lg:flex items-center gap-2 mt-4 pl-1">
+              <div className="hidden items-center gap-3 pt-3 lg:flex">
                 <motion.button
                   onClick={prev}
-                  whileHover={{ scale: 1.08 }}
+                  whileHover={{
+                    scale: 1.08,
+                    backgroundColor: UI.button.primary,
+                    color: UI.button.primaryText,
+                  }}
                   whileTap={{ scale: 0.93 }}
-                  className="w-9 h-9 rounded-full flex items-center justify-center border border-white/10 bg-white/5 text-white/50 hover:text-white hover:border-white/25 transition-all"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border transition-all"
+                  style={{
+                    background: UI.card.darkSoft,
+                    borderColor: UI.border.soft,
+                    color: UI.text.muted,
+                  }}
                   aria-label="Previous room"
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronLeft className="h-4 w-4" />
                 </motion.button>
+
                 <motion.button
                   onClick={next}
-                  whileHover={{ scale: 1.08 }}
+                  whileHover={{
+                    scale: 1.08,
+                    backgroundColor: UI.button.primary,
+                    color: UI.button.primaryText,
+                  }}
                   whileTap={{ scale: 0.93 }}
-                  className="w-9 h-9 rounded-full flex items-center justify-center border border-white/10 bg-white/5 text-white/50 hover:text-white hover:border-white/25 transition-all"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border transition-all"
+                  style={{
+                    background: UI.card.darkSoft,
+                    borderColor: UI.border.soft,
+                    color: UI.text.muted,
+                  }}
                   aria-label="Next room"
                 >
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="h-4 w-4" />
                 </motion.button>
               </div>
             </motion.div>
 
-            {/* RIGHT — Room showcase card */}
+            {/* Showcase */}
             <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+              initial={{ opacity: 0, y: 46, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{
+                duration: 0.85,
+                delay: 0.1,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               viewport={{ once: true }}
-              className="relative rounded-[28px] md:rounded-[36px] overflow-hidden"
+              className="overflow-hidden rounded-[2rem] p-1"
               style={{
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                boxShadow: `0 40px 100px -30px ${room.accent}22`,
-                transition: "box-shadow 0.8s ease",
+                background: UI.card.soft,
+                boxShadow: UI.shadow.card,
               }}
             >
-              <div className="flex flex-col lg:flex-row min-h-[520px] md:min-h-[620px]">
-
-                {/* Image panel */}
-                <div className="relative w-full lg:w-[55%] h-[300px] md:h-[420px] lg:h-auto overflow-hidden">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={room.id + "-img"}
-                      initial={{ opacity: 0, scale: 1.06 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 1.04 }}
-                      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-                      className="absolute inset-0"
-                    >
-                      <motion.div style={{ y: imageY }} className="absolute inset-[-15%]">
-                        <Image
-                          src={room.image}
-                          alt={room.title}
-                          fill
-                          className="object-cover"
-                          priority
-                        />
-                      </motion.div>
-
-                      {/* Dark gradient overlays */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a1220]/60" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a1220]/70 via-transparent to-transparent" />
-
-                      {/* Large room number watermark */}
-                      <div
-                        className="absolute top-6 left-7 select-none pointer-events-none"
-                        style={{
-                          fontFamily: "'Cormorant Garamond', serif",
-                          fontSize: "clamp(72px, 12vw, 120px)",
-                          fontWeight: 700,
-                          color: "white",
-                          opacity: 0.07,
-                          lineHeight: 1,
+              <div
+                className="overflow-hidden rounded-[1.8rem]"
+                style={{
+                  background: UI.card.light,
+                  border: `1px solid ${UI.border.white}`,
+                }}
+              >
+                <div className="grid min-h-[620px] lg:grid-cols-[1.18fr_0.82fr]">
+                  {/* Image Panel */}
+                  <div
+                    className="relative min-h-[320px] overflow-hidden md:min-h-[450px] lg:min-h-full"
+                    style={{ background: UI.card.soft }}
+                  >
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={room.id}
+                        initial={{
+                          opacity: 0,
+                          scale: 1.04,
+                          filter: "blur(6px)",
                         }}
+                        animate={{
+                          opacity: 1,
+                          scale: 1,
+                          filter: "blur(0px)",
+                        }}
+                        exit={{
+                          opacity: 0,
+                          scale: 1.04,
+                          filter: "blur(6px)",
+                        }}
+                        transition={{
+                          duration: 0.65,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="absolute inset-0"
                       >
-                        {room.label}
-                      </div>
-
-                      {/* Bottom left: title on image */}
-                      <div className="absolute bottom-7 left-7 z-10">
-                        <span
-                          className="text-[9px] tracking-[0.25em] uppercase font-bold block mb-1.5"
-                          style={{ color: room.accent }}
+                        <motion.div
+                          style={{ y: imageY }}
+                          className="absolute inset-[-10%]"
                         >
-                          {room.category}
+                          <Image
+                            src={room.image}
+                            alt={room.title}
+                            fill
+                            className="object-cover"
+                            priority
+                          />
+                        </motion.div>
+
+                        <div
+                          className="absolute inset-0"
+                          style={{
+                            background:
+                              "rgba(47, 65, 86, 0.18)",
+                          }}
+                        />
+
+                        <div className="absolute left-6 top-6">
+                          <span
+                            className="inline-flex rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-[0.22em]"
+                            style={{
+                              background: UI.card.light,
+                              color: UI.text.accent,
+                              border: `1px solid ${UI.border.white}`,
+                            }}
+                          >
+                            {room.category}
+                          </span>
+                        </div>
+
+                        <div
+                          className="absolute bottom-6 left-6 select-none text-[96px] font-black leading-none opacity-20 md:text-[130px]"
+                          style={{
+                            color: UI.text.light,
+                            fontFamily: "'Cormorant Garamond', serif",
+                          }}
+                        >
+                          {room.label}
+                        </div>
+
+                        <div className="absolute bottom-6 right-6 flex gap-2">
+                          {rooms.map((_, index) => (
+                            <motion.button
+                              key={index}
+                              onClick={() => setActive(index)}
+                              className="h-2 rounded-full"
+                              style={{
+                                width: index === active ? 34 : 10,
+                                background:
+                                  index === active
+                                    ? UI.button.primary
+                                    : "rgba(255,255,255,0.5)",
+                              }}
+                              whileHover={{ scale: 1.15 }}
+                              whileTap={{ scale: 0.92 }}
+                              aria-label={`Go to room ${index + 1}`}
+                            />
+                          ))}
+                        </div>
+
+                        <div className="absolute inset-x-4 top-1/2 z-20 flex -translate-y-1/2 justify-between lg:hidden">
+                          <motion.button
+                            onClick={prev}
+                            whileTap={{ scale: 0.92 }}
+                            className="flex h-11 w-11 items-center justify-center rounded-full"
+                            style={{
+                              background: UI.card.light,
+                              color: UI.text.dark,
+                              border: `1px solid ${UI.border.white}`,
+                            }}
+                            aria-label="Previous room"
+                          >
+                            <ChevronLeft className="h-5 w-5" />
+                          </motion.button>
+
+                          <motion.button
+                            onClick={next}
+                            whileTap={{ scale: 0.92 }}
+                            className="flex h-11 w-11 items-center justify-center rounded-full"
+                            style={{
+                              background: UI.card.light,
+                              color: UI.text.dark,
+                              border: `1px solid ${UI.border.white}`,
+                            }}
+                            aria-label="Next room"
+                          >
+                            <ChevronRight className="h-5 w-5" />
+                          </motion.button>
+                        </div>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Content Panel */}
+                  <div className="flex flex-col justify-center p-6 md:p-10 lg:p-12">
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={`${room.id}-content`}
+                        initial={{
+                          opacity: 0,
+                          y: 24,
+                          filter: "blur(4px)",
+                        }}
+                        animate={{
+                          opacity: 1,
+                          y: 0,
+                          filter: "blur(0px)",
+                        }}
+                        exit={{
+                          opacity: 0,
+                          y: -18,
+                          filter: "blur(4px)",
+                        }}
+                        transition={{
+                          duration: 0.5,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="flex h-full flex-col"
+                      >
+                        <span
+                          className="mb-4 text-[11px] font-black uppercase tracking-[0.26em]"
+                          style={{ color: UI.text.accent }}
+                        >
+                          {room.category} Room
                         </span>
+
                         <h3
-                          className="text-3xl md:text-4xl font-semibold text-white"
-                          style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                          className="text-4xl font-semibold leading-[1.05] md:text-5xl"
+                          style={{
+                            color: UI.text.dark,
+                            fontFamily: "'Cormorant Garamond', serif",
+                          }}
                         >
                           {room.title}
                         </h3>
-                      </div>
 
-                      {/* Pagination dots bottom right */}
-                      <div className="absolute bottom-8 right-7 flex gap-1.5 z-10">
-                        {rooms.map((_, i) => (
-                          <button
-                            key={i}
-                            onClick={() => setActive(i)}
-                            className="rounded-full transition-all duration-500"
-                            style={{
-                              width: i === active ? 22 : 6,
-                              height: 6,
-                              background: i === active ? room.accent : "rgba(255,255,255,0.3)",
-                            }}
-                          />
-                        ))}
-                      </div>
-
-                      {/* Mobile nav arrows */}
-                      <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 flex justify-between z-20 lg:hidden">
-                        <button
-                          onClick={prev}
-                          className="w-10 h-10 rounded-full bg-black/30 backdrop-blur-md border border-white/15 flex items-center justify-center text-white"
-                        >
-                          <ChevronLeft className="w-5 h-5" />
-                        </button>
-                        <button
-                          onClick={next}
-                          className="w-10 h-10 rounded-full bg-black/30 backdrop-blur-md border border-white/15 flex items-center justify-center text-white"
-                        >
-                          <ChevronRight className="w-5 h-5" />
-                        </button>
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
-                </div>
-
-                {/* Content panel */}
-                <div
-                  className="w-full lg:w-[45%] p-7 md:p-10 lg:p-12 flex flex-col justify-center"
-                  style={{ background: "rgba(255,255,255,0.03)" }}
-                >
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={room.id + "-content"}
-                      initial={{ opacity: 0, y: 24, filter: "blur(4px)" }}
-                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                      exit={{ opacity: 0, y: -18, filter: "blur(4px)" }}
-                      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                      className="flex flex-col h-full"
-                    >
-                      {/* Tagline */}
-                      <p
-                        className="text-base md:text-lg font-semibold mb-3 leading-snug"
-                        style={{ color: room.accent, fontFamily: "'Cormorant Garamond', serif", transition: "color 0.6s ease" }}
-                      >
-                        {room.tagline}
-                      </p>
-
-                      {/* Description */}
-                      <p className="text-white/45 text-sm leading-relaxed mb-8 font-light">
-                        {room.description}
-                      </p>
-
-                      {/* Thin divider */}
-                      <div className="h-px mb-8 w-16 opacity-20 bg-white" />
-
-                      {/* Features */}
-                      <div className="grid grid-cols-2 gap-2 mb-10">
-                        {room.features.map((feat, i) => (
-                          <motion.div
-                            key={feat}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.1 + i * 0.06, duration: 0.4, ease: "easeOut" }}
-                            className="flex items-center gap-2.5"
-                          >
-                            <div
-                              className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                              style={{ background: room.accent }}
-                            />
-                            <span className="text-white/55 text-xs font-medium tracking-wide">{feat}</span>
-                          </motion.div>
-                        ))}
-                      </div>
-
-                      {/* CTA */}
-                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-auto">
-                        <motion.button
-                          whileHover={{ scale: 1.03, y: -1 }}
-                          whileTap={{ scale: 0.97 }}
-                          className="relative group flex items-center gap-2.5 px-7 py-3.5 rounded-2xl font-semibold text-sm overflow-hidden"
+                        <p
+                          className="mt-4 text-lg font-semibold leading-snug"
                           style={{
-                            background: room.accent,
-                            color: "#0a1220",
-                            boxShadow: `0 12px 32px -8px ${room.accent}60`,
-                            transition: "background 0.6s ease, box-shadow 0.6s ease",
+                            color: UI.text.accent,
+                            fontFamily: "'Cormorant Garamond', serif",
                           }}
                         >
-                          <span className="relative z-10">Enquire Now</span>
-                          <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" />
-                          {/* Shimmer */}
-                          <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500 skew-x-12" />
-                        </motion.button>
+                          {room.tagline}
+                        </p>
 
-                        {room.tourAvailable && (
-                          <div className="flex items-center gap-2">
-                            <span className="relative flex h-2 w-2">
+                        <p
+                          className="mt-5 text-sm font-normal leading-7 md:text-base"
+                          style={{ color: UI.text.accent }}
+                        >
+                          {room.description}
+                        </p>
+
+                        <div
+                          className="my-8 h-px w-full"
+                          style={{ background: UI.border.light }}
+                        />
+
+                        <div className="mb-9 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                          {room.features.map((feature, index) => {
+                            const Icon =
+                              featureIcons[index % featureIcons.length]
+
+                            return (
+                              <motion.div
+                                key={feature}
+                                initial={{ opacity: 0, y: 12 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{
+                                  delay: 0.08 + index * 0.05,
+                                  duration: 0.35,
+                                  ease: "easeOut",
+                                }}
+                                className="flex items-center gap-3 rounded-2xl p-3"
+                                style={{
+                                  background: UI.card.white,
+                                  border: `1px solid ${UI.border.light}`,
+                                }}
+                              >
+                                <div
+                                  className="flex h-9 w-9 items-center justify-center rounded-xl"
+                                  style={{
+                                    background: UI.card.soft,
+                                    color: UI.text.dark,
+                                  }}
+                                >
+                                  <Icon className="h-4 w-4" />
+                                </div>
+
+                                <span
+                                  className="text-sm font-bold"
+                                  style={{ color: UI.text.dark }}
+                                >
+                                  {feature}
+                                </span>
+                              </motion.div>
+                            )
+                          })}
+                        </div>
+
+                        <div className="mt-auto flex flex-col gap-4 sm:flex-row sm:items-center">
+                          <motion.button
+                            whileHover={{
+                              scale: 1.03,
+                              y: -2,
+                              backgroundColor: UI.button.primaryHover,
+                            }}
+                            whileTap={{ scale: 0.97 }}
+                            className="group flex items-center justify-center gap-3 rounded-2xl px-7 py-4 text-sm font-black transition-all"
+                            style={{
+                              background: UI.button.primary,
+                              color: UI.button.primaryText,
+                              boxShadow: UI.shadow.soft,
+                            }}
+                          >
+                            Enquire Now
+                            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                          </motion.button>
+
+                          {room.tourAvailable && (
+                            <div className="flex items-center gap-2">
+                              <span className="relative flex h-2.5 w-2.5">
+                                <span
+                                  className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
+                                  style={{ background: UI.button.primary }}
+                                />
+                                <span
+                                  className="relative inline-flex h-2.5 w-2.5 rounded-full"
+                                  style={{ background: UI.button.primary }}
+                                />
+                              </span>
+
                               <span
-                                className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60"
-                                style={{ background: "#4ade80" }}
-                              />
-                              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
-                            </span>
-                            <span className="text-white/30 text-[10px] uppercase tracking-widest font-medium">
-                              Tour available
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
+                                className="text-[10px] font-black uppercase tracking-[0.2em]"
+                                style={{ color: UI.text.accent }}
+                              >
+                                Tour available
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
                 </div>
               </div>
             </motion.div>
           </div>
 
-          {/* ── Bottom count strip ── */}
+          {/* Counter */}
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
+            transition={{
+              delay: 0.5,
+              duration: 0.6,
+            }}
             viewport={{ once: true }}
             className="mt-12 flex items-center justify-center gap-4"
           >
-            <div className="h-px flex-1 max-w-24 bg-white/8" />
-            <span className="text-white/20 text-xs font-mono tracking-widest">
-              {String(active + 1).padStart(2, "0")} / {String(rooms.length).padStart(2, "0")}
+            <div
+              className="h-px max-w-24 flex-1"
+              style={{ background: UI.border.soft }}
+            />
+
+            <span
+              className="text-xs font-mono tracking-widest"
+              style={{ color: UI.text.muted }}
+            >
+              {String(active + 1).padStart(2, "0")} /{" "}
+              {String(rooms.length).padStart(2, "0")}
             </span>
-            <div className="h-px flex-1 max-w-24 bg-white/8" />
+
+            <div
+              className="h-px max-w-24 flex-1"
+              style={{ background: UI.border.soft }}
+            />
           </motion.div>
         </div>
       </section>

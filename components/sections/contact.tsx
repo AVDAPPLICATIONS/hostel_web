@@ -3,10 +3,98 @@
 import type React from "react"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Phone, MapPin, User, GraduationCap, ArrowRight, CheckCircle2, Loader2 } from "lucide-react"
+import {
+  ArrowRight,
+  CheckCircle2,
+  Loader2,
+  Sparkles,
+  User,
+  Phone,
+  MapPin,
+  Building2,
+  GraduationCap,
+  BookOpen,
+  CalendarDays,
+  Users,
+} from "lucide-react"
 import confetti from "canvas-confetti"
+import { COLORS, UI } from "@/lib/theme"
 
-const ACCENT = "#C8A96E"
+const fields = [
+  {
+    name: "firstName",
+    label: "First Name",
+    placeholder: "Rahul",
+    required: true,
+    icon: User,
+  },
+  {
+    name: "middleName",
+    label: "Middle Name",
+    placeholder: "Father Name",
+    icon: User,
+  },
+  {
+    name: "lastName",
+    label: "Last Name",
+    placeholder: "Patel",
+    icon: User,
+  },
+  {
+    name: "contactNo",
+    label: "Contact No",
+    placeholder: "+91 98765 43210",
+    icon: Phone,
+  },
+  {
+    name: "fatherContactNo",
+    label: "Father Contact No",
+    placeholder: "+91 98765 43210",
+    icon: Phone,
+  },
+  {
+    name: "city",
+    label: "City",
+    placeholder: "Ahmedabad",
+    icon: MapPin,
+  },
+  {
+    name: "district",
+    label: "District",
+    placeholder: "Ahmedabad",
+    icon: Building2,
+  },
+  {
+    name: "state",
+    label: "State",
+    placeholder: "Gujarat",
+    icon: Building2,
+  },
+  {
+    name: "school",
+    label: "School",
+    placeholder: "School Name",
+    icon: GraduationCap,
+  },
+  {
+    name: "course",
+    label: "Course",
+    placeholder: "B.Tech",
+    icon: BookOpen,
+  },
+  {
+    name: "semester",
+    label: "Semester",
+    placeholder: "1st Semester",
+    icon: CalendarDays,
+  },
+  {
+    name: "reference",
+    label: "Reference",
+    placeholder: "Instagram, Friend...",
+    icon: Users,
+  },
+] as const
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -23,461 +111,335 @@ export default function Contact() {
     semester: "",
     reference: "",
   })
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [focusedField, setFocusedField] = useState<string | null>(null)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    })
+    }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
 
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    await new Promise((resolve) => setTimeout(resolve, 1800))
 
     setIsSubmitting(false)
     setSubmitted(true)
 
-    const duration = 3 * 1000
-    const animationEnd = Date.now() + duration
-    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 }
-    const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min
-
-    const interval: ReturnType<typeof setInterval> = setInterval(() => {
-      const timeLeft = animationEnd - Date.now()
-      if (timeLeft <= 0) return clearInterval(interval)
-      const particleCount = 50 * (timeLeft / duration)
-      confetti({
-        ...defaults,
-        particleCount,
-        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-        colors: ["#C8A96E", "#fbbf24", "#1D3557"],
-      })
-      confetti({
-        ...defaults,
-        particleCount,
-        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-        colors: ["#4ade80", "#C8A96E", "#fbbf24"],
-      })
-    }, 250)
-
-    setFormData({
-      firstName: "",
-      middleName: "",
-      lastName: "",
-      contactNo: "",
-      fatherContactNo: "",
-      city: "",
-      district: "",
-      state: "",
-      school: "",
-      course: "",
-      semester: "",
-      reference: "",
+    confetti({
+      particleCount: 120,
+      spread: 85,
+      colors: [
+        COLORS.navy,
+        COLORS.teal,
+        COLORS.sky,
+        COLORS.beige,
+        COLORS.white,
+      ],
     })
 
     setTimeout(() => setSubmitted(false), 4000)
   }
 
-  // Reusable styled input
   const FormInput = ({
     name,
     label,
     placeholder,
     type = "text",
     required = false,
-    colSpan,
+    index,
+    icon: Icon,
   }: {
-    name: string
+    name: keyof typeof formData
     label: string
     placeholder: string
     type?: string
     required?: boolean
-    colSpan?: string
+    index: number
+    icon: React.ElementType
   }) => (
-    <div className={`space-y-2 ${colSpan ?? ""}`}>
-      <label className="block text-[10px] font-bold tracking-[0.15em] uppercase text-white/30 ml-1">
+    <motion.div
+      className="space-y-2"
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.45,
+        delay: 0.35 + index * 0.045,
+        ease: "easeOut",
+      }}
+    >
+      <label
+        htmlFor={name}
+        className="block text-sm font-semibold tracking-wide"
+        style={{ color: UI.text.dark }}
+      >
         {label}
-        {required && (
-          <span className="ml-1" style={{ color: ACCENT }}>
-            *
-          </span>
-        )}
+        {required && <span style={{ color: UI.text.accent }}> *</span>}
       </label>
-      <div className="relative">
+
+      <motion.div whileFocus={{ scale: 1.012 }} className="relative">
+        <Icon
+          size={19}
+          className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2"
+          style={{
+            color: focusedField === name ? UI.text.accent : UI.text.dark,
+          }}
+        />
+
         <input
+          id={name}
           type={type}
           name={name}
+          required={required}
           placeholder={placeholder}
-          value={formData[name as keyof typeof formData]}
+          value={formData[name]}
           onChange={handleInputChange}
           onFocus={() => setFocusedField(name)}
           onBlur={() => setFocusedField(null)}
-          required={required}
-          className="w-full bg-white/[0.04] text-white text-sm placeholder:text-white/20 rounded-xl px-4 py-3.5 outline-none transition-all duration-300"
+          className="w-full rounded-2xl py-3.5 pl-12 pr-4 outline-none transition-all duration-300 placeholder:text-slate-400"
           style={{
-            border: `1px solid ${
-              focusedField === name ? `${ACCENT}60` : "rgba(255,255,255,0.08)"
+            background: UI.card.white,
+            color: UI.text.dark,
+            border: `1.5px solid ${
+              focusedField === name ? UI.button.primary : UI.border.light
             }`,
             boxShadow:
               focusedField === name
-                ? `0 0 0 3px ${ACCENT}15, 0 8px 25px -8px ${ACCENT}20`
-                : "none",
+                ? `0 0 0 4px rgba(200, 217, 230, 0.9), ${UI.shadow.light}`
+                : UI.shadow.light,
           }}
         />
-        {/* Focus accent line */}
-        <motion.div
-          className="absolute bottom-0 left-4 right-4 h-[2px] rounded-full"
-          style={{ background: ACCENT }}
-          animate={{ scaleX: focusedField === name ? 1 : 0 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-        />
-      </div>
-    </div>
-  )
-
-  // Section header
-  const SectionHeader = ({
-    icon: Icon,
-    title,
-    step,
-  }: {
-    icon: React.ElementType
-    title: string
-    step: string
-  }) => (
-    <div className="flex items-center gap-3 mb-6">
-      <div
-        className="w-8 h-8 rounded-lg flex items-center justify-center"
-        style={{ background: `${ACCENT}15`, border: `1px solid ${ACCENT}25` }}
-      >
-        <Icon className="w-3.5 h-3.5" style={{ color: ACCENT }} />
-      </div>
-      <div className="flex items-center gap-2">
-        <span className="text-[9px] font-bold tracking-[0.2em] uppercase text-white/20 font-mono">
-          {step}
-        </span>
-        <div className="w-3 h-px bg-white/10" />
-        <h4 className="text-xs font-bold tracking-[0.15em] uppercase text-white/50">
-          {title}
-        </h4>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 
   return (
-    <>
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
-      `,
-        }}
-      />
-
-      <section
-        id="contact"
-        className="relative py-24 md:py-36 overflow-hidden"
-        style={{
-          background: "linear-gradient(170deg, #060d16 0%, #0d1b2a 50%, #091520 100%)",
-          fontFamily: "'DM Sans', sans-serif",
-        }}
-      >
-        {/* Grain */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.04]"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-            backgroundSize: "180px",
-          }}
-        />
-
-        {/* Ambient glow */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div
-            className="absolute -top-40 right-1/4 w-[600px] h-[600px] rounded-full opacity-[0.06] blur-3xl"
-            style={{ background: ACCENT }}
-          />
-          <div
-            className="absolute bottom-0 -left-40 w-[500px] h-[500px] rounded-full opacity-[0.04] blur-3xl"
-            style={{ background: "#7BA7BC" }}
-          />
-        </div>
-
-        {/* Top rule */}
-        <div
-          className="absolute top-0 left-0 right-0 h-px opacity-[0.08]"
-          style={{ background: "linear-gradient(90deg, transparent, #fff, transparent)" }}
-        />
-
-        <div className="relative container mx-auto px-4 max-w-4xl">
-          {/* ── Header ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true }}
-            className="text-center mb-14 md:mb-20"
-          >
-            <motion.div
-              initial={{ opacity: 0, scaleX: 0 }}
-              whileInView={{ opacity: 1, scaleX: 1 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              viewport={{ once: true }}
-              className="flex items-center justify-center gap-3 mb-6"
-            >
-              <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#C8A96E]" />
-              <span
-                className="text-[10px] tracking-[0.3em] uppercase font-medium"
-                style={{ color: ACCENT }}
-              >
-                Admission
-              </span>
-              <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#C8A96E]" />
-            </motion.div>
-
-            <h2
-              className="text-5xl md:text-7xl font-semibold text-white mb-5 leading-[1.05]"
-              style={{ fontFamily: "'Cormorant Garamond', serif" }}
-            >
-              Enquire{" "}
-              <em className="not-italic" style={{ color: ACCENT }}>
-                Now
-              </em>
-            </h2>
-            <p className="text-white/40 text-base md:text-lg max-w-xl mx-auto leading-relaxed font-light">
-              Fill in your details and our team will reach out to guide you through the admission process.
-            </p>
-          </motion.div>
-
-          {/* ── Form Card ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-            viewport={{ once: true }}
-            className="relative rounded-[28px] md:rounded-[36px] overflow-hidden"
+    <section
+      id="contact"
+      className="min-h-screen px-4 py-16 md:py-20"
+      style={{ background: UI.section.dark }}
+    >
+      <div className="mx-auto max-w-6xl">
+        <motion.div
+          className="mb-10 text-center md:mb-12"
+          initial={{ opacity: 0, y: 26 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
+          <motion.span
+            className="mb-5 inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-bold"
             style={{
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.07)",
-              boxShadow: `0 40px 100px -30px ${ACCENT}12`,
+              background: UI.card.light,
+              color: UI.text.accent,
+              border: `1px solid ${UI.border.white}`,
+              boxShadow: UI.shadow.light,
+            }}
+            animate={{ y: [0, -5, 0] }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
             }}
           >
-            {/* Accent glow top */}
-            <div
-              className="absolute -top-20 left-1/2 -translate-x-1/2 w-[400px] h-[200px] rounded-full blur-3xl opacity-[0.06]"
-              style={{ background: ACCENT }}
-            />
+            <Sparkles size={15} />
+            Student Enquiry Form
+          </motion.span>
 
-            {/* Form header bar */}
-            <div
-              className="relative px-8 md:px-12 py-7 md:py-8"
-              style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+          <motion.h2
+            className="text-5xl font-black tracking-tight md:text-7xl"
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.75, delay: 0.1 }}
+            style={{ color: UI.text.light }}
+          >
+            Enquire{" "}
+            <motion.span
+              style={{
+                color: UI.text.muted,
+                display: "inline-block",
+              }}
+              animate={{
+                opacity: [0.75, 1, 0.75],
+                y: [0, -2, 0],
+              }}
+              transition={{
+                duration: 2.6,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3
-                    className="text-2xl md:text-3xl font-semibold text-white mb-1"
-                    style={{ fontFamily: "'Cormorant Garamond', serif" }}
-                  >
-                    ENQUIRY FORM
-                  </h3>
-                  <p className="text-white/30 text-xs md:text-sm font-light">
-                    Please fill in all the details carefully
-                  </p>
-                </div>
-                <div
-                  className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full"
-                  style={{ background: `${ACCENT}12`, border: `1px solid ${ACCENT}20` }}
-                >
-                  <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                  <span
-                    className="text-[9px] font-bold tracking-[0.15em] uppercase"
-                    style={{ color: ACCENT }}
-                  >
-                    Open for Admission
-                  </span>
-                </div>
-              </div>
-            </div>
+              Now
+            </motion.span>
+          </motion.h2>
 
-            {/* Form content */}
-            <div className="relative px-8 md:px-12 py-8 md:py-10">
-              <AnimatePresence mode="wait">
-                {submitted ? (
+          <motion.div
+            className="mx-auto mt-5 h-1 rounded-full"
+            style={{ background: UI.button.primary }}
+            initial={{ width: 0, opacity: 0 }}
+            animate={{ width: 80, opacity: 1 }}
+            transition={{ duration: 0.7, delay: 0.35 }}
+          />
+
+          <motion.p
+            className="mx-auto mt-5 max-w-xl text-base md:text-lg"
+            style={{ color: UI.text.muted }}
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.45 }}
+          >
+            Fill in your details and our team will contact you soon.
+          </motion.p>
+        </motion.div>
+
+        <motion.div
+          className="relative mx-auto max-w-5xl rounded-[2rem] p-1"
+          style={{
+            background: UI.card.soft,
+            boxShadow: UI.shadow.card,
+          }}
+          initial={{ opacity: 0, y: 34, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.75, delay: 0.2, ease: "easeOut" }}
+        >
+          <div
+            className="rounded-[1.8rem] p-6 md:p-10"
+            style={{
+              background: UI.card.light,
+              border: `1px solid ${UI.border.white}`,
+            }}
+          >
+            <AnimatePresence mode="wait">
+              {submitted ? (
+                <motion.div
+                  key="success"
+                  className="flex min-h-[420px] flex-col items-center justify-center text-center"
+                  initial={{ opacity: 0, scale: 0.92 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.92 }}
+                  transition={{ duration: 0.45 }}
+                >
                   <motion.div
-                    key="success"
-                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9, y: -20 }}
-                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    className="text-center py-16"
+                    initial={{ scale: 0, rotate: -20 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 180,
+                      damping: 12,
+                    }}
                   >
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                      className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
-                      style={{ background: `${ACCENT}15`, border: `2px solid ${ACCENT}30` }}
-                    >
-                      <CheckCircle2 className="w-9 h-9" style={{ color: ACCENT }} />
-                    </motion.div>
+                    <CheckCircle2
+                      size={76}
+                      style={{ color: UI.text.accent }}
+                    />
+                  </motion.div>
+
+                  <motion.h3
+                    className="mt-5 text-3xl font-black"
+                    style={{ color: UI.text.dark }}
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 }}
+                  >
+                    Registration Successful
+                  </motion.h3>
+
+                  <motion.p
+                    className="mt-2 text-base"
+                    style={{ color: UI.text.accent }}
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.25 }}
+                  >
+                    We’ll contact you soon.
+                  </motion.p>
+                </motion.div>
+              ) : (
+                <motion.form
+                  key="form"
+                  onSubmit={handleSubmit}
+                  className="space-y-8"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <motion.div
+                    className="mb-2 text-center"
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.25 }}
+                  >
                     <h3
-                      className="text-3xl md:text-4xl font-semibold text-white mb-3"
-                      style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                      className="text-2xl font-black md:text-3xl"
+                      style={{ color: UI.text.dark }}
                     >
-                      Registration Successful
+                      Fill Your Details
                     </h3>
-                    <p className="text-white/40 text-base max-w-md mx-auto">
-                      Thank you for your interest in AVD. Our team will contact you shortly.
+
+                    <p
+                      className="mt-2 text-sm md:text-base"
+                      style={{ color: UI.text.accent }}
+                    >
+                      Please enter your contact and academic information below.
                     </p>
                   </motion.div>
-                ) : (
-                  <motion.form
-                    key="form"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onSubmit={handleSubmit}
-                    className="space-y-8"
+
+                  <div className="grid gap-x-6 gap-y-5 md:grid-cols-2">
+                    {fields.map((field, index) => (
+                      <FormInput
+                        key={field.name}
+                        name={field.name}
+                        label={field.label}
+                        placeholder={field.placeholder}
+                        // required={field.required}
+                        icon={field.icon}
+                        index={index}
+                      />
+                    ))}
+                  </div>
+
+                  <motion.button
+                    type="submit"
+                    disabled={isSubmitting}
+                    whileHover={{
+                      scale: 1.015,
+                      y: -2,
+                      backgroundColor: UI.button.primaryHover,
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                    className="group flex w-full items-center justify-center gap-3 rounded-2xl py-4 text-base font-black transition disabled:cursor-not-allowed disabled:opacity-70 md:py-5"
+                    style={{
+                      background: UI.button.primary,
+                      color: UI.button.primaryText,
+                      boxShadow: UI.shadow.soft,
+                    }}
                   >
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
-                      <FormInput
-                        name="firstName"
-                        label="First Name (Student Name)"
-                        placeholder="e.g. Rahul"
-                        required
-                      />
-                      <FormInput
-                        name="middleName"
-                        label="Middle Name (Father Name)"
-                        placeholder="Full Name"
-                        required
-                      />
-                      <FormInput
-                        name="lastName"
-                        label="Last Name (Surname)"
-                        placeholder="e.g. Patel"
-                        required
-                      />
-                      <FormInput
-                        name="contactNo"
-                        label="Contact No."
-                        placeholder="+91 00000 00000"
-                        type="tel"
-                        required
-                      />
-                      <FormInput
-                        name="fatherContactNo"
-                        label="Father's Contact No."
-                        placeholder="+91 00000 00000"
-                        type="tel"
-                        required
-                      />
-                      <FormInput
-                        name="city"
-                        label="City / Village"
-                        placeholder="City"
-                        required
-                      />
-                      <FormInput
-                        name="district"
-                        label="District"
-                        placeholder="District"
-                        required
-                      />
-                      <FormInput
-                        name="state"
-                        label="State"
-                        placeholder="State"
-                        required
-                      />
-                      <FormInput
-                        name="school"
-                        label="School / College"
-                        placeholder="Current Institution"
-                        required
-                      />
-                      <FormInput
-                        name="course"
-                        label="Course / Std"
-                        placeholder="e.g. B.Tech / 12th"
-                        required
-                      />
-                      <FormInput
-                        name="semester"
-                        label="Semester"
-                        placeholder="e.g. 1st Sem"
-                      />
-                      <FormInput
-                        name="reference"
-                        label="Reference"
-                        placeholder="How did you hear about us?"
-                      />
-                    </div>
-
-
-
-                    {/* Submit */}
-                    <div className="pt-4">
-                      <motion.button
-                        type="submit"
-                        disabled={isSubmitting}
-                        whileHover={{ scale: 1.01, y: -2 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="w-full relative group flex items-center justify-center gap-3 py-4 md:py-5 rounded-2xl font-semibold text-base md:text-lg overflow-hidden transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
-                        style={{
-                          background: ACCENT,
-                          color: "#0a1220",
-                          boxShadow: `0 16px 40px -10px ${ACCENT}50`,
-                        }}
-                      >
-                        {isSubmitting ? (
-                          <span className="flex items-center gap-2.5 relative z-10">
-                            <Loader2 className="w-5 h-5 animate-spin" />
-                            Processing...
-                          </span>
-                        ) : (
-                          <span className="flex items-center gap-2.5 relative z-10">
-                            Submit Registration
-                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                          </span>
-                        )}
-                        {/* Shimmer */}
-                        <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12" />
-                      </motion.button>
-
-                      <p className="text-center text-white/20 text-[10px] tracking-wide mt-4">
-                        By submitting, you agree to be contacted for admission purposes.
-                      </p>
-                    </div>
-                  </motion.form>
-                )}
-              </AnimatePresence>
-            </div>
-          </motion.div>
-
-          {/* Bottom counter */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            viewport={{ once: true }}
-            className="mt-10 flex items-center justify-center gap-4"
-          >
-            <div className="h-px flex-1 max-w-[80px] bg-white/[0.06]" />
-            <span className="text-white/20 text-[10px] tracking-[0.2em] uppercase font-medium">
-              AVD Admissions 2026
-            </span>
-            <div className="h-px flex-1 max-w-[80px] bg-white/[0.06]" />
-          </motion.div>
-        </div>
-      </section>
-    </>
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="animate-spin" size={22} />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        Submit Enquiry
+                        <ArrowRight
+                          size={22}
+                          className="transition-transform duration-300 group-hover:translate-x-1"
+                        />
+                      </>
+                    )}
+                  </motion.button>
+                </motion.form>
+              )}
+            </AnimatePresence>
+          </div>
+        </motion.div>
+      </div>
+    </section>
   )
 }

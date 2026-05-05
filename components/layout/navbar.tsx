@@ -4,14 +4,7 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { Menu, X, ArrowRight } from "lucide-react"
-
-const PALETTE = {
-  navy: "#2F4156",
-  teal: "#567C8D",
-  skyBlue: "#C8D9E6",
-  beige: "#F5EFEB",
-  white: "#FFFFFF",
-}
+import { COLORS, UI } from "@/lib/theme"
 
 const navItems = [
   { name: "Home", href: "#home" },
@@ -29,14 +22,17 @@ export default function Navbar() {
 
   const scrollToSection = (href: string) => {
     if (typeof document === "undefined") return
+
     try {
       const element = document.querySelector(href)
+
       if (element) {
         element.scrollIntoView({ behavior: "smooth" })
       }
     } catch (error) {
       console.warn("Error scrolling to section:", error)
     }
+
     setIsOpen(false)
   }
 
@@ -48,13 +44,15 @@ export default function Navbar() {
         setScrolled(window.scrollY > 20)
 
         const sections = navItems.map((item) => item.href.substring(1))
+
         const currentSection = sections.find((section) => {
           const element = document.getElementById(section)
-          if (element) {
-            const rect = element.getBoundingClientRect()
-            return rect.top <= 120 && rect.bottom >= 120
-          }
-          return false
+
+          if (!element) return false
+
+          const rect = element.getBoundingClientRect()
+
+          return rect.top <= 120 && rect.bottom >= 120
         })
 
         if (currentSection) {
@@ -67,6 +65,7 @@ export default function Navbar() {
 
     handleScroll()
     window.addEventListener("scroll", handleScroll, { passive: true })
+
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
@@ -74,39 +73,47 @@ export default function Navbar() {
     <motion.nav
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-0 left-0 right-0 z-50 px-3 md:px-4 pointer-events-none"
-      style={{ paddingTop: scrolled ? "10px" : "16px", transition: "padding-top 0.4s ease" }}
+      transition={{
+        duration: 0.85,
+        delay: 0.15,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      className="pointer-events-none fixed left-0 right-0 top-0 z-50 px-3 md:px-4"
+      style={{
+        paddingTop: scrolled ? "10px" : "16px",
+        transition: "padding-top 0.4s ease",
+      }}
     >
       <div className="container mx-auto max-w-7xl">
         <motion.div
-          className="pointer-events-auto rounded-[20px] md:rounded-[28px] px-4 md:px-7 h-14 md:h-16 flex items-center justify-between"
+          className="pointer-events-auto flex h-14 items-center justify-between rounded-[20px] px-4 md:h-16 md:rounded-[28px] md:px-7"
           style={{
-            background: scrolled
-              ? "linear-gradient(135deg, rgba(47,65,86,0.96), rgba(42,61,80,0.94))"
-              : "linear-gradient(135deg, rgba(47,65,86,0.9), rgba(86,124,141,0.82))",
-            backdropFilter: "blur(24px) saturate(1.4)",
-            WebkitBackdropFilter: "blur(24px) saturate(1.4)",
-            border: `1px solid ${scrolled ? "rgba(200,217,230,0.24)" : "rgba(200,217,230,0.18)"}`,
+            background: scrolled ? UI.section.dark : "rgba(47, 65, 86, 0.92)",
+            backdropFilter: "blur(22px)",
+            WebkitBackdropFilter: "blur(22px)",
+            border: `1px solid ${
+              scrolled ? UI.border.soft : "rgba(200, 217, 230, 0.22)"
+            }`,
             boxShadow: scrolled
-              ? "0 14px 45px rgba(47,65,86,0.26), inset 0 1px 0 rgba(255,255,255,0.1)"
-              : "0 10px 34px rgba(47,65,86,0.18), inset 0 1px 0 rgba(255,255,255,0.08)",
-            transition: "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
+              ? "0 16px 46px rgba(0, 0, 0, 0.22)"
+              : "0 10px 30px rgba(0, 0, 0, 0.16)",
+            transition: "all 0.45s cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
           {/* Logo */}
-          <motion.div
+          <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => scrollToSection("#home")}
-            className="flex items-center gap-3 cursor-pointer"
+            className="flex cursor-pointer items-center gap-3"
+            aria-label="Go to home"
           >
             <div
-              className="h-9 w-[68px] md:h-10 md:w-[74px] rounded-xl flex items-center justify-center overflow-hidden"
+              className="flex h-9 w-[68px] items-center justify-center overflow-hidden rounded-xl md:h-10 md:w-[74px]"
               style={{
-                background: `linear-gradient(135deg, ${PALETTE.white}, ${PALETTE.beige})`,
-                border: "1px solid rgba(200,217,230,0.55)",
-                boxShadow: "0 10px 26px -18px rgba(0,0,0,0.5)",
+                background: UI.card.light,
+                border: `1px solid ${UI.border.white}`,
+                boxShadow: UI.shadow.light,
               }}
             >
               <Image
@@ -118,32 +125,42 @@ export default function Navbar() {
                 priority
               />
             </div>
-            <div className="flex flex-col -space-y-0.5">
-              <span className="text-base md:text-lg font-black tracking-tight uppercase leading-tight" style={{ color: PALETTE.white }}>
+
+            <div className="flex flex-col text-left">
+              <span
+                className="text-base font-black uppercase leading-tight tracking-tight md:text-lg"
+                style={{ color: UI.text.light }}
+              >
                 Atmiya Vidya Dham
               </span>
-              
-            </div>
-          </motion.div>
 
-          {/* Desktop Navigation — Pill Design */}
+              <span
+                className="hidden text-[9px] font-bold uppercase tracking-[0.2em] sm:block"
+                style={{ color: UI.text.muted }}
+              >
+                Student Hostel
+              </span>
+            </div>
+          </motion.button>
+
+          {/* Desktop Navigation */}
           <div
-            className="hidden lg:flex items-center gap-0.5 p-1 rounded-full"
+            className="hidden items-center gap-1 rounded-full p-1 lg:flex"
             style={{
-              background: "rgba(47,65,86,0.28)",
-              border: "1px solid rgba(200,217,230,0.16)",
-              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)",
+              background: "rgba(245, 239, 235, 0.08)",
+              border: `1px solid ${UI.border.soft}`,
             }}
           >
             {navItems.map((item) => {
               const isActive = activeSection === item.href.substring(1)
+
               return (
                 <button
                   key={item.name}
                   onClick={() => scrollToSection(item.href)}
-                  className="relative px-4 xl:px-5 py-2 text-[13px] font-medium transition-colors duration-300 rounded-full outline-none"
+                  className="relative rounded-full px-4 py-2 text-[13px] font-bold outline-none transition-colors duration-300 xl:px-5"
                   style={{
-                    color: isActive ? PALETTE.navy : "rgba(245,239,235,0.68)",
+                    color: isActive ? UI.text.dark : UI.text.muted,
                   }}
                 >
                   {isActive && (
@@ -151,26 +168,21 @@ export default function Navbar() {
                       layoutId="nav-pill"
                       className="absolute inset-0 rounded-full"
                       style={{
-                        background: PALETTE.beige,
-                        boxShadow: "0 6px 18px rgba(245,239,235,0.2)",
+                        background: UI.card.light,
+                        boxShadow: "0 8px 20px rgba(0, 0, 0, 0.14)",
                       }}
                       transition={{
                         type: "spring",
-                        stiffness: 400,
-                        damping: 30,
+                        stiffness: 420,
+                        damping: 32,
                       }}
                     />
                   )}
+
                   <span
-                    className="relative z-10 transition-colors duration-300"
+                    className="relative z-10 transition-colors duration-300 hover:text-white"
                     style={{
-                      color: isActive ? PALETTE.navy : undefined,
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isActive) e.currentTarget.style.color = PALETTE.skyBlue
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isActive) e.currentTarget.style.color = "rgba(245,239,235,0.68)"
+                      color: isActive ? UI.text.dark : undefined,
                     }}
                   >
                     {item.name}
@@ -182,33 +194,41 @@ export default function Navbar() {
 
           {/* CTA + Mobile Toggle */}
           <div className="flex items-center gap-2.5">
-            {/* CTA Button */}
             <motion.button
-              whileHover={{ scale: 1.04, y: -1 }}
+              whileHover={{
+                scale: 1.04,
+                y: -1,
+                backgroundColor: UI.button.primaryHover,
+              }}
               whileTap={{ scale: 0.96 }}
               onClick={() => scrollToSection("#contact")}
-              className="hidden sm:flex items-center gap-2 h-9 md:h-10 px-5 md:px-6 rounded-xl md:rounded-2xl font-bold text-xs md:text-[13px] overflow-hidden group relative"
+              className="group relative hidden h-9 items-center gap-2 overflow-hidden rounded-xl px-5 text-xs font-black sm:flex md:h-10 md:rounded-2xl md:px-6 md:text-[13px]"
               style={{
-                background: PALETTE.beige,
-                color: PALETTE.navy,
-                boxShadow: "0 10px 26px -14px rgba(245,239,235,0.55)",
+                background: UI.button.primary,
+                color: UI.button.primaryText,
+                boxShadow: UI.shadow.soft,
               }}
             >
               <span className="relative z-10">Enquire Now</span>
-              <ArrowRight className="w-3.5 h-3.5 relative z-10 group-hover:translate-x-0.5 transition-transform" />
-              <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500 skew-x-12" />
+
+              <ArrowRight className="relative z-10 h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+
+              <span
+                className="absolute inset-y-0 left-0 w-0 transition-all duration-500 group-hover:w-full"
+                style={{ background: "rgba(255,255,255,0.12)" }}
+              />
             </motion.button>
 
-            {/* Mobile Toggle */}
             <motion.button
               whileTap={{ scale: 0.9 }}
-              onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center transition-colors"
+              onClick={() => setIsOpen((prev) => !prev)}
+              className="flex h-9 w-9 items-center justify-center rounded-xl transition-colors md:h-10 md:w-10 lg:hidden"
               style={{
-                background: "rgba(255,255,255,0.1)",
-                border: "1px solid rgba(200,217,230,0.18)",
-                color: PALETTE.beige,
+                background: UI.card.darkSoft,
+                border: `1px solid ${UI.border.soft}`,
+                color: UI.text.muted,
               }}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
             >
               <AnimatePresence mode="wait">
                 {isOpen ? (
@@ -244,48 +264,50 @@ export default function Navbar() {
               initial={{ opacity: 0, y: -10, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.98 }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="lg:hidden absolute top-[68px] md:top-[76px] left-3 right-3 rounded-[20px] md:rounded-[24px] p-5 md:p-6 pointer-events-auto overflow-hidden"
+              transition={{
+                duration: 0.3,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="pointer-events-auto absolute left-3 right-3 top-[68px] overflow-hidden rounded-[20px] p-5 md:top-[76px] md:rounded-[24px] md:p-6 lg:hidden"
               style={{
-                background: "rgba(47, 65, 86, 0.96)",
-                backdropFilter: "blur(32px) saturate(1.6)",
-                WebkitBackdropFilter: "blur(32px) saturate(1.6)",
-                border: "1px solid rgba(200,217,230,0.18)",
-                boxShadow: "0 20px 60px rgba(47,65,86,0.28), inset 0 1px 0 rgba(255,255,255,0.08)",
+                background: UI.section.dark,
+                backdropFilter: "blur(28px)",
+                WebkitBackdropFilter: "blur(28px)",
+                border: `1px solid ${UI.border.soft}`,
+                boxShadow: UI.shadow.card,
               }}
             >
-              {/* Accent glow */}
-              <div
-                className="absolute -top-20 left-1/2 -translate-x-1/2 w-[300px] h-[150px] rounded-full blur-3xl opacity-[0.06]"
-                style={{ background: PALETTE.skyBlue }}
-              />
-
               <div className="relative flex flex-col gap-1">
                 {navItems.map((item, index) => {
                   const isActive = activeSection === item.href.substring(1)
+
                   return (
                     <motion.button
                       key={item.name}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05, ease: [0.22, 1, 0.36, 1] }}
+                      transition={{
+                        delay: index * 0.05,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
                       onClick={() => scrollToSection(item.href)}
-                      className="text-left py-3.5 px-5 rounded-xl font-medium text-[15px] transition-all duration-300 flex items-center justify-between group"
+                      className="group flex items-center justify-between rounded-xl px-5 py-3.5 text-left text-[15px] font-bold transition-all duration-300"
                       style={{
-                        background: isActive ? "rgba(245,239,235,0.12)" : "transparent",
-                        color: isActive ? PALETTE.skyBlue : "rgba(245,239,235,0.68)",
-                        border: isActive
-                          ? "1px solid rgba(200,217,230,0.24)"
-                          : "1px solid transparent",
+                        background: isActive ? UI.card.light : "transparent",
+                        color: isActive ? UI.text.dark : UI.text.muted,
+                        border: `1px solid ${
+                          isActive ? UI.border.white : "transparent"
+                        }`,
                       }}
                     >
                       <span>{item.name}</span>
+
                       {isActive && (
-                        <motion.div
+                        <motion.span
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
-                          className="w-1.5 h-1.5 rounded-full"
-                          style={{ background: PALETTE.teal }}
+                          className="h-1.5 w-1.5 rounded-full"
+                          style={{ background: UI.button.primary }}
                         />
                       )}
                     </motion.button>
@@ -297,21 +319,29 @@ export default function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.35 }}
                   className="mt-4 pt-4"
-                  style={{ borderTop: "1px solid rgba(200,217,230,0.14)" }}
+                  style={{ borderTop: `1px solid ${UI.border.soft}` }}
                 >
                   <motion.button
                     whileTap={{ scale: 0.97 }}
+                    whileHover={{
+                      backgroundColor: UI.button.primaryHover,
+                    }}
                     onClick={() => scrollToSection("#contact")}
-                    className="w-full flex items-center justify-center gap-2.5 h-14 rounded-2xl font-bold text-base overflow-hidden group relative"
+                    className="group relative flex h-14 w-full items-center justify-center gap-2.5 overflow-hidden rounded-2xl text-base font-black"
                     style={{
-                      background: PALETTE.beige,
-                      color: PALETTE.navy,
-                      boxShadow: "0 12px 32px -14px rgba(245,239,235,0.45)",
+                      background: UI.button.primary,
+                      color: UI.button.primaryText,
+                      boxShadow: UI.shadow.soft,
                     }}
                   >
                     <span className="relative z-10">Enquire Now</span>
-                    <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" />
-                    <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-600 skew-x-12" />
+
+                    <ArrowRight className="relative z-10 h-4 w-4 transition-transform group-hover:translate-x-1" />
+
+                    <span
+                      className="absolute inset-y-0 left-0 w-0 transition-all duration-500 group-hover:w-full"
+                      style={{ background: "rgba(255,255,255,0.12)" }}
+                    />
                   </motion.button>
                 </motion.div>
               </div>

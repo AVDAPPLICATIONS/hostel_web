@@ -2,9 +2,16 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { MapPin, Navigation, Car, Train, Bus, ExternalLink, ArrowRight } from "lucide-react"
-
-const ACCENT = "#C8A96E"
+import {
+  MapPin,
+  Navigation,
+  Car,
+  Train,
+  Bus,
+  ArrowRight,
+  Sparkles,
+} from "lucide-react"
+import { UI } from "@/lib/theme"
 
 const transportOptions = [
   {
@@ -14,7 +21,6 @@ const transportOptions = [
     distance: "7 km",
     route: "Via GJ SH 60 & 100 Feet Rd",
     mode: "Auto / Bus",
-    accent: "#C8A96E",
     originQuery: "Anand+Railway+Station,+Gujarat",
   },
   {
@@ -24,7 +30,6 @@ const transportOptions = [
     distance: "6 km",
     route: "Via Zydus Hospital & GJ SH 60 Rd",
     mode: "Public Transport",
-    accent: "#C8A96E",
     originQuery: "New+Anand+Bus+Station,+Gujarat",
   },
   {
@@ -34,7 +39,6 @@ const transportOptions = [
     distance: "Highway",
     route: "Via Samarkha Chokdi & Bhalej Rd",
     mode: "Self Drive",
-    accent: "#C8A96E",
     originQuery: "Samarkha+Chokdi,+Anand,+Gujarat",
   },
 ]
@@ -48,333 +52,371 @@ export default function Arrival() {
       <style
         dangerouslySetInnerHTML={{
           __html: `
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
-      `,
+            @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+          `,
         }}
       />
 
       <section
         id="arrival"
-        className="relative py-24 md:py-36 overflow-hidden"
+        className="relative overflow-hidden px-4 py-24 md:py-36"
         style={{
-          background: "linear-gradient(170deg, #060d16 0%, #0d1b2a 50%, #091520 100%)",
+          background: UI.section.dark,
           fontFamily: "'DM Sans', sans-serif",
         }}
       >
-        {/* Grain */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.04]"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-            backgroundSize: "180px",
-          }}
-        />
-
-        {/* Ambient glow */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div
-            className="absolute -top-40 right-1/3 w-[600px] h-[600px] rounded-full opacity-[0.06] blur-3xl transition-all duration-1000"
-            style={{ background: current.accent }}
-          />
-          <div
-            className="absolute bottom-0 -left-40 w-[500px] h-[500px] rounded-full opacity-[0.04] blur-3xl"
-            style={{ background: "#D4956A" }}
-          />
-        </div>
-
-        {/* Top rule */}
-        <div
-          className="absolute top-0 left-0 right-0 h-px opacity-[0.08]"
-          style={{ background: "linear-gradient(90deg, transparent, #fff, transparent)" }}
-        />
-
-        <div className="relative container mx-auto px-4 max-w-6xl">
-          {/* ── Header ── */}
+        <div className="relative container mx-auto max-w-6xl">
+          {/* Header */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 34 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.8,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             viewport={{ once: true }}
-            className="text-center mb-16 md:mb-20"
+            className="mb-14 text-center md:mb-16"
           >
             <motion.div
-              initial={{ opacity: 0, scaleX: 0 }}
-              whileInView={{ opacity: 1, scaleX: 1 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              viewport={{ once: true }}
-              className="flex items-center justify-center gap-3 mb-6"
+              className="mb-5 inline-flex items-center gap-2 rounded-full px-5 py-2 text-[10px] font-bold uppercase tracking-[0.28em]"
+              style={{
+                background: UI.card.light,
+                color: UI.text.accent,
+                border: `1px solid ${UI.border.white}`,
+                boxShadow: UI.shadow.light,
+              }}
+              animate={{ y: [0, -5, 0] }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
             >
-              <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#C8A96E]" />
-              <span
-                className="text-[10px] tracking-[0.3em] uppercase font-medium"
-                style={{ color: ACCENT }}
-              >
-                Getting Here
-              </span>
-              <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#C8A96E]" />
+              <Sparkles size={14} />
+              Getting Here
             </motion.div>
 
             <h2
-              className="text-5xl md:text-7xl font-semibold text-white mb-5 leading-[1.05]"
-              style={{ fontFamily: "'Cormorant Garamond', serif" }}
+              className="text-5xl font-semibold leading-[1.05] md:text-7xl"
+              style={{
+                color: UI.text.light,
+                fontFamily: "'Cormorant Garamond', serif",
+              }}
             >
               Plan Your{" "}
-              <em className="not-italic" style={{ color: ACCENT }}>
+              <motion.em
+                className="inline-block not-italic"
+                style={{ color: UI.text.muted }}
+                animate={{
+                  opacity: [0.75, 1, 0.75],
+                  y: [0, -2, 0],
+                }}
+                transition={{
+                  duration: 2.8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
                 Arrival
-              </em>
+              </motion.em>
             </h2>
-            <p className="text-white/40 text-base md:text-lg max-w-xl mx-auto leading-relaxed font-light">
-              Multiple routes, one destination — find the best way to reach Atmiya Vidya Dham.
+
+            <p
+              className="mx-auto mt-5 max-w-xl text-base font-light leading-relaxed md:text-lg"
+              style={{ color: UI.text.muted }}
+            >
+              Multiple routes, one destination — find the best way to reach
+              Atmiya Vidya Dham.
             </p>
           </motion.div>
 
-          {/* ── Main Card ── */}
+          {/* Main Card */}
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+            initial={{ opacity: 0, y: 48, scale: 0.97 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{
+              duration: 0.85,
+              ease: [0.22, 1, 0.36, 1],
+              delay: 0.1,
+            }}
             viewport={{ once: true }}
-            className="rounded-[28px] md:rounded-[36px] overflow-hidden"
+            className="overflow-hidden rounded-[2rem] p-1"
             style={{
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              boxShadow: `0 40px 100px -30px ${current.accent}15`,
-              transition: "box-shadow 0.8s ease",
+              background: UI.card.soft,
+              boxShadow: UI.shadow.card,
             }}
           >
-            <div className="flex flex-col lg:flex-row min-h-[500px] md:min-h-[560px]">
-              {/* Left — Map / Location Visual */}
-              <div className="relative w-full lg:w-[50%] h-[300px] md:h-[380px] lg:h-auto overflow-hidden bg-[#0a1220]">
-                {/* Dot grid pattern */}
+            <div
+              className="overflow-hidden rounded-[1.8rem]"
+              style={{
+                background: UI.card.light,
+                border: `1px solid ${UI.border.white}`,
+              }}
+            >
+              <div className="flex min-h-[540px] flex-col lg:flex-row">
+                {/* Left Map */}
                 <div
-                  className="absolute inset-0 opacity-[0.04] pointer-events-none"
+                  className="relative h-[340px] w-full overflow-hidden lg:h-auto lg:w-[52%]"
                   style={{
-                    backgroundImage:
-                      "radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)",
-                    backgroundSize: "24px 24px",
+                    background: UI.card.soft,
+                    borderRight: `1px solid ${UI.border.light}`,
                   }}
-                />
+                >
+                  {transportOptions.map((option, index) => (
+                    <iframe
+                      key={option.from}
+                      title={`Interactive Route Map - ${option.from}`}
+                      src={`https://maps.google.com/maps?saddr=${option.originQuery}&daddr=Atmiya+Vidya+Dham,+Bakrol+Road,+VV+Nagar,+Gujarat&output=embed`}
+                      className="absolute inset-0 h-full w-full border-0 transition-opacity duration-500 ease-in-out"
+                      allowFullScreen={false}
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      style={{
+                        opacity: selected === index ? 1 : 0,
+                        pointerEvents: selected === index ? "auto" : "none",
+                        zIndex: selected === index ? 10 : 0,
+                      }}
+                    />
+                  ))}
 
-                {/* Interactive Google Maps - Preloaded for instant switching */}
-                {transportOptions.map((option, index) => (
-                  <iframe
-                    key={option.from}
-                    title={`Interactive Route Map - ${option.from}`}
-                    src={`https://maps.google.com/maps?saddr=${option.originQuery}&daddr=Atmiya+Vidya+Dham,+Bakrol+Road,+VV+Nagar,+Gujarat&output=embed`}
-                    className="absolute inset-0 w-full h-full border-0 transition-opacity duration-500 ease-in-out"
-                    allowFullScreen={false}
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    style={{ 
-                      opacity: selected === index ? 1 : 0,
-                      pointerEvents: selected === index ? "auto" : "none",
-                      filter: "invert(90%) hue-rotate(180deg) brightness(85%) contrast(110%)",
-                      zIndex: selected === index ? 10 : 0
-                    }}
-                  />
-                ))}
-
-                {/* Subtle dark overlay to blend the map with the theme */}
-                <div className="absolute inset-0 bg-[#0a1220]/20 pointer-events-none mix-blend-overlay" />
-
-                {/* Bottom status bar */}
-                <div className="absolute bottom-5 left-5 right-5">
-                  <div
-                    className="p-4 rounded-xl backdrop-blur-md"
-                    style={{
-                      background: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(255,255,255,0.06)",
-                    }}
-                  >
-                    <div className="flex items-center justify-between mb-2.5">
-                      <span className="text-[9px] font-bold text-white/25 uppercase tracking-[0.15em]">
-                        Destination Status
-                      </span>
-                      <span className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wider">
-                        <span className="relative flex h-2 w-2">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-60" />
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
+                  {/* Map Info Bar */}
+                  <div className="absolute bottom-5 left-5 right-5 z-20">
+                    <motion.div
+                      key={current.from}
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.35 }}
+                      className="rounded-2xl p-4"
+                      style={{
+                        background: UI.card.light,
+                        border: `1px solid ${UI.border.white}`,
+                        boxShadow: UI.shadow.soft,
+                      }}
+                    >
+                      <div className="mb-3 flex items-center justify-between gap-4">
+                        <span
+                          className="text-[10px] font-black uppercase tracking-[0.18em]"
+                          style={{ color: UI.text.accent }}
+                        >
+                          Destination Status
                         </span>
-                        <span className="text-green-400/80">Open Now</span>
-                      </span>
-                    </div>
-                    <div className="flex gap-2">
-                      <div className="h-1 flex-1 bg-white/[0.06] rounded-full overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          whileInView={{ width: "70%" }}
-                          transition={{ duration: 1.5, delay: 0.5 }}
-                          viewport={{ once: true }}
-                          className="h-full rounded-full"
-                          style={{ background: current.accent }}
-                        />
+
+                        <span
+                          className="flex items-center gap-2 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider"
+                          style={{
+                            background: UI.card.soft,
+                            color: UI.text.dark,
+                          }}
+                        >
+                          <span className="relative flex h-2 w-2">
+                            <span
+                              className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
+                              style={{ background: UI.text.accent }}
+                            />
+                            <span
+                              className="relative inline-flex h-2 w-2 rounded-full"
+                              style={{ background: UI.text.accent }}
+                            />
+                          </span>
+                          Open Now
+                        </span>
                       </div>
-                      <div className="h-1 flex-1 bg-white/[0.06] rounded-full overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          whileInView={{ width: "45%" }}
-                          transition={{ duration: 1.5, delay: 0.7 }}
-                          viewport={{ once: true }}
-                          className="h-full rounded-full bg-white/20"
-                        />
+
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="flex h-10 w-10 items-center justify-center rounded-xl"
+                          style={{
+                            background: UI.button.primary,
+                            color: UI.button.primaryText,
+                          }}
+                        >
+                          <MapPin size={18} />
+                        </div>
+
+                        <div className="min-w-0">
+                          <p
+                            className="truncate text-sm font-bold"
+                            style={{ color: UI.text.dark }}
+                          >
+                            Atmiya Vidya Dham
+                          </p>
+                          <p
+                            className="truncate text-xs"
+                            style={{ color: UI.text.accent }}
+                          >
+                            Bakrol Road, V.V. Nagar, Gujarat
+                          </p>
+                        </div>
                       </div>
-                    </div>
+                    </motion.div>
                   </div>
                 </div>
-              </div>
 
-              {/* Right — Route Picker */}
-              <div
-                className="w-full lg:w-[50%] p-7 md:p-10 flex flex-col"
-                style={{ background: "rgba(255,255,255,0.02)" }}
-              >
-                <div className="mb-7">
-                  <h3
-                    className="text-xl md:text-2xl font-semibold text-white mb-1.5"
-                    style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                {/* Right Route Picker */}
+                <div className="flex w-full flex-col p-6 md:p-8 lg:w-[48%] lg:p-10">
+                  <motion.div
+                    key={current.from}
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35 }}
+                    className="mb-7"
                   >
-                    Smart Navigation
-                  </h3>
-                  <p className="text-white/30 text-xs font-light">
-                    Select your arrival point to see the best route
-                  </p>
-                </div>
+                    <span
+                      className="mb-3 inline-flex rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-[0.22em]"
+                      style={{
+                        background: UI.card.soft,
+                        color: UI.text.accent,
+                      }}
+                    >
+                      Route {current.label}
+                    </span>
 
-                <div className="space-y-3 flex-1">
-                  {transportOptions.map((option, index) => {
-                    const active = selected === index
-                    return (
-                      <motion.button
-                        key={option.from}
-                        onClick={() => setSelected(index)}
-                        whileHover={{ x: 3 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="w-full text-left relative rounded-2xl overflow-hidden transition-all duration-300"
-                        style={{
-                          background: active
-                            ? "rgba(255,255,255,0.07)"
-                            : "rgba(255,255,255,0.02)",
-                          border: `1px solid ${
-                            active
-                              ? `${option.accent}40`
-                              : "rgba(255,255,255,0.05)"
-                          }`,
-                          boxShadow: active
-                            ? `0 8px 30px -10px ${option.accent}20`
-                            : "none",
-                        }}
-                      >
-                        {/* Active accent bar */}
-                        <AnimatePresence>
-                          {active && (
-                            <motion.div
-                              layoutId="arrivalTabBar"
-                              className="absolute left-0 top-3 bottom-3 w-[3px] rounded-full"
-                              style={{ background: option.accent }}
-                              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                            />
-                          )}
-                        </AnimatePresence>
+                    <h3
+                      className="text-3xl font-semibold leading-tight md:text-4xl"
+                      style={{
+                        color: UI.text.dark,
+                        fontFamily: "'Cormorant Garamond', serif",
+                      }}
+                    >
+                      Smart Navigation
+                    </h3>
 
-                        <div className="flex items-center gap-4 px-5 py-4 pl-6">
-                          <div
-                            className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300"
-                            style={{
-                              background: active
-                                ? `${option.accent}20`
-                                : "rgba(255,255,255,0.04)",
-                              border: `1px solid ${
-                                active
-                                  ? `${option.accent}35`
-                                  : "rgba(255,255,255,0.06)"
-                              }`,
-                            }}
-                          >
-                            <option.icon
-                              className="h-5 w-5 transition-colors duration-300"
-                              style={{
-                                color: active
-                                  ? option.accent
-                                  : "rgba(255,255,255,0.3)",
-                              }}
-                            />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between mb-0.5">
-                              <span
-                                className="font-medium text-sm transition-colors duration-300 truncate"
-                                style={{
-                                  color: active ? "white" : "rgba(255,255,255,0.5)",
+                    <p
+                      className="mt-2 text-sm leading-6"
+                      style={{ color: UI.text.accent }}
+                    >
+                      Select your arrival point to preview the best route.
+                    </p>
+                  </motion.div>
+
+                  <div className="flex-1 space-y-4">
+                    {transportOptions.map((option, index) => {
+                      const Icon = option.icon
+                      const active = selected === index
+
+                      return (
+                        <motion.button
+                          key={option.from}
+                          onClick={() => setSelected(index)}
+                          whileHover={{
+                            x: 4,
+                            scale: 1.01,
+                          }}
+                          whileTap={{ scale: 0.98 }}
+                          className="relative w-full overflow-hidden rounded-2xl text-left transition-all duration-300"
+                          style={{
+                            background: active ? UI.card.white : UI.card.soft,
+                            border: `1.5px solid ${
+                              active ? UI.button.primary : UI.border.white
+                            }`,
+                            boxShadow: active ? UI.shadow.soft : UI.shadow.light,
+                          }}
+                        >
+                          <AnimatePresence>
+                            {active && (
+                              <motion.div
+                                layoutId="arrivalActiveBar"
+                                className="absolute bottom-0 left-0 top-0 w-1"
+                                style={{ background: UI.button.primary }}
+                                transition={{
+                                  duration: 0.4,
+                                  ease: [0.22, 1, 0.36, 1],
                                 }}
-                              >
-                                {option.from}
-                              </span>
-                              <span
-                                className="text-[9px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full flex-shrink-0 ml-2 transition-all duration-300"
-                                style={{
-                                  background: active
-                                    ? `${option.accent}20`
-                                    : "rgba(255,255,255,0.04)",
-                                  color: active
-                                    ? option.accent
-                                    : "rgba(255,255,255,0.25)",
-                                  border: `1px solid ${
-                                    active
-                                      ? `${option.accent}30`
-                                      : "rgba(255,255,255,0.06)"
-                                  }`,
-                                }}
-                              >
-                                {option.mode}
-                              </span>
-                            </div>
-                            <p
-                              className="text-xs transition-colors duration-300"
+                              />
+                            )}
+                          </AnimatePresence>
+
+                          <div className="flex items-center gap-4 px-5 py-4">
+                            <div
+                              className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl transition-all duration-300"
                               style={{
+                                background: active
+                                  ? UI.button.primary
+                                  : UI.card.light,
                                 color: active
-                                  ? "rgba(255,255,255,0.4)"
-                                  : "rgba(255,255,255,0.2)",
+                                  ? UI.button.primaryText
+                                  : UI.text.dark,
+                                border: `1px solid ${
+                                  active
+                                    ? UI.button.primary
+                                    : UI.border.white
+                                }`,
                               }}
                             >
-                              {option.distance} · {option.route}
-                            </p>
-                          </div>
-                        </div>
-                      </motion.button>
-                    )
-                  })}
-                </div>
+                              <Icon className="h-5 w-5" />
+                            </div>
 
-                {/* Directions button */}
-                <div className="mt-8 pt-6" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-                  <motion.button
-                    whileHover={{ scale: 1.02, y: -2 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() =>
-                      window.open(
-                        "https://www.google.com/maps/dir/?api=1&destination=Atmiya+Vidya+Dham+Bakrol",
-                        "_blank"
+                            <div className="min-w-0 flex-1">
+                              <div className="mb-1 flex items-center justify-between gap-3">
+                                <span
+                                  className="truncate text-sm font-bold transition-colors duration-300"
+                                  style={{ color: UI.text.dark }}
+                                >
+                                  {option.from}
+                                </span>
+
+                                <span
+                                  className="flex-shrink-0 rounded-full px-3 py-1 text-[9px] font-black uppercase tracking-wider"
+                                  style={{
+                                    background: active
+                                      ? UI.card.soft
+                                      : UI.card.white,
+                                    color: UI.text.accent,
+                                  }}
+                                >
+                                  {option.mode}
+                                </span>
+                              </div>
+
+                              <p
+                                className="text-xs leading-5 transition-colors duration-300"
+                                style={{ color: UI.text.accent }}
+                              >
+                                {option.distance} · {option.route}
+                              </p>
+                            </div>
+                          </div>
+                        </motion.button>
                       )
-                    }
-                    className="w-full relative group flex items-center justify-center gap-3 py-4 rounded-2xl font-semibold text-sm overflow-hidden transition-all"
-                    style={{
-                      background: ACCENT,
-                      color: "#0a1220",
-                      boxShadow: `0 16px 40px -10px ${ACCENT}50`,
-                    }}
+                    })}
+                  </div>
+
+                  {/* Directions Button */}
+                  <div
+                    className="mt-8 pt-6"
+                    style={{ borderTop: `1px solid ${UI.border.light}` }}
                   >
-                    <Navigation className="w-4 h-4 relative z-10" />
-                    <span className="relative z-10">Get Live Directions</span>
-                    <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" />
-                    {/* Shimmer */}
-                    <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12" />
-                  </motion.button>
+                    <motion.button
+                      whileHover={{
+                        scale: 1.02,
+                        y: -2,
+                        backgroundColor: UI.button.primaryHover,
+                      }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() =>
+                        window.open(
+                          "https://www.google.com/maps/dir/?api=1&destination=Atmiya+Vidya+Dham+Bakrol",
+                          "_blank"
+                        )
+                      }
+                      className="group flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl py-4 text-sm font-black transition-all"
+                      style={{
+                        background: UI.button.primary,
+                        color: UI.button.primaryText,
+                        boxShadow: UI.shadow.soft,
+                      }}
+                    >
+                      <Navigation className="h-4 w-4" />
+                      <span>Get Live Directions</span>
+                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                    </motion.button>
+                  </div>
                 </div>
               </div>
             </div>
           </motion.div>
 
-          {/* Bottom counter */}
+          {/* Bottom Counter */}
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -382,12 +424,23 @@ export default function Arrival() {
             viewport={{ once: true }}
             className="mt-10 flex items-center justify-center gap-4"
           >
-            <div className="h-px flex-1 max-w-[80px] bg-white/[0.06]" />
-            <span className="text-white/20 text-xs font-mono tracking-widest">
+            <div
+              className="h-px max-w-[80px] flex-1"
+              style={{ background: UI.border.soft }}
+            />
+
+            <span
+              className="text-xs font-bold tracking-widest"
+              style={{ color: UI.text.muted }}
+            >
               {String(selected + 1).padStart(2, "0")} /{" "}
               {String(transportOptions.length).padStart(2, "0")} routes
             </span>
-            <div className="h-px flex-1 max-w-[80px] bg-white/[0.06]" />
+
+            <div
+              className="h-px max-w-[80px] flex-1"
+              style={{ background: UI.border.soft }}
+            />
           </motion.div>
         </div>
       </section>
