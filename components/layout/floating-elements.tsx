@@ -5,13 +5,13 @@ import { motion } from "framer-motion"
 export default function FloatingElements() {
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {/* Subtle gold dust particles */}
+      {/* Subtle palette dust particles */}
       {Array.from({ length: 5 }).map((_, i) => (
         <motion.div
           key={i}
           className="absolute w-1 h-1 rounded-full"
           style={{
-            background: "rgba(200, 169, 110, 0.2)",
+            background: "rgba(86, 124, 141, 0.16)",
             left: `${15 + i * 18}%`,
             top: `${25 + i * 12}%`,
           }}
@@ -32,7 +32,7 @@ export default function FloatingElements() {
       <motion.div
         className="absolute w-96 h-96 rounded-full blur-[200px]"
         style={{
-          background: "rgba(200, 169, 110, 0.03)",
+          background: "rgba(255, 255, 255, 0.16)",
           right: "10%",
           top: "20%",
         }}
@@ -50,7 +50,7 @@ export default function FloatingElements() {
       <motion.div
         className="absolute w-64 h-64 rounded-full blur-[150px]"
         style={{
-          background: "rgba(142, 180, 212, 0.03)",
+          background: "rgba(200, 217, 230, 0.16)",
           left: "5%",
           bottom: "30%",
         }}

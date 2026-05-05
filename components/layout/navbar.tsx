@@ -2,9 +2,16 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, Sunrise, ArrowRight } from "lucide-react"
+import Image from "next/image"
+import { Menu, X, ArrowRight } from "lucide-react"
 
-const ACCENT = "#C8A96E"
+const PALETTE = {
+  navy: "#2F4156",
+  teal: "#567C8D",
+  skyBlue: "#C8D9E6",
+  beige: "#F5EFEB",
+  white: "#FFFFFF",
+}
 
 const navItems = [
   { name: "Home", href: "#home" },
@@ -76,14 +83,14 @@ export default function Navbar() {
           className="pointer-events-auto rounded-[20px] md:rounded-[28px] px-4 md:px-7 h-14 md:h-16 flex items-center justify-between"
           style={{
             background: scrolled
-              ? "rgba(6, 13, 22, 0.85)"
-              : "rgba(6, 13, 22, 0.4)",
+              ? "linear-gradient(135deg, rgba(47,65,86,0.96), rgba(42,61,80,0.94))"
+              : "linear-gradient(135deg, rgba(47,65,86,0.9), rgba(86,124,141,0.82))",
             backdropFilter: "blur(24px) saturate(1.4)",
             WebkitBackdropFilter: "blur(24px) saturate(1.4)",
-            border: `1px solid ${scrolled ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.04)"}`,
+            border: `1px solid ${scrolled ? "rgba(200,217,230,0.24)" : "rgba(200,217,230,0.18)"}`,
             boxShadow: scrolled
-              ? "0 8px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)"
-              : "0 4px 20px rgba(0,0,0,0.1)",
+              ? "0 14px 45px rgba(47,65,86,0.26), inset 0 1px 0 rgba(255,255,255,0.1)"
+              : "0 10px 34px rgba(47,65,86,0.18), inset 0 1px 0 rgba(255,255,255,0.08)",
             transition: "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
@@ -92,24 +99,30 @@ export default function Navbar() {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => scrollToSection("#home")}
-            className="flex items-center gap-2.5 cursor-pointer"
+            className="flex items-center gap-3 cursor-pointer"
           >
             <div
-              className="w-8 h-8 md:w-9 md:h-9 rounded-lg md:rounded-xl flex items-center justify-center"
+              className="h-9 w-[68px] md:h-10 md:w-[74px] rounded-xl flex items-center justify-center overflow-hidden"
               style={{
-                background: `${ACCENT}12`,
-                border: `1px solid ${ACCENT}25`,
+                background: `linear-gradient(135deg, ${PALETTE.white}, ${PALETTE.beige})`,
+                border: "1px solid rgba(200,217,230,0.55)",
+                boxShadow: "0 10px 26px -18px rgba(0,0,0,0.5)",
               }}
             >
-              <Sunrise className="h-4 w-4 md:h-[18px] md:w-[18px]" style={{ color: ACCENT }} />
+              <Image
+                src="/logo.png"
+                alt="Atmiya Vidya Dham logo"
+                width={62}
+                height={29}
+                className="h-[27px] w-auto object-contain"
+                priority
+              />
             </div>
             <div className="flex flex-col -space-y-0.5">
-              <span className="text-base md:text-lg font-black text-white tracking-tight uppercase leading-tight">
-                AVD
-              </span>
-              <span className="text-[7px] md:text-[8px] font-bold text-white/25 uppercase tracking-[0.15em] leading-tight">
+              <span className="text-base md:text-lg font-black tracking-tight uppercase leading-tight" style={{ color: PALETTE.white }}>
                 Atmiya Vidya Dham
               </span>
+              
             </div>
           </motion.div>
 
@@ -117,8 +130,9 @@ export default function Navbar() {
           <div
             className="hidden lg:flex items-center gap-0.5 p-1 rounded-full"
             style={{
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.04)",
+              background: "rgba(47,65,86,0.28)",
+              border: "1px solid rgba(200,217,230,0.16)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)",
             }}
           >
             {navItems.map((item) => {
@@ -129,7 +143,7 @@ export default function Navbar() {
                   onClick={() => scrollToSection(item.href)}
                   className="relative px-4 xl:px-5 py-2 text-[13px] font-medium transition-colors duration-300 rounded-full outline-none"
                   style={{
-                    color: isActive ? "#0a1220" : "rgba(255,255,255,0.45)",
+                    color: isActive ? PALETTE.navy : "rgba(245,239,235,0.68)",
                   }}
                 >
                   {isActive && (
@@ -137,8 +151,8 @@ export default function Navbar() {
                       layoutId="nav-pill"
                       className="absolute inset-0 rounded-full"
                       style={{
-                        background: ACCENT,
-                        boxShadow: `0 4px 16px ${ACCENT}40`,
+                        background: PALETTE.beige,
+                        boxShadow: "0 6px 18px rgba(245,239,235,0.2)",
                       }}
                       transition={{
                         type: "spring",
@@ -150,13 +164,13 @@ export default function Navbar() {
                   <span
                     className="relative z-10 transition-colors duration-300"
                     style={{
-                      color: isActive ? "#0a1220" : undefined,
+                      color: isActive ? PALETTE.navy : undefined,
                     }}
                     onMouseEnter={(e) => {
-                      if (!isActive) e.currentTarget.style.color = "rgba(255,255,255,0.8)"
+                      if (!isActive) e.currentTarget.style.color = PALETTE.skyBlue
                     }}
                     onMouseLeave={(e) => {
-                      if (!isActive) e.currentTarget.style.color = "rgba(255,255,255,0.45)"
+                      if (!isActive) e.currentTarget.style.color = "rgba(245,239,235,0.68)"
                     }}
                   >
                     {item.name}
@@ -175,9 +189,9 @@ export default function Navbar() {
               onClick={() => scrollToSection("#contact")}
               className="hidden sm:flex items-center gap-2 h-9 md:h-10 px-5 md:px-6 rounded-xl md:rounded-2xl font-bold text-xs md:text-[13px] overflow-hidden group relative"
               style={{
-                background: ACCENT,
-                color: "#0a1220",
-                boxShadow: `0 8px 24px -6px ${ACCENT}40`,
+                background: PALETTE.beige,
+                color: PALETTE.navy,
+                boxShadow: "0 10px 26px -14px rgba(245,239,235,0.55)",
               }}
             >
               <span className="relative z-10">Enquire Now</span>
@@ -189,10 +203,11 @@ export default function Navbar() {
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center text-white/60 hover:text-white transition-colors"
+              className="lg:hidden w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center transition-colors"
               style={{
-                background: "rgba(255,255,255,0.06)",
-                border: "1px solid rgba(255,255,255,0.08)",
+                background: "rgba(255,255,255,0.1)",
+                border: "1px solid rgba(200,217,230,0.18)",
+                color: PALETTE.beige,
               }}
             >
               <AnimatePresence mode="wait">
@@ -232,17 +247,17 @@ export default function Navbar() {
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
               className="lg:hidden absolute top-[68px] md:top-[76px] left-3 right-3 rounded-[20px] md:rounded-[24px] p-5 md:p-6 pointer-events-auto overflow-hidden"
               style={{
-                background: "rgba(6, 13, 22, 0.95)",
+                background: "rgba(47, 65, 86, 0.96)",
                 backdropFilter: "blur(32px) saturate(1.6)",
                 WebkitBackdropFilter: "blur(32px) saturate(1.6)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                boxShadow: "0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04)",
+                border: "1px solid rgba(200,217,230,0.18)",
+                boxShadow: "0 20px 60px rgba(47,65,86,0.28), inset 0 1px 0 rgba(255,255,255,0.08)",
               }}
             >
               {/* Accent glow */}
               <div
                 className="absolute -top-20 left-1/2 -translate-x-1/2 w-[300px] h-[150px] rounded-full blur-3xl opacity-[0.06]"
-                style={{ background: ACCENT }}
+                style={{ background: PALETTE.skyBlue }}
               />
 
               <div className="relative flex flex-col gap-1">
@@ -257,10 +272,10 @@ export default function Navbar() {
                       onClick={() => scrollToSection(item.href)}
                       className="text-left py-3.5 px-5 rounded-xl font-medium text-[15px] transition-all duration-300 flex items-center justify-between group"
                       style={{
-                        background: isActive ? `${ACCENT}15` : "transparent",
-                        color: isActive ? ACCENT : "rgba(255,255,255,0.5)",
+                        background: isActive ? "rgba(245,239,235,0.12)" : "transparent",
+                        color: isActive ? PALETTE.skyBlue : "rgba(245,239,235,0.68)",
                         border: isActive
-                          ? `1px solid ${ACCENT}25`
+                          ? "1px solid rgba(200,217,230,0.24)"
                           : "1px solid transparent",
                       }}
                     >
@@ -270,7 +285,7 @@ export default function Navbar() {
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
                           className="w-1.5 h-1.5 rounded-full"
-                          style={{ background: ACCENT }}
+                          style={{ background: PALETTE.teal }}
                         />
                       )}
                     </motion.button>
@@ -282,16 +297,16 @@ export default function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.35 }}
                   className="mt-4 pt-4"
-                  style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+                  style={{ borderTop: "1px solid rgba(200,217,230,0.14)" }}
                 >
                   <motion.button
                     whileTap={{ scale: 0.97 }}
                     onClick={() => scrollToSection("#contact")}
                     className="w-full flex items-center justify-center gap-2.5 h-14 rounded-2xl font-bold text-base overflow-hidden group relative"
                     style={{
-                      background: ACCENT,
-                      color: "#0a1220",
-                      boxShadow: `0 12px 32px -8px ${ACCENT}50`,
+                      background: PALETTE.beige,
+                      color: PALETTE.navy,
+                      boxShadow: "0 12px 32px -14px rgba(245,239,235,0.45)",
                     }}
                   >
                     <span className="relative z-10">Enquire Now</span>

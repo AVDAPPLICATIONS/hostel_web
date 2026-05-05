@@ -1,4 +1,5 @@
 import { Inter, JetBrains_Mono } from "next/font/google"
+import type { Metadata } from "next"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/providers/theme-provider"
@@ -11,6 +12,16 @@ const fontMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
 })
+
+export const metadata: Metadata = {
+  title: "Atmiya Vidhya Dham | Harisaurabh Hostel",
+  description: "A value-centered student residence for focused study, cultural grounding, and everyday comfort.",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
+}
 
 export default function RootLayout({
   children,

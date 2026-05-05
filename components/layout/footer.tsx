@@ -1,7 +1,8 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Sunrise, Phone, Mail, MapPin, MessageCircle, ArrowUpRight } from "lucide-react"
+import Image from "next/image"
+import { Phone, Mail, MapPin, MessageCircle, ArrowUpRight } from "lucide-react"
 
 const InstagramIcon = (props: any) => (
   <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -85,7 +86,13 @@ export default function Footer() {
                 className="w-10 h-10 rounded-xl flex items-center justify-center"
                 style={{ background: `${ACCENT}15`, border: `1px solid ${ACCENT}25` }}
               >
-                <Sunrise className="h-5 w-5" style={{ color: ACCENT }} />
+                <Image
+                  src="/logo.png"
+                  alt="Atmiya Vidya Dham logo"
+                  width={34}
+                  height={24}
+                  className="h-6 w-auto object-contain"
+                />
               </div>
               <div className="flex flex-col -space-y-1">
                 <span className="text-lg font-black text-white tracking-tighter uppercase">AVD</span>

@@ -77,7 +77,7 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-[#060d16] overflow-x-hidden">
+    <div className="min-h-screen bg-[#F5EFEB] overflow-x-hidden">
       <ScrollProgress />
       <FloatingElements />
       <Navbar />

@@ -1,11 +1,18 @@
 "use client"
 
 import { useRef } from "react"
-import { motion, useScroll, useTransform } from "framer-motion"
-import { Button } from "@/components/ui/button"
+import { motion, useMotionValue, useScroll, useSpring, useTransform } from "framer-motion"
 import { Play, ArrowDown } from "lucide-react"
 import Magnetic from "@/components/shared/magnetic"
 import TextReveal from "@/components/shared/text-reveal"
+
+const PALETTE = {
+  navy: "#2F4156",
+  teal: "#567C8D",
+  skyBlue: "#C8D9E6",
+  beige: "#F5EFEB",
+  white: "#FFFFFF",
+}
 
 const floatingParticles = Array.from({ length: 20 }, (_, i) => ({
   id: i,
@@ -18,13 +25,25 @@ const floatingParticles = Array.from({ length: 20 }, (_, i) => ({
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const pointerX = useMotionValue(50)
+  const pointerY = useMotionValue(50)
+  const smoothPointerX = useSpring(pointerX, { stiffness: 80, damping: 24, mass: 0.4 })
+  const smoothPointerY = useSpring(pointerY, { stiffness: 80, damping: 24, mass: 0.4 })
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
   })
 
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", "25%"])
-  const overlayOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 0.6])
+  const overlayOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 0.28])
+  const colorFieldX = useTransform(smoothPointerX, [0, 100], ["-3%", "3%"])
+  const colorFieldY = useTransform(smoothPointerY, [0, 100], ["-2%", "2%"])
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    pointerX.set(((event.clientX - rect.left) / rect.width) * 100)
+    pointerY.set(((event.clientY - rect.top) / rect.height) * 100)
+  }
 
   const scrollToSection = (href: string) => {
     if (typeof document === "undefined") return
@@ -42,46 +61,53 @@ export default function Hero() {
     <section
       id="home"
       ref={containerRef}
+      onPointerMove={handlePointerMove}
       className="min-h-screen relative overflow-hidden"
       style={{
-        background: "linear-gradient(170deg, #060d16 0%, #0d1b2a 40%, #091520 100%)",
+        background: `linear-gradient(145deg, ${PALETTE.beige} 0%, ${PALETTE.white} 44%, ${PALETTE.skyBlue} 118%)`,
         fontFamily: "'DM Sans', sans-serif",
       }}
     >
-      {/* Animated gradient orbs */}
+      {/* Interactive palette wash */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          x: colorFieldX,
+          y: colorFieldY,
+          background:
+            "linear-gradient(120deg, rgba(200,217,230,0.55) 0%, transparent 36%), linear-gradient(290deg, rgba(86,124,141,0.16) 0%, transparent 42%), linear-gradient(180deg, rgba(255,255,255,0.65) 0%, rgba(245,239,235,0.22) 100%)",
+        }}
+      />
+
+      {/* Animated color fields */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           animate={{
-            x: [0, 80, -40, 0],
-            y: [0, -60, 30, 0],
-            scale: [1, 1.2, 0.9, 1],
+            x: ["-4%", "3%", "-1%", "-4%"],
+            y: ["0%", "-2%", "2%", "0%"],
           }}
           transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -top-[15%] -left-[10%] w-[55%] h-[55%] rounded-full blur-[150px]"
-          style={{ background: "radial-gradient(circle, rgba(200,169,110,0.15), transparent 70%)" }}
+          className="absolute -top-[18%] -left-[18%] h-[70%] w-[75%] blur-[90px]"
+          style={{
+            background: "linear-gradient(135deg, rgba(200,217,230,0.5), rgba(255,255,255,0))",
+            transform: "skewX(-10deg)",
+          }}
         />
         <motion.div
           animate={{
-            x: [0, -80, 60, 0],
-            y: [0, 80, -40, 0],
-            scale: [1, 1.3, 1.1, 1],
+            x: ["4%", "-2%", "3%", "4%"],
+            y: ["0%", "3%", "-1%", "0%"],
           }}
           transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -bottom-[15%] -right-[10%] w-[60%] h-[60%] rounded-full blur-[160px]"
-          style={{ background: "radial-gradient(circle, rgba(139,180,212,0.1), transparent 70%)" }}
-        />
-        <motion.div
-          animate={{
-            x: [0, 40, -20, 0],
-            y: [0, -30, 50, 0],
+          className="absolute -bottom-[22%] right-[-18%] h-[78%] w-[72%] blur-[105px]"
+          style={{
+            background: "linear-gradient(225deg, rgba(86,124,141,0.24), rgba(245,239,235,0))",
+            transform: "skewX(12deg)",
           }}
-          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[40%] left-[30%] w-[30%] h-[30%] rounded-full blur-[120px]"
-          style={{ background: "radial-gradient(circle, rgba(200,169,110,0.08), transparent 70%)" }}
         />
       </div>
 
-      {/* Floating gold dust particles */}
+      {/* Floating palette dust particles */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {floatingParticles.map((p) => (
           <motion.div
@@ -92,7 +118,7 @@ export default function Hero() {
               height: p.size,
               left: `${p.x}%`,
               top: `${p.y}%`,
-              background: "rgba(200, 169, 110, 0.4)",
+              background: "rgba(86, 124, 141, 0.24)",
             }}
             animate={{
               y: [0, -80, 0],
@@ -111,65 +137,70 @@ export default function Hero() {
 
       {/* Grid pattern overlay */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        className="absolute inset-0 pointer-events-none opacity-[0.08]"
         style={{
-          backgroundImage: "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
+          backgroundImage: "linear-gradient(rgba(47,65,86,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(47,65,86,0.12) 1px, transparent 1px)",
           backgroundSize: "60px 60px",
         }}
       />
 
       {/* Scroll-driven overlay for smooth transition */}
       <motion.div
-        className="absolute inset-0 bg-[#060d16] pointer-events-none"
-        style={{ opacity: overlayOpacity }}
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          opacity: overlayOpacity,
+          background: `linear-gradient(180deg, ${PALETTE.white}, ${PALETTE.skyBlue})`,
+        }}
       />
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 h-screen flex items-center">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
+      <div className="relative z-10 container mx-auto px-5 md:px-8 lg:px-10 min-h-screen flex items-center pt-28 pb-16 md:pt-32">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] gap-10 lg:gap-16 items-center w-full">
           {/* Text Content */}
-          <motion.div className="max-w-2xl" style={{ y: textY }}>
+          <motion.div className="max-w-[680px]" style={{ y: textY }}>
             {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="mb-10"
+              className="mb-8 md:mb-9"
             >
               <span
-                className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full text-xs font-bold tracking-[0.2em] uppercase"
+                className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full text-[11px] font-bold tracking-[0.18em] uppercase"
                 style={{
-                  background: "rgba(200,169,110,0.08)",
-                  border: "1px solid rgba(200,169,110,0.2)",
-                  color: "#C8A96E",
+                  background: "rgba(245,239,235,0.1)",
+                  border: "1px solid rgba(86,124,141,0.24)",
+                  color: PALETTE.teal,
                   backdropFilter: "blur(12px)",
+                  boxShadow: "0 14px 38px rgba(47,65,86,0.08)",
                 }}
               >
                 <motion.span
                   animate={{ opacity: [0.4, 1, 0.4] }}
                   transition={{ duration: 2, repeat: Infinity }}
-                  className="w-2 h-2 rounded-full bg-amber-400"
+                  className="w-2 h-2 rounded-full"
+                  style={{ background: PALETTE.teal }}
                 />
                 Redefining Student Living
               </span>
             </motion.div>
 
             {/* Title */}
-            <div className="mb-10 space-y-1">
+            <div className="mb-7 md:mb-8 space-y-2 md:space-y-3">
               <TextReveal>
                 <h1
-                  className="text-6xl md:text-8xl font-bold text-white leading-[0.92] tracking-tight"
-                  style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                  className="text-5xl sm:text-6xl md:text-7xl xl:text-[5.5rem] font-bold leading-[1.02] tracking-normal"
+                  style={{ fontFamily: "'Cormorant Garamond', serif", color: PALETTE.navy }}
                 >
-                  Atmiya Vidya
+                  Atmiya Vidhya
                 </h1>
               </TextReveal>
               <TextReveal delay={0.2}>
                 <h1
-                  className="text-6xl md:text-8xl font-bold leading-[0.92] tracking-tight"
+                  className="text-5xl sm:text-6xl md:text-7xl xl:text-[5.5rem] font-bold leading-[1.02] tracking-normal"
                   style={{
                     fontFamily: "'Cormorant Garamond', serif",
-                    color: "#C8A96E",
+                    color: PALETTE.teal,
                   }}
                 >
                   Dham Hostel.
@@ -182,9 +213,10 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="text-lg md:text-xl text-white/40 mb-14 max-w-xl leading-relaxed font-light"
+              className="text-base md:text-lg mb-10 md:mb-11 max-w-[610px] leading-8 font-light"
+              style={{ color: "rgba(47,65,86,0.72)" }}
             >
-              Not just a residence, but a platform to instill cultural and moral values alongside academic excellence in the lap of nature.
+              A value-centered student residence shaped for focused study, cultural grounding, and everyday comfort in a calm campus environment.
             </motion.p>
 
             {/* CTA Buttons */}
@@ -192,18 +224,18 @@ export default function Hero() {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 1, ease: [0.22, 1, 0.36, 1] }}
-              className="flex flex-col sm:flex-row gap-5 mb-20"
+              className="flex flex-col sm:flex-row gap-4 mb-16 md:mb-20"
             >
               <Magnetic>
                 <motion.button
                   whileHover={{ scale: 1.03, y: -2 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => scrollToSection("#contact")}
-                  className="relative group flex items-center justify-center gap-2.5 px-8 py-4 h-14 rounded-2xl font-semibold text-base overflow-hidden"
+                  className="relative group flex items-center justify-center gap-2.5 px-8 py-4 h-14 min-w-[190px] rounded-2xl font-semibold text-base overflow-hidden"
                   style={{
-                    background: "#C8A96E",
-                    color: "#0a1220",
-                    boxShadow: "0 16px 40px -10px rgba(200,169,110,0.4)",
+                    background: PALETTE.navy,
+                    color: PALETTE.white,
+                    boxShadow: "0 18px 40px -16px rgba(47,65,86,0.55)",
                   }}
                 >
                   <span className="relative z-10">Book Your Stay</span>
@@ -216,12 +248,13 @@ export default function Hero() {
                   whileHover={{ scale: 1.03, y: -2 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => scrollToSection("#virtual-tour")}
-                  className="flex items-center justify-center gap-2.5 px-8 py-4 h-14 rounded-2xl font-semibold text-base transition-all duration-300"
+                  className="flex items-center justify-center gap-2.5 px-8 py-4 h-14 min-w-[190px] rounded-2xl font-semibold text-base transition-all duration-300"
                   style={{
-                    background: "transparent",
-                    color: "#C8A96E",
-                    border: "1px solid rgba(200,169,110,0.35)",
+                    background: "rgba(255,255,255,0.6)",
+                    color: PALETTE.teal,
+                    border: "1px solid rgba(86,124,141,0.24)",
                     backdropFilter: "blur(8px)",
+                    boxShadow: "0 16px 40px -22px rgba(47,65,86,0.45)",
                   }}
                 >
                   <Play className="h-4 w-4" />
@@ -238,8 +271,8 @@ export default function Hero() {
               className="flex flex-col items-start gap-3"
             >
               <div className="flex items-center gap-3">
-                <div className="w-px h-10 bg-gradient-to-b from-[#C8A96E]/50 to-transparent" />
-                <span className="text-white/25 text-[10px] tracking-[0.25em] uppercase font-medium">
+                <div className="w-px h-10 bg-gradient-to-b from-[#567C8D]/50 to-transparent" />
+                <span className="text-[10px] tracking-[0.25em] uppercase font-medium" style={{ color: "rgba(47,65,86,0.42)" }}>
                   Scroll to explore
                 </span>
               </div>
@@ -248,7 +281,7 @@ export default function Hero() {
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 className="ml-[1px]"
               >
-                <ArrowDown className="h-4 w-4 text-white/20" />
+                <ArrowDown className="h-4 w-4" style={{ color: "rgba(86,124,141,0.58)" }} />
               </motion.div>
             </motion.div>
           </motion.div>
@@ -262,11 +295,10 @@ export default function Hero() {
             style={{ y: textY }}
           >
             {/* Glowing backdrop for the image */}
-            <div className="absolute inset-0 bg-[#C8A96E]/10 blur-[100px] rounded-full" />
             <img
               src="https://www.avdvvn.org/assets/images/demo-content/swamiji.png"
               alt="Swamiji"
-              className="relative z-10 max-h-[85vh] w-auto object-contain drop-shadow-[0_0_30px_rgba(200,169,110,0.3)] filter brightness-110"
+              className="relative z-10 max-h-[85vh] w-auto object-contain drop-shadow-[0_24px_34px_rgba(47,65,86,0.22)] filter brightness-105"
               style={{
                 maskImage: "linear-gradient(to bottom, black 80%, transparent 100%)",
                 WebkitMaskImage: "linear-gradient(to bottom, black 80%, transparent 100%)"
@@ -277,7 +309,7 @@ export default function Hero() {
       </div>
 
       {/* Bottom gradient fade into next section */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#060d16] to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#F5EFEB] to-transparent pointer-events-none" />
     </section>
   )
 }
