@@ -10,7 +10,7 @@ import {
 } from "framer-motion"
 import { Play, ArrowDown } from "lucide-react"
 import Magnetic from "@/components/shared/magnetic"
-import TextReveal from "@/components/shared/text-reveal"
+import ScrollShineText from "@/components/shared/scroll-shine-text"
 import { UI } from "@/lib/theme"
 
 const floatingParticles = Array.from({ length: 14 }, (_, i) => ({
@@ -91,6 +91,7 @@ export default function Hero() {
           y: colorFieldY,
           background: UI.card.darkSoft,
           opacity: 0.6,
+          willChange: "transform",
         }}
       />
 
@@ -107,6 +108,7 @@ export default function Hero() {
               top: `${particle.y}%`,
               background: UI.text.muted,
               opacity: 0.2,
+              willChange: "transform",
             }}
             animate={{
               y: [0, -55, 0],
@@ -182,58 +184,38 @@ export default function Hero() {
               </motion.span>
             </motion.div>
 
-            {/* Title */}
             <div className="mb-7 space-y-2 md:mb-8 md:space-y-3">
-              <TextReveal>
-                <h1
-                  className="text-5xl font-bold leading-[1.02] tracking-normal sm:text-6xl md:text-7xl xl:text-[5.5rem]"
-                  style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                    color: UI.text.light,
-                  }}
-                >
-                  Atmiya Vidhya
-                </h1>
-              </TextReveal>
+              <ScrollShineText
+                as="h1"
+                className="text-5xl font-bold leading-[1.02] tracking-normal sm:text-6xl md:text-7xl xl:text-[5.5rem]"
+                style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  color: UI.text.light,
+                }}
+              >
+                Atmiya Vidhya
+              </ScrollShineText>
 
-              <TextReveal delay={0.2}>
-                <motion.h1
-                  className="text-5xl font-bold leading-[1.02] tracking-normal sm:text-6xl md:text-7xl xl:text-[5.5rem]"
-                  style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                    color: UI.text.muted,
-                  }}
-                  animate={{
-                    opacity: [0.78, 1, 0.78],
-                    y: [0, -3, 0],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                >
-                  Dham Hostel.
-                </motion.h1>
-              </TextReveal>
+              <ScrollShineText
+                as="h1"
+                delay={0.2}
+                className="text-5xl font-bold leading-[1.02] tracking-normal sm:text-6xl md:text-7xl xl:text-[5.5rem]"
+                style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  color: UI.text.muted,
+                }}
+              >
+                Dham Hostel.
+              </ScrollShineText>
             </div>
 
-            {/* Description */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.8,
-                delay: 0.8,
-                ease: [0.22, 1, 0.36, 1],
-              }}
+            <ScrollShineText
+              delay={0.6}
               className="mb-10 max-w-[610px] text-base font-light leading-8 md:mb-11 md:text-lg"
               style={{ color: UI.text.muted }}
             >
-              A value-centered student residence shaped for focused study,
-              cultural grounding, and everyday comfort in a calm campus
-              environment.
-            </motion.p>
+              A value-centered student residence shaped for focused study, cultural grounding, and everyday comfort in a calm campus environment.
+            </ScrollShineText>
 
             {/* CTA Buttons */}
             <motion.div

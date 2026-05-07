@@ -12,6 +12,8 @@ import {
   Sparkles,
 } from "lucide-react"
 import { UI } from "@/lib/theme"
+import ScrollShineText from "@/components/shared/scroll-shine-text"
+import ScrollRevealCard from "@/components/shared/scroll-reveal-card"
 
 const transportOptions = [
   {
@@ -96,30 +98,16 @@ export default function Arrival() {
               Getting Here
             </motion.div>
 
-            <h2
-              className="text-5xl font-semibold leading-[1.05] md:text-7xl"
+            <ScrollShineText
+              as="h2"
+              className="text-5xl font-semibold leading-[1.05] md:text-7xl justify-center text-center"
               style={{
                 color: UI.text.light,
                 fontFamily: "'Cormorant Garamond', serif",
               }}
             >
-              Plan Your{" "}
-              <motion.em
-                className="inline-block not-italic"
-                style={{ color: UI.text.muted }}
-                animate={{
-                  opacity: [0.75, 1, 0.75],
-                  y: [0, -2, 0],
-                }}
-                transition={{
-                  duration: 2.8,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                Arrival
-              </motion.em>
-            </h2>
+              Plan Your Arrival
+            </ScrollShineText>
 
             <p
               className="mx-auto mt-5 max-w-xl text-base font-light leading-relaxed md:text-lg"
@@ -131,16 +119,9 @@ export default function Arrival() {
           </motion.div>
 
           {/* Main Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 48, scale: 0.97 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{
-              duration: 0.85,
-              ease: [0.22, 1, 0.36, 1],
-              delay: 0.1,
-            }}
-            viewport={{ once: true }}
+          <ScrollRevealCard
             className="overflow-hidden rounded-[2rem] p-1"
+            delay={0.1}
             style={{
               background: UI.card.soft,
               boxShadow: UI.shadow.card,
@@ -414,7 +395,7 @@ export default function Arrival() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </ScrollRevealCard>
 
           {/* Bottom Counter */}
           <motion.div

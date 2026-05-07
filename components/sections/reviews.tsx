@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import {
   Star,
   Sparkles,
@@ -11,6 +11,9 @@ import {
 } from "lucide-react"
 import Image from "next/image"
 import { COLORS, UI } from "@/lib/theme"
+import ScrollShineText from "@/components/shared/scroll-shine-text"
+import ScrollRevealCard from "@/components/shared/scroll-reveal-card"
+import CinematicPhoto from "@/components/shared/cinematic-photo"
 
 const reviews = [
   {
@@ -54,6 +57,11 @@ export default function Reviews() {
   const [progress, setProgress] = useState(0)
 
   const containerRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  })
+  const parallaxX = useTransform(scrollYProgress, [0, 1], [-50, 50])
   const review = reviews[currentIndex]
 
   useEffect(() => {
@@ -137,30 +145,16 @@ export default function Reviews() {
               Testimonials
             </motion.div>
 
-            <h2
-              className="text-5xl font-semibold leading-[1.05] md:text-7xl"
+            <ScrollShineText
+              as="h2"
+              className="text-5xl font-semibold leading-[1.05] md:text-7xl justify-center text-center"
               style={{
                 color: UI.text.primaryLight,
                 fontFamily: "'Cormorant Garamond', serif",
               }}
             >
-              Voices of{" "}
-              <motion.em
-                className="inline-block not-italic"
-                style={{ color: UI.text.mutedLight }}
-                animate={{
-                  opacity: [0.75, 1, 0.75],
-                  y: [0, -2, 0],
-                }}
-                transition={{
-                  duration: 2.8,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                Alumni
-              </motion.em>
-            </h2>
+              Voices of Alumni
+            </ScrollShineText>
 
             <p
               className="mx-auto mt-5 max-w-xl text-base font-light leading-relaxed md:text-lg"
@@ -172,9 +166,10 @@ export default function Reviews() {
           </motion.div>
 
           {/* Testimonial Card */}
-          <div
-            className="relative mx-auto max-w-5xl [perspective:2000px]"
+          <ScrollRevealCard
             ref={containerRef}
+            className="relative mx-auto max-w-5xl [perspective:2000px]"
+            direction="left"
           >
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
@@ -215,31 +210,23 @@ export default function Reviews() {
               >
                 <div className="flex flex-col items-center gap-8 md:flex-row md:gap-0">
                   {/* Avatar */}
-                  <motion.div
-                    initial={{ scale: 0.82, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{
-                      delay: 0.15,
-                      type: "spring",
-                      stiffness: 200,
-                      damping: 20,
-                    }}
-                    className="relative z-10 flex-shrink-0 md:-mr-12"
-                  >
+                  <CinematicPhoto className="relative z-10 flex-shrink-0 md:-mr-12">
                     <div className="group relative">
                       <motion.div
                         className="absolute inset-0 rounded-[28px] md:rounded-[32px]"
                         style={{
                           background: UI.card.soft,
                           border: `1px solid ${UI.border.white}`,
-                          transform: "rotate(6deg)",
+                        }}
+                        animate={{ 
+                          rotate: [6, 8, 6],
+                        }}
+                        transition={{
+                          duration: 5,
+                          repeat: Infinity,
+                          ease: "easeInOut"
                         }}
                         whileHover={{ rotate: 3 }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 260,
-                          damping: 18,
-                        }}
                       />
 
                       <div
@@ -261,7 +248,7 @@ export default function Reviews() {
                         />
                       </div>
                     </div>
-                  </motion.div>
+                  </CinematicPhoto>
 
                   {/* Content Card */}
                   <div
@@ -455,7 +442,7 @@ export default function Reviews() {
                 style={{ background: UI.border.soft }}
               />
             </div>
-          </div>
+          </ScrollRevealCard>
         </div>
       </section>
     </>

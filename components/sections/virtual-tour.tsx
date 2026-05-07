@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { OrbitControls, Environment, Html } from "@react-three/drei"
 import { Eye, ChevronLeft, ChevronRight } from "lucide-react"
+import ScrollShineText from "@/components/shared/scroll-shine-text"
 import type * as THREE from "three"
 
 function Room3D({ roomType }: { roomType: string }) {
@@ -240,15 +241,13 @@ export default function VirtualTour() {
               <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#C8A96E]" />
             </motion.div>
 
-            <h2
-              className="text-5xl md:text-7xl font-semibold text-white mb-5 leading-[1.05]"
+            <ScrollShineText
+              as="h2"
+              className="text-5xl md:text-7xl font-semibold text-white mb-5 leading-[1.05] justify-center text-center"
               style={{ fontFamily: "'Cormorant Garamond', serif" }}
             >
-              Explore Our{" "}
-              <em className="not-italic" style={{ color: "#C8A96E" }}>
-                Rooms
-              </em>
-            </h2>
+              Explore Our Rooms
+            </ScrollShineText>
             <p className="text-white/40 text-base md:text-lg max-w-xl mx-auto leading-relaxed font-light">
               Discover every detail of your future home — pick a room type and explore in 3D.
             </p>

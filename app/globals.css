@@ -257,6 +257,35 @@ section {
   animation: shimmer 3s ease-in-out infinite;
 }
 
+.shining-text {
+  position: relative;
+  background: linear-gradient(
+    110deg,
+    #ffffff 0%,
+    #ffffff 38%,
+    #e8d5b5 45%,
+    #ffffff 50%,
+    #e8d5b5 55%,
+    #ffffff 62%,
+    #ffffff 100%
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmer 2.5s linear infinite;
+  display: inline-block;
+  will-change: background-position;
+  transform: translateZ(0); /* Force GPU acceleration */
+}
+
+@media (max-width: 768px) {
+  .shining-text {
+    animation-duration: 5s;
+    background-size: 300% auto;
+  }
+}
+
 /* Smooth transitions for all interactive elements */
 a,
 button {

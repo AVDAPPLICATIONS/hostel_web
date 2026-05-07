@@ -22,6 +22,9 @@ import {
 } from "lucide-react"
 import Image from "next/image"
 import { UI } from "@/lib/theme"
+import ScrollShineText from "@/components/shared/scroll-shine-text"
+import ScrollRevealCard from "@/components/shared/scroll-reveal-card"
+import CinematicPhoto from "@/components/shared/cinematic-photo"
 
 const categories = ["All", "Rooms", "Common Area", "Outdoor"]
 
@@ -177,29 +180,9 @@ function GalleryCard({
   const masonryHeight = layout === "masonry" ? heights[index % heights.length] : "h-64"
 
   return (
-    <motion.div
-      layout
-      initial={{
-        opacity: 0,
-        y: 40,
-        scale: 0.94,
-      }}
-      animate={{
-        opacity: 1,
-        y: 0,
-        scale: 1,
-      }}
-      exit={{
-        opacity: 0,
-        scale: 0.9,
-        y: -20,
-      }}
-      transition={{
-        duration: 0.55,
-        delay: index * 0.045,
-        ease: [0.22, 1, 0.36, 1],
-      }}
+    <CinematicPhoto
       className="min-w-[82vw] snap-center md:min-w-0"
+      parallaxRange={[-40, 40]}
     >
       <MagneticCard
         className="group block w-full cursor-pointer"
@@ -305,7 +288,7 @@ function GalleryCard({
           </div>
         </div>
       </MagneticCard>
-    </motion.div>
+    </CinematicPhoto>
   )
 }
 
@@ -660,30 +643,16 @@ export default function Gallery() {
               Our Facilities
             </motion.div>
 
-            <h2
-              className="text-5xl font-semibold leading-[1.05] md:text-7xl"
+            <ScrollShineText
+              as="h2"
+              className="text-5xl font-semibold leading-[1.05] md:text-7xl justify-center text-center"
               style={{
                 color: UI.text.light,
                 fontFamily: "'Cormorant Garamond', serif",
               }}
             >
-              A Glimpse{" "}
-              <motion.span
-                className="inline-block"
-                style={{ color: UI.text.muted }}
-                animate={{
-                  opacity: [0.75, 1, 0.75],
-                  y: [0, -2, 0],
-                }}
-                transition={{
-                  duration: 2.8,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                Inside
-              </motion.span>
-            </h2>
+              A Glimpse Inside
+            </ScrollShineText>
 
             <p
               className="mx-auto mt-5 max-w-xl text-base font-light leading-relaxed md:text-lg"

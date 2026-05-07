@@ -22,6 +22,8 @@ import {
 } from "lucide-react"
 import Image from "next/image"
 import { COLORS, UI } from "@/lib/theme"
+import ScrollShineText from "@/components/shared/scroll-shine-text"
+import ScrollRevealCard from "@/components/shared/scroll-reveal-card"
 
 const rooms = [
   {
@@ -171,30 +173,16 @@ export default function Rooms() {
               Accommodation
             </motion.div>
 
-            <h2
-              className="text-5xl font-semibold leading-[1.05] md:text-7xl"
+            <ScrollShineText
+              as="h2"
+              className="text-5xl font-semibold leading-[1.05] md:text-7xl block justify-center text-center"
               style={{
                 color: UI.text.light,
                 fontFamily: "'Cormorant Garamond', serif",
               }}
             >
-              Our Living{" "}
-              <motion.span
-                className="inline-block"
-                style={{ color: UI.text.muted }}
-                animate={{
-                  opacity: [0.75, 1, 0.75],
-                  y: [0, -2, 0],
-                }}
-                transition={{
-                  duration: 2.8,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                Spaces
-              </motion.span>
-            </h2>
+              Our Living Spaces
+            </ScrollShineText>
 
             <p
               className="mx-auto mt-5 max-w-2xl text-base font-light leading-relaxed md:text-lg"
@@ -324,16 +312,9 @@ export default function Rooms() {
             </motion.div>
 
             {/* Showcase */}
-            <motion.div
-              initial={{ opacity: 0, y: 46, scale: 0.97 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{
-                duration: 0.85,
-                delay: 0.1,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              viewport={{ once: true }}
+            <ScrollRevealCard
               className="overflow-hidden rounded-[2rem] p-1"
+              delay={0.1}
               style={{
                 background: UI.card.soft,
                 boxShadow: UI.shadow.card,
@@ -626,7 +607,7 @@ export default function Rooms() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </ScrollRevealCard>
           </div>
 
           {/* Counter */}

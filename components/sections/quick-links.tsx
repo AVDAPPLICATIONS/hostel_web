@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion"
 import { MapPin, Crown, Landmark, ArrowRight } from "lucide-react"
+import ScrollShineText from "@/components/shared/scroll-shine-text"
+import ScrollRevealCard from "@/components/shared/scroll-reveal-card"
 
 const COLORS = {
   navy: "#2F4156",
@@ -130,30 +132,16 @@ export default function QuickLinks() {
               Quick Access
             </motion.div>
 
-            <h2
-              className="text-4xl font-bold leading-tight md:text-6xl"
+            <ScrollShineText
+              as="h2"
+              className="text-4xl font-bold leading-tight md:text-6xl justify-center text-center"
               style={{
                 color: COLORS.white,
                 fontFamily: "'Cormorant Garamond', serif",
               }}
             >
-              Explore Our{" "}
-              <motion.span
-                className="inline-block"
-                style={{ color: COLORS.sky }}
-                animate={{
-                  opacity: [0.75, 1, 0.75],
-                  y: [0, -2, 0],
-                }}
-                transition={{
-                  duration: 2.8,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                Campus Life
-              </motion.span>
-            </h2>
+              Explore Our Campus Life
+            </ScrollShineText>
 
             <p
               className="mx-auto mt-5 max-w-2xl text-sm leading-7 md:text-base"
@@ -175,26 +163,29 @@ export default function QuickLinks() {
             {highlights.map((item, index) => {
               const Icon = item.icon
 
-              return (
-                <motion.div
-                  key={item.id}
-                  variants={itemVariants}
-                  whileHover={{
-                    y: -10,
-                    scale: 1.015,
-                  }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 260,
-                    damping: 20,
-                  }}
-                  className="group relative flex min-h-[430px] flex-col overflow-hidden rounded-[2rem] p-7 md:p-8 lg:p-9"
-                  style={{
-                    background: COLORS.beige,
-                    border: `1px solid ${COLORS.sky}`,
-                    boxShadow: "0 24px 60px rgba(0, 0, 0, 0.18)",
-                  }}
-                >
+                return (
+                  <ScrollRevealCard
+                    key={item.id}
+                    delay={index * 0.1}
+                    direction={index % 2 === 0 ? "left" : "right"}
+                  >
+                    <motion.div
+                      whileHover={{
+                        y: -10,
+                        scale: 1.015,
+                      }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 260,
+                        damping: 20,
+                      }}
+                      className="group relative flex min-h-[430px] flex-col overflow-hidden rounded-[2rem] p-7 md:p-8 lg:p-9"
+                      style={{
+                        background: COLORS.beige,
+                        border: `1px solid ${COLORS.sky}`,
+                        boxShadow: "0 24px 60px rgba(0, 0, 0, 0.18)",
+                      }}
+                    >
                   {/* Card Number */}
                   <div
                     className="absolute right-7 top-6 text-6xl font-black leading-none opacity-20"
@@ -282,7 +273,8 @@ export default function QuickLinks() {
                     }}
                     viewport={{ once: true }}
                   />
-                </motion.div>
+                  </motion.div>
+                </ScrollRevealCard>
               )
             })}
           </motion.div>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react"
 import { UI } from "@/lib/theme"
+import ScrollShineText from "@/components/shared/scroll-shine-text"
 
 const campusHighlights = [
   {
@@ -109,30 +110,16 @@ export default function CampusPreview() {
               Campus Spaces
             </motion.div>
 
-            <h2
-              className="mx-auto max-w-4xl text-4xl font-semibold leading-[1.05] md:text-6xl lg:text-7xl"
+            <ScrollShineText
+              as="h2"
+              className="mx-auto max-w-4xl justify-center text-center text-4xl font-semibold leading-[1.05] md:text-6xl lg:text-7xl"
               style={{
                 color: UI.text.light,
                 fontFamily: "'Cormorant Garamond', serif",
               }}
             >
-              Life at{" "}
-              <motion.em
-                className="inline-block not-italic"
-                style={{ color: UI.text.muted }}
-                animate={{
-                  opacity: [0.75, 1, 0.75],
-                  y: [0, -2, 0],
-                }}
-                transition={{
-                  duration: 2.8,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                Atmiya Vidya Dham
-              </motion.em>
-            </h2>
+              Life at Atmiya Vidya Dham
+            </ScrollShineText>
 
             <p
               className="mx-auto mt-5 max-w-2xl text-base font-light leading-relaxed md:text-lg"

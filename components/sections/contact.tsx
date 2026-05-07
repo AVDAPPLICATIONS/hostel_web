@@ -19,6 +19,8 @@ import {
 } from "lucide-react"
 import confetti from "canvas-confetti"
 import { COLORS, UI } from "@/lib/theme"
+import ScrollShineText from "@/components/shared/scroll-shine-text"
+import ScrollRevealCard from "@/components/shared/scroll-reveal-card"
 
 const fields = [
   {
@@ -251,32 +253,13 @@ export default function Contact() {
             Student Enquiry Form
           </motion.span>
 
-          <motion.h2
-            className="text-5xl font-black tracking-tight md:text-7xl"
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.75, delay: 0.1 }}
+          <ScrollShineText
+            as="h2"
+            className="text-5xl font-black tracking-tight md:text-7xl justify-center text-center"
             style={{ color: UI.text.light }}
           >
-            Enquire{" "}
-            <motion.span
-              style={{
-                color: UI.text.muted,
-                display: "inline-block",
-              }}
-              animate={{
-                opacity: [0.75, 1, 0.75],
-                y: [0, -2, 0],
-              }}
-              transition={{
-                duration: 2.6,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
-              Now
-            </motion.span>
-          </motion.h2>
+            Enquire Now
+          </ScrollShineText>
 
           <motion.div
             className="mx-auto mt-5 h-1 rounded-full"
@@ -297,15 +280,9 @@ export default function Contact() {
           </motion.p>
         </motion.div>
 
-        <motion.div
+        <ScrollRevealCard
           className="relative mx-auto max-w-5xl rounded-[2rem] p-1"
-          style={{
-            background: UI.card.soft,
-            boxShadow: UI.shadow.card,
-          }}
-          initial={{ opacity: 0, y: 34, scale: 0.97 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.75, delay: 0.2, ease: "easeOut" }}
+          delay={0.2}
         >
           <div
             className="rounded-[1.8rem] p-6 md:p-10"
@@ -438,7 +415,7 @@ export default function Contact() {
               )}
             </AnimatePresence>
           </div>
-        </motion.div>
+        </ScrollRevealCard>
       </div>
     </section>
   )
