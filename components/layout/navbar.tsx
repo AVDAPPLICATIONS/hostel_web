@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion"
 import Image from "next/image"
 import { Menu, X, ArrowRight } from "lucide-react"
 import { COLORS, UI } from "@/lib/theme"
@@ -19,6 +19,17 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState("home")
+
+  const { scrollY } = useScroll()
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    if (typeof window === "undefined") return
+    const threshold = window.innerHeight * 2.5
+    const isScrolled = latest > threshold
+    if (isScrolled !== scrolled) {
+      setScrolled(isScrolled)
+    }
+  })
 
   const scrollToSection = (href: string) => {
     if (typeof document === "undefined") return
@@ -39,35 +50,32 @@ export default function Navbar() {
   useEffect(() => {
     if (typeof window === "undefined" || typeof document === "undefined") return
 
-    const handleScroll = () => {
-      try {
-        // Only show navbar after scrubbing through the intro video
-        setScrolled(window.scrollY > window.innerHeight * 2.5)
+    // Initialize scrolled state on mount
+    setScrolled(window.scrollY > window.innerHeight * 2.5)
 
-        const sections = navItems.map((item) => item.href.substring(1))
-
-        const currentSection = sections.find((section) => {
-          const element = document.getElementById(section)
-
-          if (!element) return false
-
-          const rect = element.getBoundingClientRect()
-
-          return rect.top <= 120 && rect.bottom >= 120
-        })
-
-        if (currentSection) {
-          setActiveSection(currentSection)
-        }
-      } catch (error) {
-        console.warn("Error in scroll handler:", error)
-      }
+    const observerOptions = {
+      root: null,
+      rootMargin: "-120px 0px -60% 0px", // focus on the upper/middle half of the viewport
+      threshold: [0, 0.1, 0.2, 0.5],
     }
 
-    handleScroll()
-    window.addEventListener("scroll", handleScroll, { passive: true })
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id)
+        }
+      })
+    }
 
-    return () => window.removeEventListener("scroll", handleScroll)
+    const observer = new IntersectionObserver(observerCallback, observerOptions)
+
+    navItems.forEach((item) => {
+      const id = item.href.substring(1)
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+
+    return () => observer.disconnect()
   }, [])
 
   return (

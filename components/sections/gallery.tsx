@@ -182,7 +182,6 @@ function GalleryCard({
   return (
     <CinematicPhoto
       className="min-w-[82vw] snap-center md:min-w-0"
-      parallaxRange={[-40, 40]}
     >
       <MagneticCard
         className="group block w-full cursor-pointer"

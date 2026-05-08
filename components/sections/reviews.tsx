@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import {
   Star,
@@ -54,7 +54,6 @@ const reviews = [
 export default function Reviews() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [direction, setDirection] = useState(0)
-  const [progress, setProgress] = useState(0)
 
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
@@ -64,38 +63,27 @@ export default function Reviews() {
   const parallaxX = useTransform(scrollYProgress, [0, 1], [-50, 50])
   const review = reviews[currentIndex]
 
+  const goNext = useCallback(() => {
+    setDirection(1)
+    setCurrentIndex((current) => (current + 1) % reviews.length)
+  }, [])
+
+  const goPrev = useCallback(() => {
+    setDirection(-1)
+    setCurrentIndex((current) => (current - 1 + reviews.length) % reviews.length)
+  }, [])
+
   useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          setDirection(1)
-          setCurrentIndex((curr) => (curr + 1) % reviews.length)
-          return 0
-        }
+    const timer = setTimeout(() => {
+      goNext()
+    }, 5000)
 
-        return prev + 0.5
-      })
-    }, 25)
-
-    return () => clearInterval(timer)
-  }, [currentIndex])
+    return () => clearTimeout(timer)
+  }, [currentIndex, goNext])
 
   const handleManualSelect = (index: number) => {
     setDirection(index > currentIndex ? 1 : -1)
     setCurrentIndex(index)
-    setProgress(0)
-  }
-
-  const goNext = () => {
-    setDirection(1)
-    setCurrentIndex((current) => (current + 1) % reviews.length)
-    setProgress(0)
-  }
-
-  const goPrev = () => {
-    setDirection(-1)
-    setCurrentIndex((current) => (current - 1 + reviews.length) % reviews.length)
-    setProgress(0)
   }
 
   return (
@@ -391,10 +379,10 @@ export default function Reviews() {
                       {index === currentIndex && (
                         <motion.div
                           className="h-full rounded-full"
-                          style={{
-                            width: `${progress}%`,
-                            background: UI.button.primary,
-                          }}
+                          style={{ background: UI.button.primary }}
+                          initial={{ width: "0%" }}
+                          animate={{ width: "100%" }}
+                          transition={{ duration: 5, ease: "linear" }}
                         />
                       )}
                     </div>
