@@ -61,13 +61,13 @@ export default function Arrival() {
 
       <section
         id="arrival"
-        className="relative overflow-hidden px-4 py-24 md:py-36"
+        className="relative overflow-hidden py-24 md:py-36"
         style={{
           background: UI.section.dark,
           fontFamily: "'DM Sans', sans-serif",
         }}
       >
-        <div className="relative container mx-auto max-w-6xl">
+        <div className="relative container mx-auto max-w-6xl px-0 sm:px-4">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 34 }}

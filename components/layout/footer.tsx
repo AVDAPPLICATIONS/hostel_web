@@ -105,7 +105,7 @@ export default function Footer() {
           style={{ background: UI.border.soft }}
         />
 
-        <div className="container mx-auto max-w-7xl px-4 py-16 md:py-20">
+        <div className="container mx-auto max-w-7xl px-3 py-12 sm:px-4 sm:py-16 md:py-20">
           <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[1.25fr_0.8fr_1.2fr_0.9fr] lg:gap-10">
             {/* Brand */}
             <motion.div
@@ -214,7 +214,7 @@ export default function Footer() {
             >
               <FooterTitle>Quick Links</FooterTitle>
 
-              <ul className="space-y-3">
+              <ul className="grid grid-cols-2 gap-x-4 gap-y-2 md:block md:space-y-3">
                 {QUICK_LINKS.map((link) => (
                   <li key={link.name}>
                     <motion.button

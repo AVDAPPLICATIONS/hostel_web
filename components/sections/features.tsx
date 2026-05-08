@@ -234,6 +234,25 @@ function AnimatedStat({ value }: { value: string }) {
 export default function Features() {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
+  const isCarouselInView = useInView(scrollContainerRef, {
+    // Only auto-scroll when the carousel is actually visible
+    amount: 0.2,
+  })
+
+  const [isMobile, setIsMobile] = useState(false)
+  const [isUserInteracting, setIsUserInteracting] = useState(false)
+
+  const featuresCount = features.length
+  const featuresLoop = [...features, ...features]
+
+  useEffect(() => {
+    // Mobile-only auto scroll (Tailwind "md" starts at 768px)
+    const update = () => setIsMobile(window.innerWidth < 768)
+    update()
+    window.addEventListener("resize", update)
+    return () => window.removeEventListener("resize", update)
+  }, [])
+
   const scroll = (direction: "left" | "right") => {
     if (!scrollContainerRef.current) return
 
@@ -245,6 +264,32 @@ export default function Features() {
       behavior: "smooth",
     })
   }
+
+  useEffect(() => {
+    if (!isMobile) return
+    if (!isCarouselInView) return
+    if (isUserInteracting) return
+    if (!scrollContainerRef.current) return
+
+    const interval = window.setInterval(() => {
+      const el = scrollContainerRef.current
+      if (!el) return
+
+      const scrollAmount = el.clientWidth * 0.6
+      // Because we render 2x the items, "half" is a full cycle.
+      const loopWidth = Math.max(1, el.scrollWidth / 2)
+
+      // Reset to the matching position in the first half (seamless loop).
+      if (el.scrollLeft >= loopWidth - 2) {
+        el.scrollTo({ left: el.scrollLeft - loopWidth, behavior: "auto" })
+        return
+      }
+
+      el.scrollBy({ left: scrollAmount, behavior: "smooth" })
+    }, 2600)
+
+    return () => window.clearInterval(interval)
+  }, [isMobile, isCarouselInView, isUserInteracting])
 
   return (
     <>
@@ -349,13 +394,19 @@ export default function Features() {
             <div
               ref={scrollContainerRef}
               className="features-scroll grid auto-cols-[85%] grid-flow-col grid-rows-2 gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 pb-6 pt-2 md:auto-cols-[calc(33.333%-0.875rem)] md:gap-5 lg:auto-cols-[calc(25%-0.9375rem)]"
+              onTouchStart={() => setIsUserInteracting(true)}
+              onTouchEnd={() => setIsUserInteracting(false)}
+              onTouchCancel={() => setIsUserInteracting(false)}
+              onMouseEnter={() => setIsUserInteracting(true)}
+              onMouseLeave={() => setIsUserInteracting(false)}
             >
-              {features.map((feature, index) => {
+              {featuresLoop.map((feature, index) => {
                 const Icon = feature.icon
+                const baseIndex = index % featuresCount
                 return (
                   <ScrollRevealCard
-                    key={feature.title}
-                    delay={index * 0.08}
+                    key={`${feature.title}-${index}`}
+                    delay={baseIndex * 0.08}
                     direction="left"
                     className="snap-center py-4"
                   >

@@ -16,6 +16,8 @@ import Contact from "@/components/sections/contact"
 import Footer from "@/components/layout/footer"
 import ScrollProgress from "@/components/layout/scroll-progress"
 import FloatingElements from "@/components/layout/floating-elements"
+import VideoLaunch from "@/components/sections/video-launch"
+
 
 export default function Home() {  
   useEffect(() => {
@@ -82,7 +84,9 @@ export default function Home() {
       <FloatingElements />
       <Navbar />
       <main>
+        <VideoLaunch />
         <Hero />
+
         <QuickLinks />
         <CampusPreview />
 

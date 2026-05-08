@@ -1,11 +1,12 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
   motion,
   AnimatePresence,
   useScroll,
   useTransform,
+  useInView,
 } from "framer-motion"
 import {
   CheckCircle2,
@@ -102,7 +103,21 @@ const featureIcons = [BedDouble, Bath, Wind, Shirt, BookOpen, Wifi]
 export default function Rooms() {
   const [active, setActive] = useState(0)
   const sectionRef = useRef<HTMLDivElement>(null)
+  const tabsScrollRef = useRef<HTMLDivElement>(null)
+  const showcaseRef = useRef<HTMLDivElement>(null)
+  const tabsInView = useInView(tabsScrollRef, { amount: 0.2 })
+  const showcaseInView = useInView(showcaseRef, { amount: 0.25 })
+  const sectionInView = useInView(sectionRef, { amount: 0.2 })
+  const [isMobile, setIsMobile] = useState(false)
+  const [isUserInteracting, setIsUserInteracting] = useState(false)
   const room = rooms[active]
+
+  useEffect(() => {
+    const update = () => setIsMobile(window.innerWidth < 768)
+    update()
+    window.addEventListener("resize", update)
+    return () => window.removeEventListener("resize", update)
+  }, [])
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -115,6 +130,51 @@ export default function Rooms() {
 
   const prev = () =>
     setActive((prev) => (prev - 1 + rooms.length) % rooms.length)
+
+  // Keep the active tab centered on mobile as the room changes
+  useEffect(() => {
+    if (!isMobile) return
+    const el = tabsScrollRef.current
+    if (!el) return
+
+    const tab = el.querySelector<HTMLElement>(`[data-room-tab="${active}"]`)
+    tab?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" })
+  }, [active, isMobile])
+
+  // Auto-advance the active room on mobile (syncs with the tabs row)
+  useEffect(() => {
+    if (!isMobile) return
+    if (!sectionInView || !showcaseInView) return
+    if (isUserInteracting) return
+
+    const interval = window.setInterval(() => {
+      setActive((prev) => (prev + 1) % rooms.length)
+    }, 5200)
+
+    return () => window.clearInterval(interval)
+  }, [isMobile, sectionInView, showcaseInView, isUserInteracting])
+
+  useEffect(() => {
+    if (!isMobile) return
+    if (!tabsInView) return
+    if (isUserInteracting) return
+
+    const interval = window.setInterval(() => {
+      const el = tabsScrollRef.current
+      if (!el) return
+
+      const maxScrollLeft = el.scrollWidth - el.clientWidth
+
+      // Keep it moving; when we hit the end, jump back to start
+      if (el.scrollLeft >= maxScrollLeft - 2) {
+        el.scrollTo({ left: 0, behavior: "smooth" })
+      } else {
+        el.scrollBy({ left: 180, behavior: "smooth" })
+      }
+    }, 2200)
+
+    return () => window.clearInterval(interval)
+  }, [isMobile, tabsInView, isUserInteracting])
 
   return (
     <>
@@ -138,13 +198,13 @@ export default function Rooms() {
       <section
         id="rooms"
         ref={sectionRef}
-        className="relative overflow-hidden px-4 py-24 md:py-36"
+        className="relative overflow-hidden py-24 md:py-36"
         style={{
           background: UI.section.dark,
           fontFamily: "'DM Sans', sans-serif",
         }}
       >
-        <div className="relative container mx-auto max-w-7xl">
+        <div className="relative container mx-auto max-w-7xl px-4">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 36 }}
@@ -197,6 +257,7 @@ export default function Rooms() {
           <div className="grid items-start gap-7 lg:grid-cols-[260px_1fr] lg:gap-10">
             {/* Room Tabs */}
             <motion.div
+              ref={tabsScrollRef}
               initial={{ opacity: 0, x: -28 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{
@@ -205,6 +266,11 @@ export default function Rooms() {
               }}
               viewport={{ once: true }}
               className="no-scrollbar flex gap-3 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0"
+              onTouchStart={() => setIsUserInteracting(true)}
+              onTouchEnd={() => setIsUserInteracting(false)}
+              onTouchCancel={() => setIsUserInteracting(false)}
+              onMouseEnter={() => setIsUserInteracting(true)}
+              onMouseLeave={() => setIsUserInteracting(false)}
             >
               {rooms.map((item, index) => {
                 const activeTab = index === active
@@ -212,6 +278,7 @@ export default function Rooms() {
                 return (
                   <motion.button
                     key={item.id}
+                    data-room-tab={index}
                     onClick={() => setActive(index)}
                     whileHover={{ x: 4 }}
                     whileTap={{ scale: 0.98 }}
@@ -313,6 +380,7 @@ export default function Rooms() {
 
             {/* Showcase */}
             <ScrollRevealCard
+              ref={showcaseRef}
               className="overflow-hidden rounded-[2rem] p-1"
               delay={0.1}
               style={{
@@ -332,6 +400,11 @@ export default function Rooms() {
                   <div
                     className="relative min-h-[320px] overflow-hidden md:min-h-[450px] lg:min-h-full"
                     style={{ background: UI.card.soft }}
+                    onTouchStart={() => setIsUserInteracting(true)}
+                    onTouchEnd={() => setIsUserInteracting(false)}
+                    onTouchCancel={() => setIsUserInteracting(false)}
+                    onMouseEnter={() => setIsUserInteracting(true)}
+                    onMouseLeave={() => setIsUserInteracting(false)}
                   >
                     <AnimatePresence mode="wait">
                       <motion.div
@@ -519,7 +592,7 @@ export default function Rooms() {
                           style={{ background: UI.border.light }}
                         />
 
-                        <div className="mb-9 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <div className="mb-9 grid grid-cols-2 gap-2 sm:grid-cols-2 sm:gap-3">
                           {room.features.map((feature, index) => {
                             const Icon =
                               featureIcons[index % featureIcons.length]
@@ -534,24 +607,24 @@ export default function Rooms() {
                                   duration: 0.35,
                                   ease: "easeOut",
                                 }}
-                                className="flex items-center gap-3 rounded-2xl p-3"
+                                className="flex min-h-[56px] items-center gap-2 rounded-xl p-2 sm:min-h-0 sm:gap-3 sm:rounded-2xl sm:p-3"
                                 style={{
                                   background: UI.card.white,
                                   border: `1px solid ${UI.border.light}`,
                                 }}
                               >
                                 <div
-                                  className="flex h-9 w-9 items-center justify-center rounded-xl"
+                                  className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl sm:h-9 sm:w-9"
                                   style={{
                                     background: UI.card.soft,
                                     color: UI.text.dark,
                                   }}
                                 >
-                                  <Icon className="h-4 w-4" />
+                                  <Icon className="h-4 w-4 sm:h-4 sm:w-4" />
                                 </div>
 
                                 <span
-                                  className="text-sm font-bold"
+                                  className="text-[13px] font-bold leading-tight sm:text-sm"
                                   style={{ color: UI.text.dark }}
                                 >
                                   {feature}

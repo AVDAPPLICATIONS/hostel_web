@@ -41,7 +41,8 @@ export default function Navbar() {
 
     const handleScroll = () => {
       try {
-        setScrolled(window.scrollY > 20)
+        // Only show navbar after scrubbing through the intro video
+        setScrolled(window.scrollY > window.innerHeight * 2.5)
 
         const sections = navItems.map((item) => item.href.substring(1))
 
@@ -71,11 +72,12 @@ export default function Navbar() {
 
   return (
     <motion.nav
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
+      animate={{ 
+        y: scrolled ? 0 : -100, 
+        opacity: scrolled ? 1 : 0 
+      }}
       transition={{
-        duration: 0.85,
-        delay: 0.15,
+        duration: 0.6,
         ease: [0.22, 1, 0.36, 1],
       }}
       className="pointer-events-none fixed left-0 right-0 top-0 z-50 px-3 md:px-4"
