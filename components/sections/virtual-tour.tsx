@@ -1,14 +1,65 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, Suspense, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Canvas, useFrame } from "@react-three/fiber"
-import { OrbitControls, Environment, Html } from "@react-three/drei"
+import { OrbitControls, Environment, Html, useTexture } from "@react-three/drei"
 import { Eye, ChevronLeft, ChevronRight } from "lucide-react"
 import ScrollShineText from "@/components/shared/scroll-shine-text"
-import type * as THREE from "three"
+import * as THREE from "three"
 
-function Room3D({ roomType }: { roomType: string }) {
+function PanoramaSphere({ url }: { url: string }) {
+  const [texture, setTexture] = useState<THREE.Texture | null>(null)
+  const [error, setError] = useState<boolean>(false)
+
+  useEffect(() => {
+    const loader = new THREE.TextureLoader()
+    loader.load(
+      url,
+      (tex) => {
+        tex.colorSpace = THREE.SRGBColorSpace
+        setTexture(tex)
+      },
+      undefined,
+      (err) => {
+        console.error("Error loading 360 texture:", err)
+        setError(true)
+      }
+    )
+  }, [url])
+
+  if (error) {
+    return (
+      <Html center>
+        <div className="text-red-400 text-xs font-bold bg-black/60 px-3 py-2 rounded-md whitespace-nowrap">
+          Failed to load 360° image
+        </div>
+      </Html>
+    )
+  }
+
+  if (!texture) {
+    return (
+      <Html center>
+        <div className="flex flex-col items-center gap-2">
+          <div className="w-8 h-8 rounded-full border-2 border-t-[#C8A96E] border-r-transparent border-b-transparent border-l-transparent animate-spin" />
+          <span className="text-[10px] tracking-[0.2em] uppercase font-bold text-[#C8A96E]">
+            Loading 360°...
+          </span>
+        </div>
+      </Html>
+    )
+  }
+
+  return (
+    <mesh>
+      <sphereGeometry args={[10, 60, 40]} />
+      <meshBasicMaterial map={texture} side={2} />
+    </mesh>
+  )
+}
+
+export function Room3D({ roomType }: { roomType: string }) {
   const meshRef = useRef<THREE.Group>(null)
 
   useFrame(() => {
@@ -271,19 +322,27 @@ export default function VirtualTour() {
               {/* Left — 3D Canvas */}
               <div className="relative w-full lg:w-[58%] h-[350px] md:h-[420px] lg:h-auto overflow-hidden bg-[#080e18]">
                 {/* 3D Scene */}
-                <Canvas camera={{ position: [5, 3, 5], fov: 60 }}>
-                  <ambientLight intensity={0.4} />
-                  <directionalLight position={[10, 10, 5]} intensity={0.8} />
-                  <pointLight position={[-5, 3, 5]} intensity={0.4} color={currentRoom.accent} />
-                  <pointLight position={[5, -2, -5]} intensity={0.2} color="#7BA7BC" />
-                  <Room3D roomType={selectedRoom} />
-                  <Environment preset="night" />
+                <Canvas camera={{ position: [0, 0, 0.1], fov: 75 }}>
+                  <ambientLight intensity={0.8} />
+                  <Suspense
+                    fallback={
+                      <Html center>
+                        <div className="flex flex-col items-center gap-2">
+                          <div className="w-8 h-8 rounded-full border-2 border-t-[#C8A96E] border-r-transparent border-b-transparent border-l-transparent animate-spin" />
+                          <span className="text-[10px] tracking-[0.2em] uppercase font-bold text-[#C8A96E]">
+                            Loading 360°...
+                          </span>
+                        </div>
+                      </Html>
+                    }
+                  >
+                    <PanoramaSphere url="/room360.jpg" />
+                  </Suspense>
                   <OrbitControls
                     enableZoom={true}
                     enablePan={false}
                     maxDistance={10}
-                    minDistance={3}
-                    maxPolarAngle={Math.PI / 2}
+                    minDistance={0.1}
                     autoRotate={false}
                   />
                 </Canvas>

@@ -104,7 +104,6 @@ const features = [
 
 const stats = [
   { number: "1000+", label: "Prayer Hall Capacity" },
-  { number: "100%", label: "Vegetarian Meals" },
   { number: "24/7", label: "Medical Support" },
   { number: "5★", label: "Hostel Rating" },
 ]
@@ -483,7 +482,7 @@ export default function Features() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-6 md:grid-cols-4 md:gap-10">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 md:grid-cols-3 md:gap-10">
               {stats.map((stat, index) => (
                 <ScrollRevealCard
                   key={stat.label}

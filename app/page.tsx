@@ -8,6 +8,7 @@ import CampusPreview from "@/components/sections/campus-preview"
 
 import Features from "@/components/sections/features"
 import Rooms from "@/components/sections/rooms"
+import VirtualTour from "@/components/sections/virtual-tour"
 import Arrival from "@/components/sections/arrival"
 import Gallery from "@/components/sections/gallery"
 import Reviews from "@/components/sections/reviews"
@@ -17,7 +18,7 @@ import ScrollProgress from "@/components/layout/scroll-progress"
 import FloatingElements from "@/components/layout/floating-elements"
 
 
-export default function Home() {  
+export default function Home() {
   useEffect(() => {
     // Only run on client side
     if (typeof window === "undefined" || typeof document === "undefined") return
@@ -89,6 +90,7 @@ export default function Home() {
 
         <Features />
         <Rooms />
+        <VirtualTour />
         <Arrival />
         <Gallery />
         <Reviews />

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, Suspense } from "react"
 import {
   motion,
   AnimatePresence,
@@ -19,11 +19,16 @@ import {
   Users,
   Maximize2,
   Sparkles,
+  Eye,
 } from "lucide-react"
 import Image from "next/image"
 import { COLORS, UI } from "@/lib/theme"
 import ScrollShineText from "@/components/shared/scroll-shine-text"
 import ScrollRevealCard from "@/components/shared/scroll-reveal-card"
+import { Canvas } from "@react-three/fiber"
+import { OrbitControls, Environment, useTexture, Html } from "@react-three/drei"
+import { Room3D } from "./virtual-tour"
+import * as THREE from "three"
 
 const rooms = [
   {
@@ -115,8 +120,60 @@ function getFeatureIcon(feature: string) {
   return FEATURE_ICONS[norm] || Sparkles
 }
 
+function PanoramaSphere({ url }: { url: string }) {
+  const [texture, setTexture] = useState<THREE.Texture | null>(null)
+  const [error, setError] = useState<boolean>(false)
+
+  useEffect(() => {
+    const loader = new THREE.TextureLoader()
+    loader.load(
+      url,
+      (tex) => {
+        tex.colorSpace = THREE.SRGBColorSpace
+        setTexture(tex)
+      },
+      undefined,
+      (err) => {
+        console.error("Error loading 360 texture:", err)
+        setError(true)
+      }
+    )
+  }, [url])
+
+  if (error) {
+    return (
+      <Html center>
+        <div className="text-red-400 text-xs font-bold bg-black/60 px-3 py-2 rounded-md whitespace-nowrap">
+          Failed to load 360° image
+        </div>
+      </Html>
+    )
+  }
+
+  if (!texture) {
+    return (
+      <Html center>
+        <div className="flex flex-col items-center gap-2">
+          <div className="w-8 h-8 rounded-full border-2 border-t-[#C8A96E] border-r-transparent border-b-transparent border-l-transparent animate-spin" />
+          <span className="text-[10px] tracking-[0.2em] uppercase font-bold text-[#C8A96E]">
+            Loading 360°...
+          </span>
+        </div>
+      </Html>
+    )
+  }
+
+  return (
+    <mesh>
+      <sphereGeometry args={[10, 60, 40]} />
+      <meshBasicMaterial map={texture} side={2} />
+    </mesh>
+  )
+}
+
 export default function Rooms() {
   const [active, setActive] = useState(0)
+  const [viewMode, setViewMode] = useState<"photo" | "360">("photo")
   const sectionRef = useRef<HTMLDivElement>(null)
   const tabsScrollRef = useRef<HTMLDivElement>(null)
   const showcaseRef = useRef<HTMLDivElement>(null)
@@ -126,6 +183,10 @@ export default function Rooms() {
   const [isMobile, setIsMobile] = useState(false)
   const [isUserInteracting, setIsUserInteracting] = useState(false)
   const room = rooms[active]
+
+  useEffect(() => {
+    setViewMode("photo")
+  }, [active])
 
   useEffect(() => {
     const update = () => setIsMobile(window.innerWidth < 768)
@@ -418,9 +479,41 @@ export default function Rooms() {
                     onMouseEnter={() => setIsUserInteracting(true)}
                     onMouseLeave={() => setIsUserInteracting(false)}
                   >
+                    {/* Glassmorphic 360 View Toggle Pill */}
+                    <div
+                      className="absolute right-6 top-6 z-30 flex items-center gap-1 rounded-full p-1 backdrop-blur-md"
+                      style={{
+                        background: "rgba(47, 65, 86, 0.25)",
+                        border: "1px solid rgba(255, 255, 255, 0.15)",
+                        boxShadow: UI.shadow.soft,
+                      }}
+                    >
+                      <button
+                        onClick={() => setViewMode("photo")}
+                        className="rounded-full px-3 py-1.5 text-[9px] font-black uppercase tracking-wider transition-all duration-300 cursor-pointer"
+                        style={{
+                          background: viewMode === "photo" ? UI.button.primary : "transparent",
+                          color: viewMode === "photo" ? UI.button.primaryText : "rgba(255,255,255,0.7)",
+                        }}
+                      >
+                        Photo
+                      </button>
+                      <button
+                        onClick={() => setViewMode("360")}
+                        className="rounded-full px-3 py-1.5 text-[9px] font-black uppercase tracking-wider transition-all duration-300 flex items-center gap-1 cursor-pointer"
+                        style={{
+                          background: viewMode === "360" ? UI.button.primary : "transparent",
+                          color: viewMode === "360" ? UI.button.primaryText : "rgba(255,255,255,0.7)",
+                        }}
+                      >
+                        <Eye className="h-3 w-3" />
+                        360° View
+                      </button>
+                    </div>
+
                     <AnimatePresence mode="wait">
                       <motion.div
-                        key={room.id}
+                        key={`${room.id}-${viewMode}`}
                         initial={{
                           opacity: 0,
                           scale: 1.04,
@@ -439,26 +532,79 @@ export default function Rooms() {
                         }}
                         className="absolute inset-0"
                       >
-                        <motion.div
-                          style={{ y: imageY }}
-                          className="absolute inset-[-10%]"
-                        >
-                          <Image
-                            src={room.image}
-                            alt={room.title}
-                            fill
-                            className="object-cover"
-                            priority
-                          />
-                        </motion.div>
+                        {viewMode === "360" ? (
+                          <div className="absolute inset-0 bg-[#080e18]">
+                            <Canvas camera={{ position: [0, 0, 0.1], fov: 75 }}>
+                              <ambientLight intensity={0.8} />
+                              <Suspense
+                                fallback={
+                                  <Html center>
+                                    <div className="flex flex-col items-center gap-2">
+                                      <div className="w-8 h-8 rounded-full border-2 border-t-[#C8A96E] border-r-transparent border-b-transparent border-l-transparent animate-spin" />
+                                      <span className="text-[10px] tracking-[0.2em] uppercase font-bold text-[#C8A96E]">
+                                        Loading 360°...
+                                      </span>
+                                    </div>
+                                  </Html>
+                                }
+                              >
+                                <PanoramaSphere url="/room360.jpg" />
+                              </Suspense>
+                              <OrbitControls
+                                enableZoom={true}
+                                enablePan={false}
+                                maxDistance={10}
+                                minDistance={0.1}
+                                autoRotate={false}
+                              />
+                            </Canvas>
 
-                        <div
-                          className="absolute inset-0"
-                          style={{
-                            background:
-                              "rgba(47, 65, 86, 0.18)",
-                          }}
-                        />
+                            {/* 360 Interaction Hint */}
+                            <div className="absolute inset-x-0 bottom-14 flex flex-col items-center justify-center pointer-events-none z-10">
+                              <motion.div
+                                animate={{ opacity: [0.3, 0.8, 0.3] }}
+                                transition={{ duration: 3, repeat: Infinity }}
+                                className="flex flex-col items-center gap-1.5"
+                              >
+                                <div
+                                  className="w-10 h-10 rounded-full flex items-center justify-center"
+                                  style={{
+                                    background: "rgba(200, 169, 110, 0.15)",
+                                    border: "1px solid rgba(200, 169, 110, 0.3)",
+                                    backdropFilter: "blur(6px)",
+                                  }}
+                                >
+                                  <Eye className="w-4.5 h-4.5 text-[#C8A96E]" />
+                                </div>
+                                <span className="text-[9px] tracking-[0.2em] uppercase font-bold text-white/40">
+                                  Drag to look around the real room in 360°
+                                </span>
+                              </motion.div>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <motion.div
+                              style={{ y: imageY }}
+                              className="absolute inset-[-10%]"
+                            >
+                              <Image
+                                src={room.image}
+                                alt={room.title}
+                                fill
+                                className="object-cover"
+                                priority
+                              />
+                            </motion.div>
+
+                            <div
+                              className="absolute inset-0"
+                              style={{
+                                background: "rgba(47, 65, 86, 0.18)",
+                              }}
+                            />
+                          </>
+                        )}
 
                         <div className="absolute left-6 top-6">
                           <span

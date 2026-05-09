@@ -83,17 +83,7 @@ export default function Hero() {
         fontFamily: "'DM Sans', sans-serif",
       }}
     >
-      {/* Soft moving flat overlay */}
-      <motion.div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          x: colorFieldX,
-          y: colorFieldY,
-          background: UI.card.darkSoft,
-          opacity: 0.6,
-          willChange: "transform",
-        }}
-      />
+
 
       {/* Subtle floating dots */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -124,24 +114,9 @@ export default function Hero() {
         ))}
       </div>
 
-      {/* Subtle grid */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.05]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(200,217,230,0.45) 1px, transparent 1px), linear-gradient(90deg, rgba(200,217,230,0.45) 1px, transparent 1px)",
-          backgroundSize: "64px 64px",
-        }}
-      />
 
-      {/* Scroll overlay */}
-      <motion.div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          opacity: overlayOpacity,
-          background: UI.section.light,
-        }}
-      />
+
+
 
       <div className="relative z-10 container mx-auto flex min-h-screen items-center px-5 pb-16 pt-28 md:px-8 md:pt-32 lg:px-10">
         <div className="grid w-full grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
