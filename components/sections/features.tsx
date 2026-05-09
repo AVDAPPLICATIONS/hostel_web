@@ -2,12 +2,9 @@
 
 import type React from "react"
 
-import { useRef, useState, useCallback, useEffect } from "react"
+import { useRef, useState, useEffect } from "react"
 import {
   motion,
-  useMotionValue,
-  useTransform,
-  useSpring,
   useInView,
 } from "framer-motion"
 import {
@@ -119,54 +116,7 @@ function TiltCard({
   children: React.ReactNode
   className?: string
 }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
-
-  const rotateX = useTransform(y, [-50, 50], [6, -6])
-  const rotateY = useTransform(x, [-50, 50], [-6, 6])
-
-  const springX = useSpring(rotateX, {
-    stiffness: 300,
-    damping: 30,
-  })
-
-  const springY = useSpring(rotateY, {
-    stiffness: 300,
-    damping: 30,
-  })
-
-  const handleMouseMove = useCallback(
-    (event: React.MouseEvent) => {
-      if (!ref.current) return
-
-      const rect = ref.current.getBoundingClientRect()
-      x.set(event.clientX - rect.left - rect.width / 2)
-      y.set(event.clientY - rect.top - rect.height / 2)
-    },
-    [x, y]
-  )
-
-  const handleMouseLeave = useCallback(() => {
-    x.set(0)
-    y.set(0)
-  }, [x, y])
-
-  return (
-    <motion.div
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        rotateX: springX,
-        rotateY: springY,
-        transformStyle: "preserve-3d",
-      }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  )
+  return <div className={className}>{children}</div>
 }
 
 function AnimatedStat({ value }: { value: string }) {
@@ -296,8 +246,6 @@ export default function Features() {
       <style
         dangerouslySetInnerHTML={{
           __html: `
-            @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap');
-
             .features-scroll::-webkit-scrollbar {
               display: none;
             }
@@ -406,90 +354,41 @@ export default function Features() {
                 return (
                   <ScrollRevealCard
                     key={`${feature.title}-${index}`}
-                    delay={baseIndex * 0.08}
+                    delay={baseIndex * 0.06}
                     direction="left"
                     className="snap-center py-4"
                   >
-                    <TiltCard className="h-full">
-                      <div
-                        className="group relative h-full overflow-hidden rounded-[1.5rem] p-5 transition-all duration-700 md:rounded-[2rem] md:p-6"
+                    <div
+                      className="group relative h-full overflow-hidden rounded-[1.5rem] p-5 transition-shadow duration-300 md:rounded-[2rem] md:p-6 hover:shadow-lg"
+                      style={{
+                        background: `linear-gradient(145deg, ${COLORS.softNavy} 0%, ${COLORS.deepNavy} 100%)`,
+                        border: `1px solid rgba(255, 255, 255, 0.08)`,
+                        boxShadow: "0 16px 32px rgba(0, 0, 0, 0.3)",
+                      }}
+                    >
+                      <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl transition-colors duration-300 group-hover:bg-teal-600"
                         style={{
-                          background: `linear-gradient(145deg, ${COLORS.softNavy} 0%, ${COLORS.deepNavy} 100%)`,
-                          border: `1px solid rgba(255, 255, 255, 0.08)`,
-                          boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4)",
-                          transformStyle: "preserve-3d",
+                          background: "rgba(255, 255, 255, 0.06)",
+                          border: "1px solid rgba(255, 255, 255, 0.1)",
                         }}
                       >
-                        {/* 3D Depth Content */}
-                        <div style={{ transform: "translateZ(45px)" }} className="relative z-10">
-                          <motion.div
-                            className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl transition-all duration-500"
-                            style={{
-                              background: "rgba(255, 255, 255, 0.03)",
-                              border: "1px solid rgba(255, 255, 255, 0.1)",
-                              backdropFilter: "blur(10px)",
-                            }}
-                            whileHover={{ 
-                              scale: 1.15,
-                              backgroundColor: COLORS.teal,
-                              borderColor: COLORS.white,
-                            }}
-                          >
-                            <Icon
-                              className="h-7 w-7 text-white transition-transform duration-500 group-hover:scale-110"
-                            />
-                          </motion.div>
-
-                          <h3
-                            className="mb-2 text-xl font-bold leading-tight text-white"
-                            style={{
-                              fontFamily: "'Cormorant Garamond', serif",
-                            }}
-                          >
-                            {feature.title}
-                          </h3>
-
-                          <p
-                            className="text-sm leading-relaxed"
-                            style={{
-                              color: COLORS.sky,
-                              opacity: 0.8,
-                            }}
-                          >
-                            {feature.description}
-                          </p>
-                        </div>
-
-                        {/* Premium Shine Sweep */}
-                        <div 
-                          className="pointer-events-none absolute -inset-[100%] z-0 opacity-0 transition-opacity duration-1000 group-hover:opacity-20"
-                          style={{
-                            background: "linear-gradient(45deg, transparent 45%, white 50%, transparent 55%)",
-                            transform: "translateX(-100%)",
-                          }}
-                        >
-                          <motion.div 
-                            className="h-full w-full"
-                            animate={{
-                              x: ["-100%", "100%"]
-                            }}
-                            transition={{
-                              duration: 1.5,
-                              repeat: Infinity,
-                              repeatDelay: 2
-                            }}
-                          />
-                        </div>
-
-                        {/* Subtle Inner Glow */}
-                        <div 
-                          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                          style={{
-                            background: `radial-gradient(circle at 50% 0%, rgba(255,255,255,0.05) 0%, transparent 70%)`
-                          }}
-                        />
+                        <Icon className="h-6 w-6 text-white" />
                       </div>
-                    </TiltCard>
+
+                      <h3
+                        className="mb-2 text-xl font-bold leading-tight text-white"
+                        style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                      >
+                        {feature.title}
+                      </h3>
+
+                      <p
+                        className="text-sm leading-relaxed"
+                        style={{ color: COLORS.sky, opacity: 0.8 }}
+                      >
+                        {feature.description}
+                      </p>
+                    </div>
                   </ScrollRevealCard>
                 )
               })}
@@ -590,50 +489,28 @@ export default function Features() {
                   key={stat.label}
                   delay={index * 0.1}
                   direction="up"
-                  className="group"
                 >
-                  <TiltCard className="h-full">
+                  <div
+                    className="relative h-full overflow-hidden rounded-[2rem] p-6 text-center"
+                    style={{
+                      background: `linear-gradient(145deg, ${COLORS.softNavy} 0%, ${COLORS.deepNavy} 100%)`,
+                      border: `1px solid rgba(200, 217, 230, 0.2)`,
+                      boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4)",
+                    }}
+                  >
+                    <AnimatedStat value={stat.number} />
+
                     <div
-                      className="relative h-full overflow-hidden rounded-[2rem] p-6 text-center transition-all duration-700"
+                      className="text-xs font-bold uppercase tracking-[0.25em] md:text-sm"
                       style={{
-                        background: `linear-gradient(145deg, ${COLORS.softNavy} 0%, ${COLORS.deepNavy} 100%)`,
-                        border: `1px solid rgba(200, 217, 230, 0.2)`,
-                        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
-                        transformStyle: "preserve-3d",
+                        color: COLORS.sky,
+                        fontFamily: "'DM Sans', sans-serif",
+                        opacity: 0.8,
                       }}
                     >
-                      {/* Interactive Light Effect */}
-                      <div
-                        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                        style={{
-                          background: "radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(200, 217, 230, 0.15) 0%, transparent 80%)",
-                        }}
-                      />
-
-                      <div style={{ transform: "translateZ(60px)" }} className="relative z-10">
-                        <AnimatedStat value={stat.number} />
-
-                        <div
-                          className="text-xs font-bold uppercase tracking-[0.25em] md:text-sm"
-                          style={{
-                            color: COLORS.sky,
-                            fontFamily: "'DM Sans', sans-serif",
-                            opacity: 0.8
-                          }}
-                        >
-                          {stat.label}
-                        </div>
-                      </div>
-
-                      {/* Corner Accents */}
-                      <div 
-                        className="absolute right-0 top-0 h-16 w-16 opacity-20"
-                        style={{
-                          background: `radial-gradient(circle at top right, ${COLORS.white}, transparent 70%)`
-                        }}
-                      />
+                      {stat.label}
                     </div>
-                  </TiltCard>
+                  </div>
                 </ScrollRevealCard>
               ))}
             </div>

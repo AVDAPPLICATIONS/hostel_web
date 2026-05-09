@@ -9,7 +9,6 @@ import {
   useInView,
 } from "framer-motion"
 import {
-  CheckCircle2,
   ArrowRight,
   ChevronLeft,
   ChevronRight,
@@ -17,8 +16,8 @@ import {
   Bath,
   BookOpen,
   Shirt,
-  Wifi,
-  BedDouble,
+  Users,
+  Maximize2,
   Sparkles,
 } from "lucide-react"
 import Image from "next/image"
@@ -98,7 +97,23 @@ const rooms = [
   },
 ]
 
-const featureIcons = [BedDouble, Bath, Wind, Shirt, BookOpen, Wifi]
+const FEATURE_ICONS: Record<string, any> = {
+  "2 sharing": Users,
+  "3 sharing": Users,
+  "6 sharing": Users,
+  "attached bathroom": Bath,
+  "smart ac": Wind,
+  "ventilated": Wind,
+  "spacious": Maximize2,
+  "personal wardrobe": Shirt,
+  "study table": BookOpen,
+  "laundry bag": Shirt,
+}
+
+function getFeatureIcon(feature: string) {
+  const norm = feature.toLowerCase().trim()
+  return FEATURE_ICONS[norm] || Sparkles
+}
 
 export default function Rooms() {
   const [active, setActive] = useState(0)
@@ -181,8 +196,6 @@ export default function Rooms() {
       <style
         dangerouslySetInnerHTML={{
           __html: `
-            @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap');
-
             .no-scrollbar::-webkit-scrollbar {
               display: none;
             }
@@ -285,9 +298,8 @@ export default function Rooms() {
                     className="relative min-w-[220px] overflow-hidden rounded-2xl p-4 text-left transition-all lg:min-w-0"
                     style={{
                       background: activeTab ? UI.card.light : UI.card.darkSoft,
-                      border: `1.5px solid ${
-                        activeTab ? UI.border.white : UI.border.soft
-                      }`,
+                      border: `1.5px solid ${activeTab ? UI.border.white : UI.border.soft
+                        }`,
                       boxShadow: activeTab ? UI.shadow.soft : "none",
                     }}
                   >
@@ -295,7 +307,7 @@ export default function Rooms() {
                       {activeTab && (
                         <motion.div
                           layoutId="activeRoomTab"
-                          className="absolute bottom-0 left-0 top-0 w-1"
+                          className="absolute bottom-0 left-0 right-0 h-1 lg:bottom-0 lg:left-0 lg:top-0 lg:h-auto lg:w-1"
                           style={{ background: UI.button.primary }}
                           transition={{
                             duration: 0.4,
@@ -412,17 +424,14 @@ export default function Rooms() {
                         initial={{
                           opacity: 0,
                           scale: 1.04,
-                          filter: "blur(6px)",
                         }}
                         animate={{
                           opacity: 1,
                           scale: 1,
-                          filter: "blur(0px)",
                         }}
                         exit={{
                           opacity: 0,
                           scale: 1.04,
-                          filter: "blur(6px)",
                         }}
                         transition={{
                           duration: 0.65,
@@ -535,17 +544,14 @@ export default function Rooms() {
                         initial={{
                           opacity: 0,
                           y: 24,
-                          filter: "blur(4px)",
                         }}
                         animate={{
                           opacity: 1,
                           y: 0,
-                          filter: "blur(0px)",
                         }}
                         exit={{
                           opacity: 0,
                           y: -18,
-                          filter: "blur(4px)",
                         }}
                         transition={{
                           duration: 0.5,
@@ -594,20 +600,20 @@ export default function Rooms() {
 
                         <div className="mb-9 grid grid-cols-2 gap-2 sm:grid-cols-2 sm:gap-3">
                           {room.features.map((feature, index) => {
-                            const Icon =
-                              featureIcons[index % featureIcons.length]
+                            const Icon = getFeatureIcon(feature)
 
                             return (
                               <motion.div
                                 key={feature}
                                 initial={{ opacity: 0, y: 12 }}
                                 animate={{ opacity: 1, y: 0 }}
+                                whileHover={{ scale: 1.02, y: -2 }}
                                 transition={{
                                   delay: 0.08 + index * 0.05,
                                   duration: 0.35,
                                   ease: "easeOut",
                                 }}
-                                className="flex min-h-[56px] items-center gap-2 rounded-xl p-2 sm:min-h-0 sm:gap-3 sm:rounded-2xl sm:p-3"
+                                className="flex min-h-[56px] items-center gap-2 rounded-xl p-2 sm:min-h-0 sm:gap-3 sm:rounded-2xl sm:p-3 transition-shadow hover:shadow-sm"
                                 style={{
                                   background: UI.card.white,
                                   border: `1px solid ${UI.border.light}`,
@@ -616,11 +622,11 @@ export default function Rooms() {
                                 <div
                                   className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl sm:h-9 sm:w-9"
                                   style={{
-                                    background: UI.card.soft,
-                                    color: UI.text.dark,
+                                    background: "rgba(86, 124, 141, 0.12)",
+                                    color: UI.text.accent,
                                   }}
                                 >
-                                  <Icon className="h-4 w-4 sm:h-4 sm:w-4" />
+                                  <Icon className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
                                 </div>
 
                                 <span

@@ -13,12 +13,12 @@ import Magnetic from "@/components/shared/magnetic"
 import ScrollShineText from "@/components/shared/scroll-shine-text"
 import { UI } from "@/lib/theme"
 
-const floatingParticles = Array.from({ length: 14 }, (_, i) => ({
+const floatingParticles = Array.from({ length: 6 }, (_, i) => ({
   id: i,
   size: ((i * 3) % 4) + 2,
   x: (i * 23) % 100,
   y: (i * 37) % 100,
-  duration: 10 + ((i * 7) % 15),
+  duration: 14 + ((i * 7) % 12),
   delay: (i * 11) % 5,
 }))
 
@@ -112,8 +112,7 @@ export default function Hero() {
             }}
             animate={{
               y: [0, -55, 0],
-              opacity: [0, 0.25, 0],
-              scale: [0.8, 1.2, 0.8],
+              opacity: [0, 0.2, 0],
             }}
             transition={{
               duration: particle.duration,
@@ -150,8 +149,8 @@ export default function Hero() {
           <motion.div className="max-w-[680px]" style={{ y: textY }}>
             {/* Badge */}
             <motion.div
-              initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{
                 duration: 1,
                 delay: 0.25,

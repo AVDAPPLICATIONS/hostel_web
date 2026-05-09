@@ -1,67 +1,25 @@
 "use client"
 
-import { motion } from "framer-motion"
-
 export default function FloatingElements() {
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {/* Subtle palette dust particles */}
-      {Array.from({ length: 5 }).map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-1 h-1 rounded-full"
-          style={{
-            background: "rgba(86, 124, 141, 0.16)",
-            left: `${15 + i * 18}%`,
-            top: `${25 + i * 12}%`,
-          }}
-          animate={{
-            x: [0, 60, 0],
-            y: [0, -60, 0],
-            opacity: [0.15, 0.3, 0.15],
-          }}
-          transition={{
-            duration: 25 + i * 5,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: "linear",
-          }}
-        />
-      ))}
-
-      {/* Ambient orbs */}
-      <motion.div
-        className="absolute w-96 h-96 rounded-full blur-[200px]"
+      {/* Static ambient orbs — no animation to keep GPU free */}
+      <div
+        className="absolute w-[500px] h-[500px] rounded-full"
         style={{
-          background: "rgba(255, 255, 255, 0.16)",
+          background: "rgba(86, 124, 141, 0.05)",
+          filter: "blur(80px)",
           right: "10%",
-          top: "20%",
-        }}
-        animate={{
-          x: [0, 100, 0],
-          y: [0, -100, 0],
-        }}
-        transition={{
-          duration: 35,
-          repeat: Number.POSITIVE_INFINITY,
-          ease: "easeInOut",
+          top: "15%",
         }}
       />
-
-      <motion.div
-        className="absolute w-64 h-64 rounded-full blur-[150px]"
+      <div
+        className="absolute w-[360px] h-[360px] rounded-full"
         style={{
-          background: "rgba(200, 217, 230, 0.16)",
+          background: "rgba(200, 217, 230, 0.05)",
+          filter: "blur(60px)",
           left: "5%",
-          bottom: "30%",
-        }}
-        animate={{
-          x: [0, -80, 0],
-          y: [0, 80, 0],
-        }}
-        transition={{
-          duration: 30,
-          repeat: Number.POSITIVE_INFINITY,
-          ease: "easeInOut",
+          bottom: "25%",
         }}
       />
     </div>

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from "react"
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import {
   Star,
   Sparkles,
@@ -56,11 +56,6 @@ export default function Reviews() {
   const [direction, setDirection] = useState(0)
 
   const containerRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  })
-  const parallaxX = useTransform(scrollYProgress, [0, 1], [-50, 50])
   const review = reviews[currentIndex]
 
   const goNext = useCallback(() => {
@@ -88,13 +83,7 @@ export default function Reviews() {
 
   return (
     <>
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-            @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap');
-          `,
-        }}
-      />
+
 
       <section
         id="reviews"
@@ -165,22 +154,22 @@ export default function Reviews() {
                 custom={direction}
                 variants={{
                   enter: (d: number) => ({
-                    x: d > 0 ? 80 : -80,
+                    x: d > 0 ? 120 : -120,
+                    rotateY: d > 0 ? 8 : -8,
                     opacity: 0,
-                    scale: 0.96,
-                    filter: "blur(6px)",
+                    scale: 0.95,
                   }),
                   center: {
                     x: 0,
+                    rotateY: 0,
                     opacity: 1,
                     scale: 1,
-                    filter: "blur(0px)",
                   },
                   exit: (d: number) => ({
-                    x: d > 0 ? -80 : 80,
+                    x: d > 0 ? -120 : 120,
+                    rotateY: d > 0 ? -8 : 8,
                     opacity: 0,
-                    scale: 0.96,
-                    filter: "blur(6px)",
+                    scale: 0.95,
                   }),
                 }}
                 initial="enter"
@@ -189,32 +178,29 @@ export default function Reviews() {
                 transition={{
                   x: {
                     type: "spring",
-                    stiffness: 300,
-                    damping: 30,
+                    stiffness: 260,
+                    damping: 26,
+                  },
+                  rotateY: {
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 26,
                   },
                   opacity: { duration: 0.35 },
-                  filter: { duration: 0.35 },
+                  scale: { duration: 0.35 },
                 }}
               >
                 <div className="flex flex-col items-center gap-8 md:flex-row md:gap-0">
                   {/* Avatar */}
                   <CinematicPhoto className="relative z-10 flex-shrink-0 md:-mr-12">
                     <div className="group relative">
-                      <motion.div
+                      <div
                         className="absolute inset-0 rounded-[28px] md:rounded-[32px]"
                         style={{
                           background: UI.card.soft,
                           border: `1px solid ${UI.border.white}`,
+                          transform: "rotate(6deg)",
                         }}
-                        animate={{ 
-                          rotate: [6, 8, 6],
-                        }}
-                        transition={{
-                          duration: 5,
-                          repeat: Infinity,
-                          ease: "easeInOut"
-                        }}
-                        whileHover={{ rotate: 3 }}
                       />
 
                       <div

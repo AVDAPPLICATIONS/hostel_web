@@ -8,7 +8,6 @@ import CampusPreview from "@/components/sections/campus-preview"
 
 import Features from "@/components/sections/features"
 import Rooms from "@/components/sections/rooms"
-import VirtualTour from "@/components/sections/virtual-tour"
 import Arrival from "@/components/sections/arrival"
 import Gallery from "@/components/sections/gallery"
 import Reviews from "@/components/sections/reviews"
@@ -16,7 +15,6 @@ import Contact from "@/components/sections/contact"
 import Footer from "@/components/layout/footer"
 import ScrollProgress from "@/components/layout/scroll-progress"
 import FloatingElements from "@/components/layout/floating-elements"
-import VideoLaunch from "@/components/sections/video-launch"
 
 
 export default function Home() {  
@@ -84,7 +82,6 @@ export default function Home() {
       <FloatingElements />
       <Navbar />
       <main>
-        <VideoLaunch />
         <Hero />
 
         <QuickLinks />
@@ -92,7 +89,6 @@ export default function Home() {
 
         <Features />
         <Rooms />
-        <VirtualTour />
         <Arrival />
         <Gallery />
         <Reviews />

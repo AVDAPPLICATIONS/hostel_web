@@ -53,28 +53,20 @@ const ScrollRevealCard = forwardRef<HTMLDivElement, ScrollRevealCardProps>(({
       initial={{ 
         opacity: 0, 
         ...initialPos,
-        rotateX: direction === "up" ? 15 : direction === "down" ? -15 : 0,
-        rotateY: direction === "left" ? -15 : direction === "right" ? 15 : 0,
-        scale: 0.9,
-        filter: "blur(8px)"
       }}
       animate={isInView ? { 
         opacity: 1, 
         x: 0, 
         y: 0, 
-        rotateX: 0,
-        rotateY: 0,
-        scale: 1,
-        filter: "blur(0px)"
       } : {}}
       exit={exit}
       transition={{
-        duration: 0.9,
+        duration: 0.7,
         delay,
         ease: [0.22, 1, 0.36, 1],
       }}
       className={cn("will-change-transform", className)}
-      style={{ perspective: "1000px", ...style }}
+      style={style}
     >
       {children}
     </motion.div>

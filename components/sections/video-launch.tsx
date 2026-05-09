@@ -67,7 +67,7 @@ export default function VideoLaunch() {
             src="/intro.mp4"
             muted
             playsInline
-            preload="auto"
+            preload="metadata"
             autoPlay
             loop
             className="absolute inset-0 h-full w-full object-cover"
@@ -116,6 +116,7 @@ export default function VideoLaunch() {
 
           {/* Scroll Hint */}
           <motion.div
+            initial={{ opacity: 1 }}
             style={{
               opacity: useTransform(scrollYProgress, [0, 0.05], [1, 0]),
             }}

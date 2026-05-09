@@ -98,6 +98,88 @@ const fields = [
   },
 ] as const
 
+const FormInput = ({
+  name,
+  label,
+  placeholder,
+  type = "text",
+  required = false,
+  index,
+  icon: Icon,
+  value,
+  isFocused,
+  onChange,
+  onFocus,
+  onBlur,
+}: {
+  name: string
+  label: string
+  placeholder: string
+  type?: string
+  required?: boolean
+  index: number
+  icon: React.ElementType
+  value: string
+  isFocused: boolean
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onFocus: () => void
+  onBlur: () => void
+}) => (
+  <motion.div
+    className="space-y-2"
+    initial={{ opacity: 0, y: 18 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{
+      duration: 0.45,
+      delay: 0.35 + index * 0.045,
+      ease: "easeOut",
+    }}
+  >
+    <label
+      htmlFor={name}
+      className="block text-sm font-semibold tracking-wide"
+      style={{ color: UI.text.dark }}
+    >
+      {label}
+      {required && <span style={{ color: UI.text.accent }}> *</span>}
+    </label>
+
+    <motion.div whileFocus={{ scale: 1.012 }} className="relative">
+      <Icon
+        size={19}
+        className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2"
+        style={{
+          color: isFocused ? UI.text.accent : UI.text.dark,
+        }}
+      />
+
+      <input
+        id={name}
+        type={type}
+        name={name}
+        required={required}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        className="w-full rounded-2xl py-3.5 pl-12 pr-4 outline-none transition-all duration-300 placeholder:text-slate-400"
+        style={{
+          background: UI.card.white,
+          color: UI.text.dark,
+          border: `1.5px solid ${
+            isFocused ? UI.button.primary : UI.border.light
+          }`,
+          boxShadow:
+            isFocused
+              ? `0 0 0 4px rgba(200, 217, 230, 0.9), ${UI.shadow.light}`
+              : UI.shadow.light,
+        }}
+      />
+    </motion.div>
+  </motion.div>
+)
+
 export default function Contact() {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -149,77 +231,6 @@ export default function Contact() {
     setTimeout(() => setSubmitted(false), 4000)
   }
 
-  const FormInput = ({
-    name,
-    label,
-    placeholder,
-    type = "text",
-    required = false,
-    index,
-    icon: Icon,
-  }: {
-    name: keyof typeof formData
-    label: string
-    placeholder: string
-    type?: string
-    required?: boolean
-    index: number
-    icon: React.ElementType
-  }) => (
-    <motion.div
-      className="space-y-2"
-      initial={{ opacity: 0, y: 18 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.45,
-        delay: 0.35 + index * 0.045,
-        ease: "easeOut",
-      }}
-    >
-      <label
-        htmlFor={name}
-        className="block text-sm font-semibold tracking-wide"
-        style={{ color: UI.text.dark }}
-      >
-        {label}
-        {required && <span style={{ color: UI.text.accent }}> *</span>}
-      </label>
-
-      <motion.div whileFocus={{ scale: 1.012 }} className="relative">
-        <Icon
-          size={19}
-          className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2"
-          style={{
-            color: focusedField === name ? UI.text.accent : UI.text.dark,
-          }}
-        />
-
-        <input
-          id={name}
-          type={type}
-          name={name}
-          required={required}
-          placeholder={placeholder}
-          value={formData[name]}
-          onChange={handleInputChange}
-          onFocus={() => setFocusedField(name)}
-          onBlur={() => setFocusedField(null)}
-          className="w-full rounded-2xl py-3.5 pl-12 pr-4 outline-none transition-all duration-300 placeholder:text-slate-400"
-          style={{
-            background: UI.card.white,
-            color: UI.text.dark,
-            border: `1.5px solid ${
-              focusedField === name ? UI.button.primary : UI.border.light
-            }`,
-            boxShadow:
-              focusedField === name
-                ? `0 0 0 4px rgba(200, 217, 230, 0.9), ${UI.shadow.light}`
-                : UI.shadow.light,
-          }}
-        />
-      </motion.div>
-    </motion.div>
-  )
 
   return (
     <section
@@ -373,9 +384,13 @@ export default function Contact() {
                         name={field.name}
                         label={field.label}
                         placeholder={field.placeholder}
-                        // required={field.required}
                         icon={field.icon}
                         index={index}
+                        value={formData[field.name]}
+                        isFocused={focusedField === field.name}
+                        onChange={handleInputChange}
+                        onFocus={() => setFocusedField(field.name)}
+                        onBlur={() => setFocusedField(null)}
                       />
                     ))}
                   </div>

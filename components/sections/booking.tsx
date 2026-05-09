@@ -326,9 +326,9 @@ export default function Booking() {
                   {step === 1 && (
                     <motion.div
                       key="step-1"
-                      initial={{ opacity: 0, x: 40, filter: "blur(4px)" }}
-                      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                      exit={{ opacity: 0, x: -40, filter: "blur(4px)" }}
+                      initial={{ opacity: 0, x: 40 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -40 }}
                       transition={{
                         duration: 0.42,
                         ease: [0.22, 1, 0.36, 1],
@@ -491,9 +491,9 @@ export default function Booking() {
                   {step === 2 && (
                     <motion.div
                       key="step-2"
-                      initial={{ opacity: 0, x: 40, filter: "blur(4px)" }}
-                      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                      exit={{ opacity: 0, x: -40, filter: "blur(4px)" }}
+                      initial={{ opacity: 0, x: 40 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -40 }}
                       transition={{
                         duration: 0.42,
                         ease: [0.22, 1, 0.36, 1],
@@ -620,9 +620,9 @@ export default function Booking() {
                   {step === 3 && (
                     <motion.div
                       key="step-3"
-                      initial={{ opacity: 0, x: 40, filter: "blur(4px)" }}
-                      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                      exit={{ opacity: 0, x: -40, filter: "blur(4px)" }}
+                      initial={{ opacity: 0, x: 40 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -40 }}
                       transition={{
                         duration: 0.42,
                         ease: [0.22, 1, 0.36, 1],

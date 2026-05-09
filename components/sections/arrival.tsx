@@ -51,13 +51,7 @@ export default function Arrival() {
 
   return (
     <>
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-            @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap');
-          `,
-        }}
-      />
+
 
       <section
         id="arrival"
@@ -67,7 +61,7 @@ export default function Arrival() {
           fontFamily: "'DM Sans', sans-serif",
         }}
       >
-        <div className="relative container mx-auto max-w-6xl px-0 sm:px-4">
+        <div className="relative container mx-auto max-w-6xl px-4">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 34 }}
@@ -120,7 +114,7 @@ export default function Arrival() {
 
           {/* Main Card */}
           <ScrollRevealCard
-            className="overflow-hidden rounded-[2rem] p-1"
+            className="overflow-hidden rounded-[1.8rem] sm:rounded-[2rem] p-0.5 sm:p-1"
             delay={0.1}
             style={{
               background: UI.card.soft,
@@ -128,16 +122,16 @@ export default function Arrival() {
             }}
           >
             <div
-              className="overflow-hidden rounded-[1.8rem]"
+              className="overflow-hidden rounded-[1.6rem] sm:rounded-[1.8rem]"
               style={{
                 background: UI.card.light,
                 border: `1px solid ${UI.border.white}`,
               }}
             >
-              <div className="flex min-h-[540px] flex-col lg:flex-row">
+              <div className="flex min-h-[500px] sm:min-h-[540px] flex-col lg:flex-row">
                 {/* Left Map */}
                 <div
-                  className="relative h-[340px] w-full overflow-hidden lg:h-auto lg:w-[52%]"
+                  className="relative h-[280px] sm:h-[340px] w-full overflow-hidden lg:h-auto lg:w-[52%]"
                   style={{
                     background: UI.card.soft,
                     borderRight: `1px solid ${UI.border.light}`,
@@ -161,41 +155,41 @@ export default function Arrival() {
                   ))}
 
                   {/* Map Info Bar */}
-                  <div className="absolute bottom-5 left-5 right-5 z-20">
+                  <div className="absolute bottom-3 left-3 right-3 sm:bottom-5 sm:left-5 sm:right-5 z-20">
                     <motion.div
                       key={current.from}
                       initial={{ opacity: 0, y: 16 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.35 }}
-                      className="rounded-2xl p-4"
+                      className="rounded-2xl p-3 sm:p-4"
                       style={{
                         background: UI.card.light,
                         border: `1px solid ${UI.border.white}`,
                         boxShadow: UI.shadow.soft,
                       }}
                     >
-                      <div className="mb-3 flex items-center justify-between gap-4">
+                      <div className="mb-2 sm:mb-3 flex items-center justify-between gap-4">
                         <span
-                          className="text-[10px] font-black uppercase tracking-[0.18em]"
+                          className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.18em]"
                           style={{ color: UI.text.accent }}
                         >
                           Destination Status
                         </span>
 
                         <span
-                          className="flex items-center gap-2 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider"
+                          className="flex items-center gap-1.5 rounded-full px-2 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider"
                           style={{
                             background: UI.card.soft,
                             color: UI.text.dark,
                           }}
                         >
-                          <span className="relative flex h-2 w-2">
+                          <span className="relative flex h-1.5 w-1.5">
                             <span
                               className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
                               style={{ background: UI.text.accent }}
                             />
                             <span
-                              className="relative inline-flex h-2 w-2 rounded-full"
+                              className="relative inline-flex h-1.5 w-1.5 rounded-full"
                               style={{ background: UI.text.accent }}
                             />
                           </span>
@@ -203,26 +197,26 @@ export default function Arrival() {
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2.5 sm:gap-3">
                         <div
-                          className="flex h-10 w-10 items-center justify-center rounded-xl"
+                          className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg sm:rounded-xl"
                           style={{
                             background: UI.button.primary,
                             color: UI.button.primaryText,
                           }}
                         >
-                          <MapPin size={18} />
+                          <MapPin size={16} className="sm:w-[18px] sm:h-[18px]" />
                         </div>
 
                         <div className="min-w-0">
                           <p
-                            className="truncate text-sm font-bold"
+                            className="truncate text-xs sm:text-sm font-bold"
                             style={{ color: UI.text.dark }}
                           >
                             Atmiya Vidya Dham
                           </p>
                           <p
-                            className="truncate text-xs"
+                            className="truncate text-[10px] sm:text-xs"
                             style={{ color: UI.text.accent }}
                           >
                             Bakrol Road, V.V. Nagar, Gujarat
@@ -234,16 +228,16 @@ export default function Arrival() {
                 </div>
 
                 {/* Right Route Picker */}
-                <div className="flex w-full flex-col p-6 md:p-8 lg:w-[48%] lg:p-10">
+                <div className="flex w-full flex-col p-4 sm:p-6 md:p-8 lg:w-[48%] lg:p-10">
                   <motion.div
                     key={current.from}
                     initial={{ opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.35 }}
-                    className="mb-7"
+                    className="mb-5 sm:mb-7"
                   >
                     <span
-                      className="mb-3 inline-flex rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-[0.22em]"
+                      className="mb-2 sm:mb-3 inline-flex rounded-full px-3 py-1.5 sm:px-4 sm:py-2 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.22em]"
                       style={{
                         background: UI.card.soft,
                         color: UI.text.accent,
@@ -253,7 +247,7 @@ export default function Arrival() {
                     </span>
 
                     <h3
-                      className="text-3xl font-semibold leading-tight md:text-4xl"
+                      className="text-2xl sm:text-3xl font-semibold leading-tight md:text-4xl"
                       style={{
                         color: UI.text.dark,
                         fontFamily: "'Cormorant Garamond', serif",
@@ -263,14 +257,14 @@ export default function Arrival() {
                     </h3>
 
                     <p
-                      className="mt-2 text-sm leading-6"
+                      className="mt-1 sm:mt-2 text-xs sm:text-sm leading-5 sm:leading-6"
                       style={{ color: UI.text.accent }}
                     >
                       Select your arrival point to preview the best route.
                     </p>
                   </motion.div>
 
-                  <div className="flex-1 space-y-4">
+                  <div className="flex-1 space-y-3 sm:space-y-4">
                     {transportOptions.map((option, index) => {
                       const Icon = option.icon
                       const active = selected === index
@@ -307,9 +301,9 @@ export default function Arrival() {
                             )}
                           </AnimatePresence>
 
-                          <div className="flex items-center gap-4 px-5 py-4">
+                          <div className="flex items-start sm:items-center gap-3 sm:gap-4 px-4 py-3 sm:px-5 sm:py-4">
                             <div
-                              className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl transition-all duration-300"
+                              className="flex h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0 items-center justify-center rounded-xl sm:rounded-2xl transition-all duration-300 mt-0.5 sm:mt-0"
                               style={{
                                 background: active
                                   ? UI.button.primary
@@ -324,20 +318,20 @@ export default function Arrival() {
                                 }`,
                               }}
                             >
-                              <Icon className="h-5 w-5" />
+                              <Icon className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
                             </div>
 
                             <div className="min-w-0 flex-1">
-                              <div className="mb-1 flex items-center justify-between gap-3">
+                              <div className="mb-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-3">
                                 <span
-                                  className="truncate text-sm font-bold transition-colors duration-300"
+                                  className="text-xs sm:text-sm font-bold leading-tight transition-colors duration-300 whitespace-normal break-words"
                                   style={{ color: UI.text.dark }}
                                 >
                                   {option.from}
                                 </span>
 
                                 <span
-                                  className="flex-shrink-0 rounded-full px-3 py-1 text-[9px] font-black uppercase tracking-wider"
+                                  className="self-start sm:self-auto flex-shrink-0 rounded-full px-2.5 py-0.5 sm:px-3 sm:py-1 text-[8px] sm:text-[9px] font-black uppercase tracking-wider"
                                   style={{
                                     background: active
                                       ? UI.card.soft
@@ -350,7 +344,7 @@ export default function Arrival() {
                               </div>
 
                               <p
-                                className="text-xs leading-5 transition-colors duration-300"
+                                className="text-[11px] sm:text-xs leading-4 sm:leading-5 transition-colors duration-300"
                                 style={{ color: UI.text.accent }}
                               >
                                 {option.distance} · {option.route}
@@ -364,7 +358,7 @@ export default function Arrival() {
 
                   {/* Directions Button */}
                   <div
-                    className="mt-8 pt-6"
+                    className="mt-6 pt-5 sm:mt-8 sm:pt-6"
                     style={{ borderTop: `1px solid ${UI.border.light}` }}
                   >
                     <motion.button
@@ -380,7 +374,7 @@ export default function Arrival() {
                           "_blank"
                         )
                       }
-                      className="group flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl py-4 text-sm font-black transition-all"
+                      className="group flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl py-3.5 sm:py-4 text-sm font-black transition-all"
                       style={{
                         background: UI.button.primary,
                         color: UI.button.primaryText,
