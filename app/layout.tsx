@@ -19,7 +19,7 @@ const fontMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "Atmiya Vidhya Dham | Harisaurabh Hostel",
+  title: "Atmiya Vidya Dham",
   description:
     "A value-centered student residence for focused study, cultural grounding, and everyday comfort.",
   icons: {

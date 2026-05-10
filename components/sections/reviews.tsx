@@ -22,30 +22,30 @@ const reviews = [
     image: "https://www.avdvvn.org/assets/images/mantra.jpg",
     rating: 5,
     review:
-      "I never thought somebody can be helpful without expectations. I never felt away from home... I found the best mentors here, and came in contact with good individuals.",
-    tag: "Alumni · Batch 2020",
+      "I never thought that somebody can be helpful without any expectations. Also, I never felt I am away from home as the place just suited me with itself. I found the best mentors here, came in contact with good individuals, and along with that my every expectation of college life is answered.",
+    tag: "Student",
     badge: "Found a Family",
     imagePosition: "object-center",
   },
   {
     id: 2,
-    name: "Senior Student",
+    name: "Axat Patel",
     image: "https://www.avdvvn.org/assets/images/senior.jpg",
     rating: 5,
     review:
-      "Stepping out from the protected environment was a challenge. Admitting me here was a blessing. I secured my academics and gained cultural values.",
-    tag: "Current Resident",
+      "Stepping out from the protected environment and studying far away from home was a challenge for me. But maybe my parent's decision of admitting me here at Harisaurabh Hostel was a blessing for me. Not only I secured my Academics but me being able with a healthy attitude and just cultural and moral values is possible because of the environment here I perceived.",
+    tag: "4th yr Student (BE IT, ADIT)",
     badge: "Blessed Environment",
     imagePosition: "object-center",
   },
   {
     id: 3,
-    name: "Alumni Resident",
+    name: "Naitik Joshi",
     image: "https://www.avdvvn.org/assets/images/alumni2.jpeg",
     rating: 5,
     review:
-      "Till date, if I miss anything in my academic life is staying at AVD. The atmosphere helped me crack CAT. I didn't make friends instead came out with a family.",
-    tag: "Alumni · Batch 2018",
+      "Frankly, it wasn't my initial choice but was more of a dad's. But till date, if I miss anything in about my entire academic life is staying at AVD. The atmosphere made an impact which I realized later when I cracked CAT. So much attention was paid to me. And damn that breakfast! Class-apart! I didn't make friends instead came out with a family. The guidance provided by Anand Sagar Swamiji and Gurus' talks enabled a life-altering experience at AVD",
+    tag: "Business Analyst, American Express",
     badge: "Life Impact",
     imagePosition: "object-top",
   },
@@ -190,12 +190,12 @@ export default function Reviews() {
                   scale: { duration: 0.35 },
                 }}
               >
-                <div className="flex flex-col items-center gap-8 md:flex-row md:gap-0">
-                  {/* Avatar */}
-                  <CinematicPhoto className="relative z-10 flex-shrink-0 md:-mr-12">
+                <div className="flex flex-col items-start gap-4 md:flex-row md:items-stretch md:gap-0">
+                  {/* Avatar — hidden on mobile, overlapping panel on desktop */}
+                  <div className="relative z-10 -mr-12 hidden flex-shrink-0 self-center md:block">
                     <div className="group relative">
                       <div
-                        className="absolute inset-0 rounded-[28px] md:rounded-[32px]"
+                        className="absolute inset-0 rounded-[32px]"
                         style={{
                           background: UI.card.soft,
                           border: `1px solid ${UI.border.white}`,
@@ -204,7 +204,7 @@ export default function Reviews() {
                       />
 
                       <div
-                        className="relative h-28 w-28 overflow-hidden rounded-[24px] border-[4px] md:h-44 md:w-44 md:rounded-[30px]"
+                        className="relative h-44 w-44 overflow-hidden rounded-[30px] border-[4px]"
                         style={{
                           background: UI.card.soft,
                           borderColor: UI.border.white,
@@ -222,100 +222,95 @@ export default function Reviews() {
                         />
                       </div>
                     </div>
-                  </CinematicPhoto>
+                  </div>
 
                   {/* Content Card */}
                   <div
-                    className="relative flex-1 overflow-hidden rounded-[2rem] p-1"
+                    className="relative w-full flex-1 overflow-hidden rounded-[2rem] p-1"
                     style={{
                       background: UI.card.soft,
                       boxShadow: UI.shadow.card,
                     }}
                   >
                     <div
-                      className="rounded-[1.75rem] p-8 md:p-14 md:pl-20"
+                      className="rounded-[1.75rem] p-5 md:p-14 md:pl-20"
                       style={{
                         background: UI.card.light,
                         border: `1px solid ${UI.border.white}`,
                       }}
                     >
-                      <Quote
-                        className="mb-6 h-9 w-9 md:h-11 md:w-11"
-                        style={{ color: UI.text.accent }}
-                      />
-
-                      <blockquote
-                        className="mb-8 text-xl font-medium leading-[1.4] md:mb-10 md:text-3xl md:leading-[1.35] lg:text-[2rem]"
-                        style={{
-                          color: UI.text.primaryDark,
-                          fontFamily: "'Cormorant Garamond', serif",
-                        }}
-                      >
-                        &ldquo;{review.review}&rdquo;
-                      </blockquote>
-
-                      <div
-                        className="flex flex-col justify-between gap-5 border-t pt-7 sm:flex-row sm:items-end"
-                        style={{ borderColor: UI.border.light }}
-                      >
+                      {/* Mobile-only: photo + name row at the top of the card */}
+                      <div className="mb-5 flex items-center gap-4 md:hidden">
+                        <div className="group relative flex-shrink-0">
+                          <div
+                            className="relative h-14 w-14 overflow-hidden rounded-2xl border-2"
+                            style={{
+                              background: UI.card.soft,
+                              borderColor: UI.border.white,
+                              boxShadow: UI.shadow.soft,
+                            }}
+                          >
+                            <Image
+                              src={review.image}
+                              alt={review.name}
+                              width={56}
+                              height={56}
+                              className={`h-full w-full object-cover ${
+                                review.imagePosition || "object-center"
+                              }`}
+                            />
+                          </div>
+                        </div>
                         <div>
-                          <h4
-                            className="mb-1 text-xl font-semibold md:text-2xl"
+                          <p
+                            className="text-sm font-bold"
                             style={{
                               color: UI.text.primaryDark,
                               fontFamily: "'Cormorant Garamond', serif",
                             }}
                           >
                             {review.name}
-                          </h4>
-
-                          <span
-                            className="text-xs font-semibold tracking-wide"
+                          </p>
+                          <p
+                            className="text-[11px] font-semibold"
                             style={{ color: UI.text.accent }}
                           >
                             {review.tag}
-                          </span>
+                          </p>
                         </div>
+                      </div>
 
-                        <div className="flex items-center gap-4 md:gap-5">
-                          <div className="flex gap-1">
-                            {[...Array(review.rating)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className="h-4 w-4"
-                                style={{
-                                  color: UI.text.accent,
-                                  fill: UI.text.accent,
-                                }}
-                              />
-                            ))}
-                          </div>
+                      <blockquote
+                        className="mb-6 text-sm font-medium leading-[1.7] md:mb-10 md:text-3xl md:leading-[1.35] lg:text-[2rem]"
+                        style={{
+                          color: UI.text.primaryDark,
+                          fontFamily: "'Cormorant Garamond', serif",
+                        }}
+                      >
+                        {review.review}
+                      </blockquote>
 
-                          <div
-                            className="hidden h-6 w-px sm:block"
-                            style={{ background: UI.border.light }}
-                          />
+                      {/* Desktop-only: name/tag at the bottom */}
+                      <div
+                        className="hidden border-t pt-7 md:block"
+                        style={{ borderColor: UI.border.light }}
+                      >
+                        <h4
+                          className="mb-1 text-2xl font-semibold"
+                          style={{
+                            color: UI.text.primaryDark,
+                            fontFamily: "'Cormorant Garamond', serif",
+                          }}
+                        >
+                          {review.name}
+                        </h4>
 
-                          <div
-                            className="flex items-center gap-2 rounded-full px-4 py-2"
-                            style={{
-                              background: UI.card.soft,
-                              border: `1px solid ${UI.border.white}`,
-                            }}
-                          >
-                            <Sparkles
-                              className="h-3 w-3"
-                              style={{ color: UI.text.accent }}
-                            />
-
-                            <span
-                              className="text-[9px] font-black uppercase tracking-[0.15em] md:text-[10px]"
-                              style={{ color: UI.text.accent }}
-                            >
-                              {review.badge}
-                            </span>
-                          </div>
-                        </div>
+                        <span
+                          className="text-xs font-semibold tracking-wide"
+                          style={{ color: UI.text.accent }}
+                        >
+                          {review.tag}
+                        </span>
                       </div>
                     </div>
                   </div>
