@@ -24,7 +24,7 @@ import {
 import Image from "next/image"
 import { COLORS, UI } from "@/lib/theme"
 import ScrollShineText from "@/components/shared/scroll-shine-text"
-import ScrollRevealCard from "@/components/shared/scroll-reveal-card"
+import SlideInView from "@/components/shared/slide-in-view"
 import { Canvas } from "@react-three/fiber"
 import { OrbitControls, Environment, useTexture, Html } from "@react-three/drei"
 import { Room3D } from "./virtual-tour"
@@ -174,6 +174,7 @@ function PanoramaSphere({ url }: { url: string }) {
 export default function Rooms() {
   const [active, setActive] = useState(0)
   const [viewMode, setViewMode] = useState<"photo" | "360">("photo")
+  const [hoveredTab, setHoveredTab] = useState<number | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
   const tabsScrollRef = useRef<HTMLDivElement>(null)
   const showcaseRef = useRef<HTMLDivElement>(null)
@@ -278,7 +279,7 @@ export default function Rooms() {
           fontFamily: "'DM Sans', sans-serif",
         }}
       >
-        <div className="relative container mx-auto max-w-7xl px-4">
+        <div className="relative container mx-auto max-w-[1440px] px-4">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 36 }}
@@ -329,23 +330,25 @@ export default function Rooms() {
 
           {/* Main Layout */}
           <div className="grid items-start gap-7 lg:grid-cols-[260px_1fr] lg:gap-10">
-            {/* Room Tabs */}
-            <motion.div
-              ref={tabsScrollRef}
-              initial={{ opacity: 0, x: -28 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{
-                duration: 0.7,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              viewport={{ once: true }}
-              className="no-scrollbar flex gap-3 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0"
-              onTouchStart={() => setIsUserInteracting(true)}
-              onTouchEnd={() => setIsUserInteracting(false)}
-              onTouchCancel={() => setIsUserInteracting(false)}
-              onMouseEnter={() => setIsUserInteracting(true)}
-              onMouseLeave={() => setIsUserInteracting(false)}
+            {/* Room Tabs — SlideInView from LEFT */}
+            <SlideInView
+              direction="left"
+              distance={120}
+              duration={0.85}
+              viewportAmount={0.2}
+              hoverScale={1.01}
+              hoverY={-4}
             >
+              {/* inner scroll container keeps the ref + touch/mouse handlers */}
+              <div
+                ref={tabsScrollRef}
+                className="no-scrollbar flex gap-3 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0"
+                onTouchStart={() => setIsUserInteracting(true)}
+                onTouchEnd={() => setIsUserInteracting(false)}
+                onTouchCancel={() => setIsUserInteracting(false)}
+                onMouseEnter={() => setIsUserInteracting(true)}
+                onMouseLeave={() => setIsUserInteracting(false)}
+              >
               {rooms.map((item, index) => {
                 const activeTab = index === active
 
@@ -354,14 +357,37 @@ export default function Rooms() {
                     key={item.id}
                     data-room-tab={index}
                     onClick={() => setActive(index)}
-                    whileHover={{ x: 4 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="relative min-w-[220px] overflow-hidden rounded-2xl p-4 text-left transition-all lg:min-w-0"
+                    onMouseEnter={() => setHoveredTab(index)}
+                    onMouseLeave={() => setHoveredTab(null)}
+                    whileTap={{ scale: 0.97 }}
+                    animate={{
+                      scale: hoveredTab === index ? 1.02 : 1,
+                      x: hoveredTab === index ? 6 : 0,
+                      filter:
+                        hoveredTab !== null && hoveredTab !== index
+                          ? "blur(3px) brightness(0.6)"
+                          : "blur(0px) brightness(1)",
+                      opacity:
+                        hoveredTab !== null && hoveredTab !== index ? 0.55 : 1,
+                    }}
+                    transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                    className="relative min-w-[220px] overflow-hidden rounded-2xl p-4 text-left transition-colors lg:min-w-0"
                     style={{
                       background: activeTab ? UI.card.light : UI.card.darkSoft,
-                      border: `1.5px solid ${activeTab ? UI.border.white : UI.border.soft
-                        }`,
-                      boxShadow: activeTab ? UI.shadow.soft : "none",
+                      border: `1.5px solid ${
+                        hoveredTab === index
+                          ? "rgba(200,217,230,0.5)"
+                          : activeTab
+                          ? UI.border.white
+                          : UI.border.soft
+                      }`,
+                      boxShadow:
+                        hoveredTab === index
+                          ? "0 16px 48px rgba(0,0,0,0.4), 0 0 0 1.5px rgba(200,217,230,0.2)"
+                          : activeTab
+                          ? UI.shadow.soft
+                          : "none",
+                      backdropFilter: activeTab ? "blur(12px)" : "none",
                     }}
                   >
                     <AnimatePresence>
@@ -419,15 +445,15 @@ export default function Rooms() {
                     color: UI.button.primaryText,
                   }}
                   whileTap={{ scale: 0.93 }}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border transition-all"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border transition-all shadow-sm hover:shadow-md"
                   style={{
-                    background: UI.card.darkSoft,
+                    background: UI.card.light,
                     borderColor: UI.border.soft,
-                    color: UI.text.muted,
+                    color: UI.text.dark,
                   }}
                   aria-label="Previous room"
                 >
-                  <ChevronLeft className="h-4 w-4" />
+                  <ChevronLeft className="h-5 w-5" />
                 </motion.button>
 
                 <motion.button
@@ -438,24 +464,32 @@ export default function Rooms() {
                     color: UI.button.primaryText,
                   }}
                   whileTap={{ scale: 0.93 }}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border transition-all"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border transition-all shadow-sm hover:shadow-md"
                   style={{
-                    background: UI.card.darkSoft,
+                    background: UI.card.light,
                     borderColor: UI.border.soft,
-                    color: UI.text.muted,
+                    color: UI.text.dark,
                   }}
                   aria-label="Next room"
                 >
-                  <ChevronRight className="h-4 w-4" />
+                  <ChevronRight className="h-5 w-5" />
                 </motion.button>
               </div>
-            </motion.div>
+              </div>
+            </SlideInView>
 
-            {/* Showcase */}
-            <ScrollRevealCard
+            {/* Showcase — SlideInView from RIGHT */}
+            <SlideInView
               ref={showcaseRef}
+              direction="right"
+              distance={120}
+              duration={0.85}
+              delay={0.12}
+              viewportAmount={0.2}
+              hoverScale={1.012}
+              hoverY={-6}
+              hoverBlur={0}
               className="overflow-hidden rounded-[2rem] p-1"
-              delay={0.1}
               style={{
                 background: UI.card.soft,
                 boxShadow: UI.shadow.card,
@@ -468,7 +502,7 @@ export default function Rooms() {
                   border: `1px solid ${UI.border.white}`,
                 }}
               >
-                <div className="grid min-h-[620px] lg:grid-cols-[1.18fr_0.82fr]">
+                <div className="grid min-h-[720px] lg:grid-cols-[1.18fr_0.82fr]">
                   {/* Image Panel */}
                   <div
                     className="relative min-h-[320px] overflow-hidden md:min-h-[450px] lg:min-h-full"
@@ -744,7 +778,7 @@ export default function Rooms() {
                           style={{ background: UI.border.light }}
                         />
 
-                        <div className="mb-9 grid grid-cols-2 gap-2 sm:grid-cols-2 sm:gap-3">
+                        <div className="mb-9 grid grid-cols-2 gap-3 sm:gap-4">
                           {room.features.map((feature, index) => {
                             const Icon = getFeatureIcon(feature)
 
@@ -759,28 +793,28 @@ export default function Rooms() {
                                   duration: 0.35,
                                   ease: "easeOut",
                                 }}
-                                className="flex min-h-[56px] items-center gap-2 rounded-xl p-2 sm:min-h-0 sm:gap-3 sm:rounded-2xl sm:p-3 transition-shadow hover:shadow-sm"
+                                className="flex min-h-[80px] items-center gap-4 rounded-2xl bg-white p-3 sm:p-4 transition-all hover:shadow-md group"
                                 style={{
-                                  background: UI.card.white,
-                                  border: `1px solid ${UI.border.light}`,
+                                  boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
                                 }}
                               >
                                 <div
-                                  className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl sm:h-9 sm:w-9"
+                                  className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl transition-colors group-hover:bg-[#E2E8F0]"
                                   style={{
-                                    background: "rgba(86, 124, 141, 0.12)",
-                                    color: UI.text.accent,
+                                    background: "#F1F5F9",
+                                    color: "#475569",
                                   }}
                                 >
-                                  <Icon className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
+                                  <Icon className="h-6 w-6" />
                                 </div>
 
-                                <span
-                                  className="text-[13px] font-bold leading-tight sm:text-sm"
-                                  style={{ color: UI.text.dark }}
-                                >
-                                  {feature}
-                                </span>
+                                <div className="flex flex-col">
+                                  <span
+                                    className="text-[15px] font-bold leading-[1.3] text-[#2A3B50]"
+                                  >
+                                    {feature}
+                                  </span>
+                                </div>
                               </motion.div>
                             )
                           })}
@@ -832,7 +866,7 @@ export default function Rooms() {
                   </div>
                 </div>
               </div>
-            </ScrollRevealCard>
+            </SlideInView>
           </div>
 
           {/* Counter */}
