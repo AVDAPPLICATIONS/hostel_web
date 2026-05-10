@@ -9,7 +9,6 @@ import { COLORS, UI } from "@/lib/theme"
 const navItems = [
   { name: "Home", href: "#home" },
   { name: "Rooms", href: "#rooms" },
-  { name: "Tour", href: "#virtual-tour" },
   { name: "Gallery", href: "#gallery" },
   { name: "Reviews", href: "#reviews" },
   { name: "Contact", href: "#contact" },
@@ -148,7 +147,7 @@ export default function Navbar() {
                 className="hidden text-[9px] font-bold uppercase tracking-[0.2em] sm:block"
                 style={{ color: UI.text.muted }}
               >
-                Student Hostel
+                Student Residence
               </span>
             </div>
           </motion.button>

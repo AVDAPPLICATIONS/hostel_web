@@ -122,64 +122,26 @@ export default function Hero() {
         <div className="grid w-full grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
           {/* Text Content */}
           <motion.div className="max-w-[680px]" style={{ y: textY }}>
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 1,
-                delay: 0.25,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="mb-8 md:mb-9"
-            >
-              <motion.span
-                className="inline-flex items-center gap-2.5 rounded-full px-5 py-2.5 text-[11px] font-black uppercase tracking-[0.18em]"
-                style={{
-                  background: UI.card.light,
-                  border: `1px solid ${UI.border.white}`,
-                  color: UI.text.accent,
-                  boxShadow: UI.shadow.light,
-                }}
-                animate={{ y: [0, -5, 0] }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                <motion.span
-                  animate={{ opacity: [0.4, 1, 0.4] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="h-2 w-2 rounded-full"
-                  style={{ background: UI.text.accent }}
-                />
-                Redefining Student Living
-              </motion.span>
-            </motion.div>
-
-            <div className="mb-7 space-y-2 md:mb-8 md:space-y-3">
+            <div className="mb-8 space-y-2 md:mb-10 md:space-y-4">
               <ScrollShineText
                 as="h1"
-                className="text-5xl font-bold leading-[1.02] tracking-normal sm:text-6xl md:text-7xl xl:text-[5.5rem]"
+                className="text-5xl font-bold uppercase leading-[1.05] tracking-wide sm:text-6xl md:text-7xl xl:text-[4.5rem]"
                 style={{
-                  fontFamily: "'Cormorant Garamond', serif",
                   color: UI.text.light,
                 }}
               >
-                Atmiya Vidhya
+                ATMIYA VIDYA DHAM
               </ScrollShineText>
 
               <ScrollShineText
-                as="h1"
+                as="h2"
                 delay={0.2}
-                className="text-5xl font-bold leading-[1.02] tracking-normal sm:text-6xl md:text-7xl xl:text-[5.5rem]"
+                className="text-3xl font-light uppercase leading-[1.1] tracking-widest sm:text-4xl md:text-5xl xl:text-[3rem]"
                 style={{
-                  fontFamily: "'Cormorant Garamond', serif",
                   color: UI.text.muted,
                 }}
               >
-                Dham Hostel.
+                REDEFINING YOUTH
               </ScrollShineText>
             </div>
 
@@ -188,7 +150,7 @@ export default function Hero() {
               className="mb-10 max-w-[610px] text-base font-light leading-8 md:mb-11 md:text-lg"
               style={{ color: UI.text.muted }}
             >
-              A value-centered student residence shaped for focused study, cultural grounding, and everyday comfort in a calm campus environment.
+              Developed in the laps of nature, AVD is the epitome of the education system that has diverse youth from across the country studying in various colleges. It is not just a hostel but a platform to instill cultural and moral values along with providing environment for academic proficiency. To make students learn from the best mentors and fostering a harmonious atmosphere is what we constantly strive for.
             </ScrollShineText>
 
             {/* CTA Buttons */}
@@ -224,28 +186,6 @@ export default function Hero() {
                     className="absolute inset-y-0 left-0 w-0 transition-all duration-500 group-hover:w-full"
                     style={{ background: "rgba(255,255,255,0.12)" }}
                   />
-                </motion.button>
-              </Magnetic>
-
-              <Magnetic>
-                <motion.button
-                  whileHover={{
-                    scale: 1.035,
-                    y: -3,
-                    backgroundColor: UI.card.soft,
-                  }}
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => scrollToSection("#virtual-tour")}
-                  className="flex h-14 min-w-[190px] items-center justify-center gap-2.5 rounded-2xl px-8 py-4 text-base font-black transition-all duration-300"
-                  style={{
-                    background: UI.card.light,
-                    color: UI.text.dark,
-                    border: `1px solid ${UI.border.white}`,
-                    boxShadow: UI.shadow.light,
-                  }}
-                >
-                  <Play className="h-4 w-4" />
-                  Virtual Tour
                 </motion.button>
               </Magnetic>
             </motion.div>
@@ -300,37 +240,28 @@ export default function Hero() {
             className="relative hidden items-center justify-end lg:flex"
             style={{ y: imageY }}
           >
-            <motion.div
-              className="absolute right-8 top-1/2 h-[520px] w-[360px] -translate-y-1/2 rounded-[3rem]"
-              style={{
-                background: UI.card.soft,
-                border: `1px solid ${UI.border.white}`,
-                boxShadow: UI.shadow.card,
-              }}
-              animate={{ y: [0, -10, 0] }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
 
-            <motion.img
-              src="https://www.avdvvn.org/assets/images/demo-content/swamiji.png"
-              alt="Swamiji"
-              className="relative z-10 max-h-[85vh] w-auto object-contain drop-shadow-[0_24px_34px_rgba(0,0,0,0.25)] brightness-105"
-              style={{
-                maskImage: "linear-gradient(to bottom, black 82%, transparent 100%)",
-                WebkitMaskImage:
-                  "linear-gradient(to bottom, black 82%, transparent 100%)",
-              }}
+
+            <motion.div
+              className="relative z-10 drop-shadow-[0_24px_34px_rgba(0,0,0,0.25)]"
               animate={{ y: [0, -12, 0] }}
               transition={{
                 duration: 6,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-            />
+            >
+              <img
+                src="https://www.avdvvn.org/assets/images/demo-content/swamiji.png"
+                alt="Swamiji"
+                className="max-h-[85vh] w-auto object-contain brightness-105"
+                style={{
+                  maskImage: "linear-gradient(to bottom, black 75%, transparent 98%)",
+                  WebkitMaskImage:
+                    "linear-gradient(to bottom, black 75%, transparent 98%)",
+                }}
+              />
+            </motion.div>
           </motion.div>
         </div>
       </div>

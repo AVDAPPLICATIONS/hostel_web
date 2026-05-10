@@ -19,16 +19,16 @@ const highlights = [
     icon: MapPin,
     title: "Map & Directions",
     description:
-      "Situated in the outskirts of Vallabh Vidhyanagar near the Bakrol gate, the AVD campus is known for its visible and inherent beauty. Educational institutes are only a few kilometers away, with easy transportation access.",
+      "Situated in the outskirts of Vallabh Vidhyanagar near the Bakrol gate, the AVD campus is known for it's visible and inherent beauty. Approx every education institutes are few Km's away from this beautiful campus. It is easy for a commuter to reach here with different means of transportation available.",
     action: "Learn More",
     href: "#arrival",
   },
   {
     id: 2,
     icon: Crown,
-    title: "Services & Accommodations",
+    title: "Services & Accomodations",
     description:
-      "We provide suitable facilities for students including 24/7 basic medical help, regular room cleaning, a green campus, healthy environment, quality food, sports access, TV room, study room, and more.",
+      "We always try to provide the best and suitable facilities for our students. 24*7 Basic Medical help, Regular rooms cleaning, Green campus, healthy environment, quality food, access to sports resources, TV room, Study room, and much more.",
     action: "Learn More",
     href: "#rooms",
   },
@@ -37,7 +37,7 @@ const highlights = [
     icon: Landmark,
     title: "Great Highlights",
     description:
-      "We create a friendly environment through sports tournaments, annual sports day, stage events, drama, and cultural activities where students can participate and cherish every moment.",
+      "We always try to create a friendly environment for students. Various sports tournaments are organized every year including Sports day. We always try to induce new and interesting events that everyone can participate in and cherish every single moment. Stage event, Drama are a few of the highlights.",
     action: "Learn More",
     href: "#gallery",
   },
@@ -241,6 +241,7 @@ export default function QuickLinks() {
                   key={item.id}
                   delay={index * 0.1}
                   direction={index % 2 === 0 ? "left" : "right"}
+                  className="h-full"
                 >
                   <motion.div
                     whileHover={{
@@ -252,7 +253,7 @@ export default function QuickLinks() {
                       stiffness: 260,
                       damping: 20,
                     }}
-                    className="premium-card group relative flex min-h-[430px] flex-col overflow-hidden rounded-[2rem] p-7 md:p-8 lg:p-9 cursor-pointer"
+                    className="premium-card group relative flex h-full min-h-[430px] flex-col overflow-hidden rounded-[2rem] p-7 md:p-8 lg:p-9 cursor-pointer"
                     style={{
                       background: COLORS.beige,
                       border: `1px solid ${COLORS.sky}`,

@@ -3,12 +3,13 @@
 import { useEffect } from "react"
 import Navbar from "@/components/layout/navbar"
 import Hero from "@/components/sections/hero"
+import IntroVideo from "@/components/sections/intro-video"
 import QuickLinks from "@/components/sections/quick-links"
 import CampusPreview from "@/components/sections/campus-preview"
 
 import Features from "@/components/sections/features"
 import Rooms from "@/components/sections/rooms"
-import VirtualTour from "@/components/sections/virtual-tour"
+
 import Arrival from "@/components/sections/arrival"
 import Gallery from "@/components/sections/gallery"
 import Reviews from "@/components/sections/reviews"
@@ -83,14 +84,14 @@ export default function Home() {
       <FloatingElements />
       <Navbar />
       <main>
+        <IntroVideo />
         <Hero />
-
         <QuickLinks />
         <CampusPreview />
 
         <Features />
         <Rooms />
-        <VirtualTour />
+
         <Arrival />
         <Gallery />
         <Reviews />

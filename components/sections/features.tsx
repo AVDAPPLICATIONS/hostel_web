@@ -105,7 +105,7 @@ const features = [
 const stats = [
   { number: "1000+", label: "Prayer Hall Capacity" },
   { number: "24/7", label: "Medical Support" },
-  { number: "5★", label: "Hostel Rating" },
+  { number: "5★", label: "Campus Rating" },
 ]
 
 function TiltCard({
@@ -191,8 +191,7 @@ export default function Features() {
   const [isMobile, setIsMobile] = useState(false)
   const [isUserInteracting, setIsUserInteracting] = useState(false)
 
-  const featuresCount = features.length
-  const featuresLoop = [...features, ...features]
+
 
   useEffect(() => {
     // Mobile-only auto scroll (Tailwind "md" starts at 768px)
@@ -276,41 +275,7 @@ export default function Features() {
             viewport={{ once: true }}
             className="mb-16 text-center md:mb-20"
           >
-            <motion.div
-              initial={{ opacity: 0, scaleX: 0 }}
-              whileInView={{ opacity: 1, scaleX: 1 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              viewport={{ once: true }}
-              className="mb-6 flex items-center justify-center gap-3"
-            >
-              <div
-                className="h-px w-12"
-                style={{ background: UI.text.muted }}
-              />
 
-              <motion.span
-                className="rounded-full px-5 py-2 text-[10px] font-bold uppercase tracking-[0.3em]"
-                style={{
-                  background: UI.card.light,
-                  color: UI.text.accent,
-                  border: `1px solid ${UI.border.white}`,
-                  boxShadow: UI.shadow.light,
-                }}
-                animate={{ y: [0, -4, 0] }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                Amenities
-              </motion.span>
-
-              <div
-                className="h-px w-12"
-                style={{ background: UI.text.muted }}
-              />
-            </motion.div>
 
             <ScrollShineText
               as="h2"
@@ -347,9 +312,9 @@ export default function Features() {
               onMouseEnter={() => setIsUserInteracting(true)}
               onMouseLeave={() => setIsUserInteracting(false)}
             >
-              {featuresLoop.map((feature, index) => {
+              {features.map((feature, index) => {
                 const Icon = feature.icon
-                const baseIndex = index % featuresCount
+                const baseIndex = index
                 return (
                   <ScrollRevealCard
                     key={`${feature.title}-${index}`}

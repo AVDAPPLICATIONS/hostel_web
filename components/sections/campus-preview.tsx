@@ -9,26 +9,26 @@ import ScrollShineText from "@/components/shared/scroll-shine-text"
 const campusHighlights = [
   {
     id: 1,
-    title: "HARI SAURABH HOSTEL",
-    subtitle: "A home away from home",
+    title: "HARI SAURABH",
+    subtitle: "a home away from home",
     description:
-      "A student is always an empty shell without a pure heart. Along with studies, what good he imbibes in his life helps shape a better future for him. With the blessings of our Guru, we always try to impart brotherhood, humanity, love, and discipline in our students.",
+      "A student is always an empty shell without a pure heart. Along with studies what good he imbibes in his life helps to shapes a better future for him. We with the blessings of our Guru always try to impart brotherhood, humanity, love, and discipline in our students which are the sole practices an Indian culture is known for.",
     image: "/hostel-building.png",
   },
   {
     id: 2,
     title: "TEMPLE",
-    subtitle: "Where peace prevails",
+    subtitle: "where peace prevails",
     description:
-      "A place of beauty, sunlight, warmth, and satisfaction where every heart flashes purity is what a temple implies. With the blessings of Lord Swaminarayan, AVD campus comprises a beautiful temple where devotees step in for peace and positivity.",
+      "A place of cool stone, beauty, shafting sunlight, warmth, and satisfaction where every heart flashes purity is what a temple implies. With the blessings of Lord Swaminarayan, AVD campus comprises of a beautiful temple with enormous devotees stepping in for peace and positivity.",
     image: "/temple.png",
   },
   {
     id: 3,
     title: "PRAYER HALL",
-    subtitle: "Togetherness is half success",
+    subtitle: "togetherness is half success",
     description:
-      "A large prayer hall with the capacity of 1000+ individuals is a symbol of togetherness. Every evening, prayer is performed here by the students of Harisaurabh Hostel. Various stage events and Sabha are also organized at this place.",
+      "A large prayer hall with the capacity of 1000+ individuals is a symbol of togetherness. Prayer hall symbolizes the ancient Gurukul culture where students come together for prayers and augment positive energy in themselves. Every day in evening prayer is performed here by the students of Harisaurabh Hostel. Also, various stage events and Sabha are organized at this place.",
     image: "/prayer-hall.png",
   },
 ]
