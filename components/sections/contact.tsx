@@ -74,8 +74,8 @@ const fields = [
   },
   {
     name: "school",
-    label: "School",
-    placeholder: "School Name",
+    label: "College / School",
+    placeholder: "Select College",
     icon: GraduationCap,
   },
   {
@@ -93,10 +93,48 @@ const fields = [
   {
     name: "reference",
     label: "Reference",
-    placeholder: "Instagram, Friend...",
+    placeholder: "Friend, Family, etc.",
     icon: Users,
   },
 ] as const
+
+const locationData: Record<string, Record<string, string[]>> = {
+  "Gujarat": {
+    "Anand": ["Anand", "Vallabh Vidyanagar", "Karamsad", "Borsad", "Khambhat", "Petlad", "Sojitra", "Tarapur", "Umreth"],
+    "Ahmedabad": ["Ahmedabad", "Bavla", "Daskroi", "Detroj", "Dhandhuka", "Dholka", "Mandal", "Sanand", "Viramgam"],
+    "Vadodara": ["Vadodara", "Dabhoi", "Karjan", "Padra", "Savli", "Sinor", "Waghodia", "Desar"],
+    "Surat": ["Surat", "Bardoli", "Choryasi", "Kamrej", "Mahuva", "Mandvi", "Olpad", "Palsana", "Umarpada"],
+    "Rajkot": ["Rajkot", "Gondal", "Jetpur", "Dhoraji", "Kotda Sangani", "Lodhika", "Paddhari", "Upleta"],
+    "Kheda": ["Nadiad", "Matar", "Vaso", "Mahudha", "Kheda"]
+  },
+  "Maharashtra": {
+    "Mumbai": ["Mumbai City", "Mumbai Suburban"],
+    "Pune": ["Pune City", "Pimpri-Chinchwad", "Baramati", "Junnar", "Khed", "Maval"],
+    "Nagpur": ["Nagpur City", "Kamptee", "Hingna", "Katol", "Savner"]
+  },
+  "Rajasthan": {
+    "Jaipur": ["Jaipur", "Amber", "Bassi", "Chaksu", "Chomu"],
+    "Udaipur": ["Udaipur", "Girwa", "Gogunda", "Jhadol", "Kherwara"],
+    "Jodhpur": ["Jodhpur", "Bilara", "Luni", "Osian", "Phalodi"]
+  }
+};
+
+const collegeOptions = [
+  "BVM - Birla Vishvakarma Mahavidyalaya",
+  "GCET - G.H. Patel College of Engineering",
+  "ADIT - A.D. Patel Institute of Technology",
+  "MBIT - Madhuben & Bhanubhai Patel Inst. of Tech",
+  "SEMCOM",
+  "ARIBAS",
+  "C Z Patel College of Business & Management",
+  "N V Patel College of Pure & Applied Sciences",
+  "V P Science College",
+  "D P Bhabhu Arts College",
+  "DDU - Dharmsinh Desai University",
+  "DDIT",
+  "M.B. Patel Science College",
+  "J.S. Ayurved Mahavidyalaya"
+];
 
 const FormInput = ({
   name,
@@ -111,6 +149,8 @@ const FormInput = ({
   onChange,
   onFocus,
   onBlur,
+  options,
+  disabled,
 }: {
   name: string
   label: string
@@ -121,9 +161,11 @@ const FormInput = ({
   icon: React.ElementType
   value: string
   isFocused: boolean
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void
   onFocus: () => void
   onBlur: () => void
+  options?: readonly string[] | string[]
+  disabled?: boolean
 }) => (
   <motion.div
     className="space-y-2"
@@ -153,29 +195,62 @@ const FormInput = ({
         }}
       />
 
-      <input
-        id={name}
-        type={type}
-        name={name}
-        required={required}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        className="w-full rounded-2xl py-3.5 pl-12 pr-4 outline-none transition-all duration-300 placeholder:text-slate-400"
-        style={{
-          background: UI.card.white,
-          color: UI.text.dark,
-          border: `1.5px solid ${
-            isFocused ? UI.button.primary : UI.border.light
-          }`,
-          boxShadow:
-            isFocused
-              ? `0 0 0 4px rgba(200, 217, 230, 0.9), ${UI.shadow.light}`
-              : UI.shadow.light,
-        }}
-      />
+      {options ? (
+        <select
+          id={name}
+          name={name}
+          required={required}
+          value={value}
+          onChange={onChange}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          disabled={disabled}
+          className="w-full appearance-none rounded-2xl py-3.5 pl-12 pr-10 outline-none transition-all duration-300 disabled:opacity-50"
+          style={{
+            background: `${UI.card.white} url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232D507B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 16px center`,
+            color: value ? UI.text.dark : "#94a3b8",
+            border: `1.5px solid ${isFocused ? UI.button.primary : UI.border.light
+              }`,
+            boxShadow:
+              isFocused
+                ? `0 0 0 4px rgba(200, 217, 230, 0.9), ${UI.shadow.light}`
+                : UI.shadow.light,
+            cursor: disabled ? "not-allowed" : "pointer",
+          }}
+        >
+          <option value="" disabled>
+            {placeholder}
+          </option>
+          {options.map((opt) => (
+            <option key={opt} value={opt} style={{ color: UI.text.dark }}>
+              {opt}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <input
+          id={name}
+          type={type}
+          name={name}
+          required={required}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          className="w-full rounded-2xl py-3.5 pl-12 pr-4 outline-none transition-all duration-300 placeholder:text-slate-400"
+          style={{
+            background: UI.card.white,
+            color: UI.text.dark,
+            border: `1.5px solid ${isFocused ? UI.button.primary : UI.border.light
+              }`,
+            boxShadow:
+              isFocused
+                ? `0 0 0 4px rgba(200, 217, 230, 0.9), ${UI.shadow.light}`
+                : UI.shadow.light,
+          }}
+        />
+      )}
     </motion.div>
   </motion.div>
 )
@@ -200,11 +275,18 @@ export default function Contact() {
   const [submitted, setSubmitted] = useState(false)
   const [focusedField, setFocusedField] = useState<string | null>(null)
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }))
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    if (name === "state") {
+      setFormData(prev => ({ ...prev, state: value, district: "", city: "" }))
+    } else if (name === "district") {
+      setFormData(prev => ({ ...prev, district: value, city: "" }))
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }))
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -228,7 +310,17 @@ export default function Contact() {
       ],
     })
 
-    setTimeout(() => setSubmitted(false), 4000)
+    setTimeout(() => {
+      setSubmitted(false)
+      // Construct WhatsApp message
+      const message = `Thank you for your enquiry. Our team will contact you shortly.`
+
+      // Clean phone number (remove non-digits)
+      const cleanPhone = formData.fatherContactNo.replace(/\D/g, "")
+      const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`
+
+      window.open(whatsappUrl, "_blank")
+    }, 2000)
   }
 
 
@@ -378,21 +470,44 @@ export default function Contact() {
                   </motion.div>
 
                   <div className="grid gap-x-6 gap-y-5 md:grid-cols-2">
-                    {fields.map((field, index) => (
-                      <FormInput
-                        key={field.name}
-                        name={field.name}
-                        label={field.label}
-                        placeholder={field.placeholder}
-                        icon={field.icon}
-                        index={index}
-                        value={formData[field.name]}
-                        isFocused={focusedField === field.name}
-                        onChange={handleInputChange}
-                        onFocus={() => setFocusedField(field.name)}
-                        onBlur={() => setFocusedField(null)}
-                      />
-                    ))}
+                    {fields.map((field, index) => {
+                      let options: string[] | undefined = undefined
+                      let disabled = false
+
+                      if (field.name === "state") {
+                        options = Object.keys(locationData)
+                      } else if (field.name === "district") {
+                        options = formData.state ? Object.keys(locationData[formData.state] || {}) : []
+                        disabled = !formData.state
+                      } else if (field.name === "city") {
+                        options = (formData.state && formData.district)
+                          ? (locationData[formData.state]?.[formData.district] || [])
+                          : []
+                        disabled = !formData.district
+                      } else if (field.name === "semester") {
+                        options = ["1st Semester", "2nd Semester", "3rd Semester", "4th Semester", "5th Semester", "6th Semester", "7th Semester", "8th Semester"]
+                      } else if (field.name === "school") {
+                        options = collegeOptions
+                      }
+
+                      return (
+                        <FormInput
+                          key={field.name}
+                          name={field.name}
+                          label={field.label}
+                          placeholder={field.placeholder}
+                          icon={field.icon}
+                          index={index}
+                          value={formData[field.name as keyof typeof formData]}
+                          isFocused={focusedField === field.name}
+                          onChange={handleInputChange}
+                          onFocus={() => setFocusedField(field.name)}
+                          onBlur={() => setFocusedField(null)}
+                          options={options}
+                          disabled={disabled}
+                        />
+                      )
+                    })}
                   </div>
 
                   <motion.button
