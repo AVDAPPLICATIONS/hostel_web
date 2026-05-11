@@ -8,17 +8,14 @@ import {
   MapPin,
   MessageCircle,
   ArrowUpRight,
+  ArrowRight,
+  Sparkles,
+  Heart,
 } from "lucide-react"
-import { UI } from "@/lib/theme"
+import { COLORS, UI } from "@/lib/theme"
 
 const InstagramIcon = (props: any) => (
-  <svg
-    {...props}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
+  <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <rect x="2" y="2" width="20" height="20" rx="5" />
     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
@@ -26,13 +23,7 @@ const InstagramIcon = (props: any) => (
 )
 
 const FacebookIcon = (props: any) => (
-  <svg
-    {...props}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
+  <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
   </svg>
 )
@@ -51,11 +42,7 @@ const CONTACT = {
 const SOCIAL_LINKS = [
   { icon: InstagramIcon, link: "#", label: "Instagram" },
   { icon: FacebookIcon, link: "#", label: "Facebook" },
-  {
-    icon: MessageCircle,
-    link: "https://wa.me/919712977261",
-    label: "WhatsApp",
-  },
+  { icon: MessageCircle, link: "https://wa.me/919712977261", label: "WhatsApp" },
 ]
 
 const QUICK_LINKS = [
@@ -78,8 +65,12 @@ const SERVICES = [
 
 export default function Footer() {
   const scrollToSection = (href: string) => {
-    const element = document.querySelector(href)
-    element?.scrollIntoView({ behavior: "smooth" })
+    if (typeof document === "undefined") return
+    try {
+      document.querySelector(href)?.scrollIntoView({ behavior: "smooth" })
+    } catch (e) {
+      console.warn("Scroll error:", e)
+    }
   }
 
   return (
@@ -94,84 +85,107 @@ export default function Footer() {
 
       <footer
         className="relative overflow-hidden"
-        style={{
-          background: UI.section.dark,
-          fontFamily: "'DM Sans', sans-serif",
-        }}
+        style={{ background: UI.section.dark, fontFamily: "'DM Sans', sans-serif" }}
       >
-        {/* Top Rule */}
+        {/* Ambient glow */}
         <div
-          className="h-px"
-          style={{ background: UI.border.soft }}
+          className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.055]"
+          style={{ background: `radial-gradient(ellipse, ${COLORS.teal}, transparent 70%)` }}
         />
 
-        <div className="container mx-auto max-w-7xl px-3 py-12 sm:px-4 sm:py-16 md:py-20">
-          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[1.25fr_0.8fr_1.2fr_0.9fr] lg:gap-10">
-            {/* Brand */}
+        {/* Top divider with centered floating badge */}
+        <div className="relative flex items-center justify-center py-10">
+          <div className="absolute inset-x-0 h-px" style={{ background: UI.border.soft }} />
+          <motion.div
+            className="relative z-10 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[10px] font-black uppercase tracking-[0.28em]"
+            style={{
+              background: UI.section.dark,
+              color: UI.text.muted,
+              border: "1px solid rgba(200,217,230,0.14)",
+              boxShadow: `0 0 0 8px ${UI.section.dark}`,
+            }}
+            animate={{ y: [0, -4, 0] }}
+            transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Sparkles size={12} />
+            Atmiya Vidya Dham
+          </motion.div>
+        </div>
+
+        <div className="container mx-auto max-w-7xl px-4 pb-8 md:pb-14">
+
+          {/* ── 4-Column Grid ── */}
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-[1.6fr_0.9fr_1.3fr_1fr] lg:gap-10 xl:gap-14">
+
+            {/* ── Brand ── */}
             <motion.div
               initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
             >
-              <div className="mb-6 flex items-center gap-4">
+              <div className="mb-6 flex items-center gap-3.5">
                 <motion.div
-                  className="flex h-14 w-14 items-center justify-center rounded-2xl"
+                  className="flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl"
                   style={{
                     background: UI.card.light,
-                    border: `1px solid ${UI.border.white}`,
-                    boxShadow: UI.shadow.light,
+                    border: "1.5px solid rgba(255,255,255,0.55)",
+                    boxShadow: "0 4px 20px rgba(0,0,0,0.18)",
                   }}
-                  whileHover={{
-                    scale: 1.06,
-                    rotate: 3,
-                  }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 260,
-                    damping: 18,
-                  }}
+                  whileHover={{ scale: 1.05, rotate: 2 }}
+                  transition={{ type: "spring", stiffness: 280, damping: 18 }}
                 >
                   <Image
                     src="/logo.png"
                     alt="Atmiya Vidya Dham logo"
-                    width={40}
-                    height={30}
+                    width={44}
+                    height={32}
                     className="h-8 w-auto object-contain"
                   />
                 </motion.div>
 
                 <div>
                   <h3
-                    className="text-2xl font-semibold leading-none"
-                    style={{
-                      color: UI.text.light,
-                      fontFamily: "'Cormorant Garamond', serif",
-                    }}
-                  >
-                    AVD
-                  </h3>
-                  <p
-                    className="mt-1 text-[10px] font-black uppercase tracking-[0.22em]"
-                    style={{ color: UI.text.muted }}
+                    className="text-[1.55rem] font-semibold leading-none tracking-tight"
+                    style={{ color: UI.text.light, fontFamily: "'Cormorant Garamond', serif" }}
                   >
                     Atmiya Vidya Dham
+                  </h3>
+                  <p
+                    className="mt-1 text-[9px] font-black uppercase tracking-[0.28em]"
+                    style={{ color: UI.text.muted }}
+                  >
+                    Student Residence · Est. 1989
                   </p>
                 </div>
               </div>
 
               <p
-                className="mb-7 max-w-sm text-sm leading-7"
+                className="mb-6 max-w-[340px] text-sm leading-[1.85]"
                 style={{ color: UI.text.muted }}
               >
-                Comfort & Peace for Students. A secure, value-driven environment
-                designed for focused living and personal growth.
+                A secure, value-driven environment for students — built on care, community,
+                and purpose. Your home away from home.
               </p>
 
-              <div className="flex gap-3">
+              <motion.button
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => scrollToSection("#contact")}
+                className="group mb-8 flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-black"
+                style={{
+                  background: "rgba(86,124,141,0.14)",
+                  color: COLORS.sky,
+                  border: "1px solid rgba(86,124,141,0.28)",
+                }}
+              >
+                Enquire Now
+                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
+              </motion.button>
+
+              <div className="flex gap-2.5">
                 {SOCIAL_LINKS.map((social) => {
                   const Icon = social.icon
-
                   return (
                     <motion.a
                       key={social.label}
@@ -179,7 +193,7 @@ export default function Footer() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={social.label}
-                      className="flex h-10 w-10 items-center justify-center rounded-2xl border transition-all"
+                      className="flex h-10 w-10 items-center justify-center rounded-xl border transition-all"
                       style={{
                         background: UI.card.darkSoft,
                         borderColor: UI.border.soft,
@@ -187,12 +201,12 @@ export default function Footer() {
                       }}
                       whileHover={{
                         y: -3,
-                        scale: 1.06,
-                        backgroundColor: UI.button.primary,
-                        color: UI.button.primaryText,
-                        borderColor: UI.button.primary,
+                        scale: 1.08,
+                        backgroundColor: COLORS.teal,
+                        color: "#fff",
+                        borderColor: COLORS.teal,
                       }}
-                      whileTap={{ scale: 0.94 }}
+                      whileTap={{ scale: 0.92 }}
                     >
                       <Icon className="h-4 w-4" />
                     </motion.a>
@@ -201,94 +215,96 @@ export default function Footer() {
               </div>
             </motion.div>
 
-            {/* Quick Links */}
+            {/* ── Quick Links ── */}
             <motion.div
               initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.65,
-                delay: 0.08,
-                ease: [0.22, 1, 0.36, 1],
-              }}
+              transition={{ duration: 0.65, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
             >
               <FooterTitle>Quick Links</FooterTitle>
-
-              <ul className="grid grid-cols-2 gap-x-4 gap-y-2 md:block md:space-y-3">
-                {QUICK_LINKS.map((link) => (
+              <ul className="space-y-0.5">
+                {QUICK_LINKS.map((link, i) => (
                   <li key={link.name}>
                     <motion.button
                       onClick={() => scrollToSection(link.href)}
-                      className="group flex items-center gap-2 text-sm font-medium transition-all"
+                      className="group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium"
                       style={{ color: UI.text.muted }}
                       whileHover={{
                         x: 4,
                         color: UI.text.light,
+                        backgroundColor: "rgba(200,217,230,0.05)",
                       }}
                     >
-                      <span>{link.name}</span>
-                      <ArrowUpRight className="h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
+                      <span
+                        className="flex-shrink-0 font-mono text-[9px] font-black tracking-widest"
+                        style={{ color: "rgba(86,124,141,0.45)" }}
+                      >
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      {link.name}
+                      <ArrowUpRight className="ml-auto h-3 w-3 opacity-0 transition-all duration-200 group-hover:opacity-100" />
                     </motion.button>
                   </li>
                 ))}
               </ul>
             </motion.div>
 
-            {/* Contact */}
+            {/* ── Contact Info ── */}
             <motion.div
               initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.65,
-                delay: 0.16,
-                ease: [0.22, 1, 0.36, 1],
-              }}
+              transition={{ duration: 0.65, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
             >
               <FooterTitle>Contact Info</FooterTitle>
-
-              <div className="space-y-4">
+              <div className="space-y-3.5">
                 <FooterContactLink
                   href={`mailto:${CONTACT.email}`}
                   icon={Mail}
+                  label="Email"
                   text={CONTACT.email}
                 />
-
                 {CONTACT.phones.map((phone) => (
                   <FooterContactLink
                     key={phone.number}
                     href={`tel:${phone.number}`}
                     icon={Phone}
-                    text={`${phone.name}: ${phone.number}`}
+                    label={phone.name}
+                    text={phone.number}
                   />
                 ))}
 
-                <div className="flex items-start gap-3 text-sm">
+                <div className="flex items-start gap-3">
                   <div
                     className="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl"
                     style={{
-                      background: UI.card.darkSoft,
-                      color: UI.text.accent,
-                      border: `1px solid ${UI.border.soft}`,
+                      background: "rgba(86,124,141,0.12)",
+                      color: COLORS.teal,
+                      border: "1px solid rgba(86,124,141,0.20)",
                     }}
                   >
                     <MapPin className="h-4 w-4" />
                   </div>
-
-                  <div>
+                  <div className="min-w-0">
                     <p
-                      className="leading-7"
+                      className="mb-1 text-[9px] font-black uppercase tracking-[0.18em]"
+                      style={{ color: COLORS.teal, opacity: 0.7 }}
+                    >
+                      Address
+                    </p>
+                    <p
+                      className="text-[12px] leading-[1.7]"
                       style={{ color: UI.text.muted }}
                     >
                       {CONTACT.address}
                     </p>
-
                     <motion.a
                       href={CONTACT.mapLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-2 inline-flex items-center gap-1 text-xs font-bold"
-                      style={{ color: UI.text.accent }}
+                      className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold"
+                      style={{ color: COLORS.teal }}
                       whileHover={{ x: 3 }}
                     >
                       View on Map
@@ -299,64 +315,70 @@ export default function Footer() {
               </div>
             </motion.div>
 
-            {/* Services */}
+            {/* ── Services ── */}
             <motion.div
               initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.65,
-                delay: 0.24,
-                ease: [0.22, 1, 0.36, 1],
-              }}
+              transition={{ duration: 0.65, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
             >
               <FooterTitle>Our Services</FooterTitle>
-
-              <ul className="space-y-3">
+              <ul className="space-y-1">
                 {SERVICES.map((service) => (
                   <motion.li
                     key={service}
-                    className="flex items-center gap-3 text-sm"
+                    className="flex cursor-default items-center gap-3 rounded-lg px-3 py-2 text-sm"
                     style={{ color: UI.text.muted }}
-                    whileHover={{ x: 4, color: UI.text.light }}
+                    whileHover={{
+                      x: 4,
+                      color: UI.text.light,
+                      backgroundColor: "rgba(200,217,230,0.04)",
+                    }}
                   >
                     <span
                       className="h-1.5 w-1.5 flex-shrink-0 rounded-full"
-                      style={{ background: UI.text.accent }}
+                      style={{ background: COLORS.teal, opacity: 0.65 }}
                     />
                     {service}
                   </motion.li>
                 ))}
               </ul>
             </motion.div>
+
           </div>
 
-          {/* Bottom Bar */}
-          <div
-            className="mt-14 border-t pt-6"
+          {/* ── Bottom Bar ── */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            viewport={{ once: true }}
+            className="mt-14 border-t pt-7"
             style={{ borderColor: UI.border.soft }}
           >
-            <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-              <span
-                className="text-xs tracking-wide"
-                style={{ color: UI.text.muted }}
-              >
-                © {new Date().getFullYear()} Atmiya Vidya Dham. All rights
-                reserved.
-              </span>
+            <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+              <p className="text-xs tracking-wide" style={{ color: UI.text.muted }}>
+                © {new Date().getFullYear()} Atmiya Vidya Dham. All rights reserved.
+              </p>
 
               <span
-                className="rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-[0.22em]"
+                className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.22em]"
                 style={{
                   background: UI.card.darkSoft,
                   color: UI.text.muted,
-                  border: `1px solid ${UI.border.soft}`,
+                  border: "1px solid rgba(200,217,230,0.10)",
                 }}
               >
-                Crafted with care
+                Crafted with
+                <Heart
+                  className="h-2.5 w-2.5"
+                  style={{ fill: COLORS.teal, color: COLORS.teal }}
+                />
+                care
               </span>
             </div>
-          </div>
+          </motion.div>
+
         </div>
       </footer>
     </>
@@ -366,8 +388,8 @@ export default function Footer() {
 function FooterTitle({ children }: { children: React.ReactNode }) {
   return (
     <h3
-      className="mb-5 text-[10px] font-black uppercase tracking-[0.24em]"
-      style={{ color: UI.text.accent }}
+      className="mb-5 text-[10px] font-black uppercase tracking-[0.26em]"
+      style={{ color: COLORS.teal }}
     >
       {children}
     </h3>
@@ -377,34 +399,40 @@ function FooterTitle({ children }: { children: React.ReactNode }) {
 function FooterContactLink({
   href,
   icon: Icon,
+  label,
   text,
 }: {
   href: string
   icon: React.ElementType
+  label: string
   text: string
 }) {
   return (
     <motion.a
       href={href}
-      className="flex items-center gap-3 text-sm transition-all"
+      className="flex items-start gap-3 text-sm transition-all"
       style={{ color: UI.text.muted }}
-      whileHover={{
-        x: 4,
-        color: UI.text.light,
-      }}
+      whileHover={{ x: 4, color: UI.text.light }}
     >
       <div
         className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl"
         style={{
-          background: UI.card.darkSoft,
-          color: UI.text.accent,
-          border: `1px solid ${UI.border.soft}`,
+          background: "rgba(86,124,141,0.12)",
+          color: COLORS.teal,
+          border: "1px solid rgba(86,124,141,0.20)",
         }}
       >
         <Icon className="h-4 w-4" />
       </div>
-
-      <span className="truncate">{text}</span>
+      <div className="min-w-0">
+        <p
+          className="mb-0.5 text-[9px] font-black uppercase tracking-[0.18em]"
+          style={{ color: COLORS.teal, opacity: 0.7 }}
+        >
+          {label}
+        </p>
+        <span className="block truncate text-[12px]">{text}</span>
+      </div>
     </motion.a>
   )
 }

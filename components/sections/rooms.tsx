@@ -24,10 +24,8 @@ import {
 import Image from "next/image"
 import { COLORS, UI } from "@/lib/theme"
 import ScrollShineText from "@/components/shared/scroll-shine-text"
-import SlideInView from "@/components/shared/slide-in-view"
 import { Canvas } from "@react-three/fiber"
-import { OrbitControls, Environment, useTexture, Html } from "@react-three/drei"
-import { Room3D } from "./virtual-tour"
+import { OrbitControls, Html } from "@react-three/drei"
 import * as THREE from "three"
 
 const rooms = [
@@ -108,21 +106,20 @@ const FEATURE_ICONS: Record<string, any> = {
   "6 sharing": Users,
   "attached bathroom": Bath,
   "smart ac": Wind,
-  "ventilated": Wind,
-  "spacious": Maximize2,
+  ventilated: Wind,
+  spacious: Maximize2,
   "personal wardrobe": Shirt,
   "study table": BookOpen,
   "laundry bag": Shirt,
 }
 
 function getFeatureIcon(feature: string) {
-  const norm = feature.toLowerCase().trim()
-  return FEATURE_ICONS[norm] || Sparkles
+  return FEATURE_ICONS[feature.toLowerCase().trim()] || Sparkles
 }
 
 function PanoramaSphere({ url }: { url: string }) {
   const [texture, setTexture] = useState<THREE.Texture | null>(null)
-  const [error, setError] = useState<boolean>(false)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     const loader = new THREE.TextureLoader()
@@ -133,10 +130,7 @@ function PanoramaSphere({ url }: { url: string }) {
         setTexture(tex)
       },
       undefined,
-      (err) => {
-        console.error("Error loading 360 texture:", err)
-        setError(true)
-      }
+      () => setError(true)
     )
   }, [url])
 
@@ -154,9 +148,9 @@ function PanoramaSphere({ url }: { url: string }) {
     return (
       <Html center>
         <div className="flex flex-col items-center gap-2">
-          <div className="w-8 h-8 rounded-full border-2 border-t-[#C8A96E] border-r-transparent border-b-transparent border-l-transparent animate-spin" />
-          <span className="text-[10px] tracking-[0.2em] uppercase font-bold text-[#C8A96E]">
-            Loading 360°...
+          <div className="w-8 h-8 rounded-full border-2 border-t-[#567C8D] border-r-transparent border-b-transparent border-l-transparent animate-spin" />
+          <span className="text-[10px] tracking-[0.2em] uppercase font-bold text-[#567C8D]">
+            Loading 360°…
           </span>
         </div>
       </Html>
@@ -174,15 +168,11 @@ function PanoramaSphere({ url }: { url: string }) {
 export default function Rooms() {
   const [active, setActive] = useState(0)
   const [viewMode, setViewMode] = useState<"photo" | "360">("photo")
-  const [hoveredTab, setHoveredTab] = useState<number | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
   const tabsScrollRef = useRef<HTMLDivElement>(null)
-  const showcaseRef = useRef<HTMLDivElement>(null)
-  const tabsInView = useInView(tabsScrollRef, { amount: 0.2 })
-  const showcaseInView = useInView(showcaseRef, { amount: 0.25 })
-  const sectionInView = useInView(sectionRef, { amount: 0.2 })
   const [isMobile, setIsMobile] = useState(false)
   const [isUserInteracting, setIsUserInteracting] = useState(false)
+  const sectionInView = useInView(sectionRef, { amount: 0.15 })
   const room = rooms[active]
 
   useEffect(() => {
@@ -200,73 +190,37 @@ export default function Rooms() {
     target: sectionRef,
     offset: ["start end", "end start"],
   })
-
   const imageY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"])
 
-  const next = () => setActive((prev) => (prev + 1) % rooms.length)
+  const next = () => setActive((p) => (p + 1) % rooms.length)
+  const prev = () => setActive((p) => (p - 1 + rooms.length) % rooms.length)
 
-  const prev = () =>
-    setActive((prev) => (prev - 1 + rooms.length) % rooms.length)
+  // Auto-advance on mobile
+  useEffect(() => {
+    if (!isMobile || !sectionInView || isUserInteracting) return
+    const id = window.setInterval(next, 5200)
+    return () => window.clearInterval(id)
+  }, [isMobile, sectionInView, isUserInteracting])
 
-  // Keep the active tab centered on mobile as the room changes
+  // Keep active tab visible on mobile
   useEffect(() => {
     if (!isMobile) return
     const el = tabsScrollRef.current
     if (!el) return
-
-    const tab = el.querySelector<HTMLElement>(`[data-room-tab="${active}"]`)
-    tab?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" })
+    const tab = el.querySelector<HTMLElement>(`[data-tab="${active}"]`)
+    if (tab) {
+      el.scrollTo({
+        left: tab.offsetLeft - el.clientWidth / 2 + tab.clientWidth / 2,
+        behavior: "smooth",
+      })
+    }
   }, [active, isMobile])
-
-  // Auto-advance the active room on mobile (syncs with the tabs row)
-  useEffect(() => {
-    if (!isMobile) return
-    if (!sectionInView || !showcaseInView) return
-    if (isUserInteracting) return
-
-    const interval = window.setInterval(() => {
-      setActive((prev) => (prev + 1) % rooms.length)
-    }, 5200)
-
-    return () => window.clearInterval(interval)
-  }, [isMobile, sectionInView, showcaseInView, isUserInteracting])
-
-  useEffect(() => {
-    if (!isMobile) return
-    if (!tabsInView) return
-    if (isUserInteracting) return
-
-    const interval = window.setInterval(() => {
-      const el = tabsScrollRef.current
-      if (!el) return
-
-      const maxScrollLeft = el.scrollWidth - el.clientWidth
-
-      // Keep it moving; when we hit the end, jump back to start
-      if (el.scrollLeft >= maxScrollLeft - 2) {
-        el.scrollTo({ left: 0, behavior: "smooth" })
-      } else {
-        el.scrollBy({ left: 180, behavior: "smooth" })
-      }
-    }, 2200)
-
-    return () => window.clearInterval(interval)
-  }, [isMobile, tabsInView, isUserInteracting])
 
   return (
     <>
       <style
         dangerouslySetInnerHTML={{
-          __html: `
-            .no-scrollbar::-webkit-scrollbar {
-              display: none;
-            }
-
-            .no-scrollbar {
-              -ms-overflow-style: none;
-              scrollbar-width: none;
-            }
-          `,
+          __html: `.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}`,
         }}
       />
 
@@ -274,47 +228,32 @@ export default function Rooms() {
         id="rooms"
         ref={sectionRef}
         className="relative overflow-hidden py-24 md:py-36"
-        style={{
-          background: UI.section.dark,
-          fontFamily: "'DM Sans', sans-serif",
-        }}
+        style={{ background: UI.section.dark, fontFamily: "'DM Sans', sans-serif" }}
       >
-        <div className="relative container mx-auto max-w-[1440px] px-4">
-          {/* Header */}
+        <div className="container mx-auto max-w-[1400px] px-4">
+
+          {/* ── Header ─────────────────────────────── */}
           <motion.div
             initial={{ opacity: 0, y: 36 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.85,
-              ease: [0.22, 1, 0.36, 1],
-            }}
+            transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
             viewport={{ once: true }}
-            className="mb-14 text-center md:mb-16"
+            className="mb-12 text-center md:mb-14"
           >
             <motion.div
               className="mb-5 inline-flex items-center gap-2 rounded-full px-5 py-2 text-[10px] font-bold uppercase tracking-[0.28em]"
-              style={{
-                background: UI.card.light,
-                color: UI.text.accent,
-              }}
+              style={{ background: UI.card.darkSoft, color: UI.text.muted, border: "1px solid rgba(200,217,230,0.12)" }}
               animate={{ y: [0, -5, 0] }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
-              <Sparkles size={14} />
+              <Sparkles size={13} />
               Accommodation
             </motion.div>
 
             <ScrollShineText
               as="h2"
-              className="text-5xl font-semibold leading-[1.05] md:text-7xl block justify-center text-center"
-              style={{
-                color: UI.text.light,
-                fontFamily: "'Cormorant Garamond', serif",
-              }}
+              className="block justify-center text-center text-5xl font-semibold leading-[1.05] md:text-7xl"
+              style={{ color: UI.text.light, fontFamily: "'Cormorant Garamond', serif" }}
             >
               Our Living Spaces
             </ScrollShineText>
@@ -328,575 +267,428 @@ export default function Rooms() {
             </p>
           </motion.div>
 
-          {/* Main Layout */}
-          <div className="grid items-start gap-7 lg:grid-cols-[260px_1fr] lg:gap-10">
-            {/* Room Tabs — SlideInView from LEFT */}
-            <SlideInView
-              direction="left"
-              distance={120}
-              duration={0.85}
-              viewportAmount={0.2}
-              hoverScale={1.01}
-              hoverY={-4}
+          {/* ── Tab Row ────────────────────────────── */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            viewport={{ once: true }}
+            className="mb-7 flex justify-center"
+          >
+            <div
+              ref={tabsScrollRef}
+              className="no-scrollbar inline-flex gap-1.5 overflow-x-auto rounded-2xl p-1.5"
+              style={{
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.08)",
+              }}
+              onTouchStart={() => setIsUserInteracting(true)}
+              onTouchEnd={() => setIsUserInteracting(false)}
+              onMouseEnter={() => setIsUserInteracting(true)}
+              onMouseLeave={() => setIsUserInteracting(false)}
             >
-              {/* inner scroll container keeps the ref + touch/mouse handlers */}
-              <div
-                ref={tabsScrollRef}
-                className="no-scrollbar flex gap-3 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0"
-                onTouchStart={() => setIsUserInteracting(true)}
-                onTouchEnd={() => setIsUserInteracting(false)}
-                onTouchCancel={() => setIsUserInteracting(false)}
-                onMouseEnter={() => setIsUserInteracting(true)}
-                onMouseLeave={() => setIsUserInteracting(false)}
-              >
               {rooms.map((item, index) => {
-                const activeTab = index === active
-
+                const isActive = index === active
                 return (
                   <motion.button
                     key={item.id}
-                    data-room-tab={index}
+                    data-tab={index}
                     onClick={() => setActive(index)}
-                    onMouseEnter={() => setHoveredTab(index)}
-                    onMouseLeave={() => setHoveredTab(null)}
-                    whileTap={{ scale: 0.97 }}
-                    animate={{
-                      scale: hoveredTab === index ? 1.02 : 1,
-                      x: hoveredTab === index ? 6 : 0,
-                      filter:
-                        hoveredTab !== null && hoveredTab !== index
-                          ? "blur(3px) brightness(0.6)"
-                          : "blur(0px) brightness(1)",
-                      opacity:
-                        hoveredTab !== null && hoveredTab !== index ? 0.55 : 1,
-                    }}
-                    transition={{ type: "spring", stiffness: 300, damping: 22 }}
-                    className="relative min-w-[220px] overflow-hidden rounded-2xl p-4 text-left transition-colors lg:min-w-0"
+                    whileTap={{ scale: 0.96 }}
+                    className="relative flex min-w-[100px] flex-col items-center gap-0.5 whitespace-nowrap rounded-xl px-5 py-3 transition-all duration-300"
                     style={{
-                      background: activeTab ? UI.card.light : UI.card.darkSoft,
-                      border: `1.5px solid ${
-                        hoveredTab === index
-                          ? "rgba(200,217,230,0.5)"
-                          : activeTab
-                          ? UI.border.white
-                          : UI.border.soft
-                      }`,
-                      boxShadow:
-                        hoveredTab === index
-                          ? "0 16px 48px rgba(0,0,0,0.4), 0 0 0 1.5px rgba(200,217,230,0.2)"
-                          : activeTab
-                          ? UI.shadow.soft
-                          : "none",
-                      backdropFilter: activeTab ? "blur(12px)" : "none",
+                      background: isActive ? UI.button.primary : "transparent",
+                      color: isActive ? "#fff" : UI.text.muted,
                     }}
                   >
-                    <AnimatePresence>
-                      {activeTab && (
-                        <motion.div
-                          layoutId="activeRoomTab"
-                          className="absolute bottom-0 left-0 right-0 h-1 lg:bottom-0 lg:left-0 lg:top-0 lg:h-auto lg:w-1"
-                          style={{ background: UI.button.primary }}
-                          transition={{
-                            duration: 0.4,
-                            ease: [0.22, 1, 0.36, 1],
-                          }}
-                        />
-                      )}
-                    </AnimatePresence>
-
-                    <div className="pl-2">
-                      <span
-                        className="mb-1 block text-[10px] font-black uppercase tracking-[0.22em]"
-                        style={{
-                          color: activeTab ? UI.text.accent : UI.text.muted,
-                        }}
-                      >
-                        {item.label} — {item.category}
-                      </span>
-
-                      <span
-                        className="block text-base font-bold"
-                        style={{
-                          color: activeTab ? UI.text.dark : UI.text.light,
-                        }}
-                      >
-                        {item.title}
-                      </span>
-
-                      <span
-                        className="mt-2 block text-xs leading-5"
-                        style={{
-                          color: activeTab ? UI.text.accent : UI.text.muted,
-                        }}
-                      >
-                        {item.tagline}
-                      </span>
-                    </div>
+                    <span className="text-[9px] font-black uppercase tracking-[0.22em] opacity-70">
+                      {item.label}
+                    </span>
+                    <span className="text-sm font-bold leading-tight">
+                      {item.title}
+                    </span>
                   </motion.button>
                 )
               })}
+            </div>
+          </motion.div>
 
-              <div className="hidden items-center gap-3 pt-3 lg:flex">
-                <motion.button
-                  onClick={prev}
-                  whileHover={{
-                    scale: 1.08,
-                    backgroundColor: UI.button.primary,
-                    color: UI.button.primaryText,
-                  }}
-                  whileTap={{ scale: 0.93 }}
-                  className="flex h-11 w-11 items-center justify-center rounded-full border transition-all shadow-sm hover:shadow-md"
+          {/* ── Showcase Card ──────────────────────── */}
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
+            className="overflow-hidden rounded-[2rem] md:rounded-[2.5rem]"
+            style={{
+              boxShadow: "0 40px 100px rgba(0,0,0,0.38)",
+              border: "1px solid rgba(255,255,255,0.10)",
+            }}
+            onTouchStart={() => setIsUserInteracting(true)}
+            onTouchEnd={() => setIsUserInteracting(false)}
+            onMouseEnter={() => setIsUserInteracting(true)}
+            onMouseLeave={() => setIsUserInteracting(false)}
+          >
+            <div className="grid lg:grid-cols-[3fr_2fr]">
+
+              {/* ── Image Panel ── */}
+              <div className="relative min-h-[340px] overflow-hidden md:min-h-[500px] lg:min-h-[640px]">
+
+                {/* Photo / 360 toggle */}
+                <div
+                  className="absolute right-5 top-5 z-30 flex items-center gap-1 rounded-full p-1 backdrop-blur-md"
                   style={{
-                    background: UI.card.light,
-                    borderColor: UI.border.soft,
-                    color: UI.text.dark,
+                    background: "rgba(10,18,30,0.60)",
+                    border: "1px solid rgba(255,255,255,0.14)",
                   }}
-                  aria-label="Previous room"
                 >
-                  <ChevronLeft className="h-5 w-5" />
-                </motion.button>
-
-                <motion.button
-                  onClick={next}
-                  whileHover={{
-                    scale: 1.08,
-                    backgroundColor: UI.button.primary,
-                    color: UI.button.primaryText,
-                  }}
-                  whileTap={{ scale: 0.93 }}
-                  className="flex h-11 w-11 items-center justify-center rounded-full border transition-all shadow-sm hover:shadow-md"
-                  style={{
-                    background: UI.card.light,
-                    borderColor: UI.border.soft,
-                    color: UI.text.dark,
-                  }}
-                  aria-label="Next room"
-                >
-                  <ChevronRight className="h-5 w-5" />
-                </motion.button>
-              </div>
-              </div>
-            </SlideInView>
-
-            {/* Showcase — SlideInView from RIGHT */}
-            <SlideInView
-              ref={showcaseRef}
-              direction="right"
-              distance={120}
-              duration={0.85}
-              delay={0.12}
-              viewportAmount={0.2}
-              hoverScale={1.012}
-              hoverY={-6}
-              hoverBlur={0}
-              className="overflow-hidden rounded-[2rem] p-1"
-              style={{
-                background: UI.card.soft,
-                boxShadow: UI.shadow.card,
-              }}
-            >
-              <div
-                className="overflow-hidden rounded-[1.8rem]"
-                style={{
-                  background: UI.card.light,
-                  border: `1px solid ${UI.border.white}`,
-                }}
-              >
-                <div className="grid min-h-[720px] lg:grid-cols-[1.18fr_0.82fr]">
-                  {/* Image Panel */}
-                  <div
-                    className="relative min-h-[320px] overflow-hidden md:min-h-[450px] lg:min-h-full"
-                    style={{ background: UI.card.soft }}
-                    onTouchStart={() => setIsUserInteracting(true)}
-                    onTouchEnd={() => setIsUserInteracting(false)}
-                    onTouchCancel={() => setIsUserInteracting(false)}
-                    onMouseEnter={() => setIsUserInteracting(true)}
-                    onMouseLeave={() => setIsUserInteracting(false)}
+                  <button
+                    onClick={() => setViewMode("photo")}
+                    className="cursor-pointer rounded-full px-3.5 py-1.5 text-[9px] font-black uppercase tracking-wider transition-all duration-300"
+                    style={{
+                      background: viewMode === "photo" ? UI.button.primary : "transparent",
+                      color: viewMode === "photo" ? "#fff" : "rgba(255,255,255,0.6)",
+                    }}
                   >
-                    {/* Glassmorphic 360 View Toggle Pill */}
-                    <div
-                      className="absolute right-6 top-6 z-30 flex items-center gap-1 rounded-full p-1 backdrop-blur-md"
-                      style={{
-                        background: "rgba(47, 65, 86, 0.25)",
-                        border: "1px solid rgba(255, 255, 255, 0.15)",
-                        boxShadow: UI.shadow.soft,
-                      }}
-                    >
-                      <button
-                        onClick={() => setViewMode("photo")}
-                        className="rounded-full px-3 py-1.5 text-[9px] font-black uppercase tracking-wider transition-all duration-300 cursor-pointer"
-                        style={{
-                          background: viewMode === "photo" ? UI.button.primary : "transparent",
-                          color: viewMode === "photo" ? UI.button.primaryText : "rgba(255,255,255,0.7)",
-                        }}
-                      >
-                        Photo
-                      </button>
-                      <button
-                        onClick={() => setViewMode("360")}
-                        className="rounded-full px-3 py-1.5 text-[9px] font-black uppercase tracking-wider transition-all duration-300 flex items-center gap-1 cursor-pointer"
-                        style={{
-                          background: viewMode === "360" ? UI.button.primary : "transparent",
-                          color: viewMode === "360" ? UI.button.primaryText : "rgba(255,255,255,0.7)",
-                        }}
-                      >
-                        <Eye className="h-3 w-3" />
-                        360° View
-                      </button>
-                    </div>
+                    Photo
+                  </button>
+                  <button
+                    onClick={() => setViewMode("360")}
+                    className="flex cursor-pointer items-center gap-1 rounded-full px-3.5 py-1.5 text-[9px] font-black uppercase tracking-wider transition-all duration-300"
+                    style={{
+                      background: viewMode === "360" ? UI.button.primary : "transparent",
+                      color: viewMode === "360" ? "#fff" : "rgba(255,255,255,0.6)",
+                    }}
+                  >
+                    <Eye className="h-3 w-3" />
+                    360°
+                  </button>
+                </div>
 
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={`${room.id}-${viewMode}`}
-                        initial={{
-                          opacity: 0,
-                          scale: 1.04,
-                        }}
-                        animate={{
-                          opacity: 1,
-                          scale: 1,
-                        }}
-                        exit={{
-                          opacity: 0,
-                          scale: 1.04,
-                        }}
-                        transition={{
-                          duration: 0.65,
-                          ease: [0.22, 1, 0.36, 1],
-                        }}
-                        className="absolute inset-0"
-                      >
-                        {viewMode === "360" ? (
-                          <div className="absolute inset-0 bg-[#080e18]">
-                            <Canvas camera={{ position: [0, 0, 0.1], fov: 75 }}>
-                              <ambientLight intensity={0.8} />
-                              <Suspense
-                                fallback={
-                                  <Html center>
-                                    <div className="flex flex-col items-center gap-2">
-                                      <div className="w-8 h-8 rounded-full border-2 border-t-[#C8A96E] border-r-transparent border-b-transparent border-l-transparent animate-spin" />
-                                      <span className="text-[10px] tracking-[0.2em] uppercase font-bold text-[#C8A96E]">
-                                        Loading 360°...
-                                      </span>
-                                    </div>
-                                  </Html>
-                                }
-                              >
-                                <PanoramaSphere url="/room360.jpg" />
-                              </Suspense>
-                              <OrbitControls
-                                enableZoom={true}
-                                enablePan={false}
-                                maxDistance={10}
-                                minDistance={0.1}
-                                autoRotate={false}
-                              />
-                            </Canvas>
-
-                            {/* 360 Interaction Hint */}
-                            <div className="absolute inset-x-0 bottom-14 flex flex-col items-center justify-center pointer-events-none z-10">
-                              <motion.div
-                                animate={{ opacity: [0.3, 0.8, 0.3] }}
-                                transition={{ duration: 3, repeat: Infinity }}
-                                className="flex flex-col items-center gap-1.5"
-                              >
-                                <div
-                                  className="w-10 h-10 rounded-full flex items-center justify-center"
-                                  style={{
-                                    background: "rgba(200, 169, 110, 0.15)",
-                                    border: "1px solid rgba(200, 169, 110, 0.3)",
-                                    backdropFilter: "blur(6px)",
-                                  }}
-                                >
-                                  <Eye className="w-4.5 h-4.5 text-[#C8A96E]" />
-                                </div>
-                                <span className="text-[9px] tracking-[0.2em] uppercase font-bold text-white/40">
-                                  Drag to look around the real room in 360°
-                                </span>
-                              </motion.div>
-                            </div>
-                          </div>
-                        ) : (
-                          <>
-                            <motion.div
-                              style={{ y: imageY }}
-                              className="absolute inset-[-10%]"
-                            >
-                              <Image
-                                src={room.image}
-                                alt={room.title}
-                                fill
-                                className="object-cover"
-                                priority
-                              />
-                            </motion.div>
-
-                            <div
-                              className="absolute inset-0"
-                              style={{
-                                background: "rgba(47, 65, 86, 0.18)",
-                              }}
-                            />
-                          </>
-                        )}
-
-                        <div className="absolute left-6 top-6">
-                          <span
-                            className="inline-flex rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-[0.22em]"
-                            style={{
-                              background: UI.card.light,
-                              color: UI.text.accent,
-                              border: `1px solid ${UI.border.white}`,
-                            }}
-                          >
-                            {room.category}
-                          </span>
-                        </div>
-
-                        <div
-                          className="absolute bottom-6 left-6 select-none text-[96px] font-black leading-none opacity-20 md:text-[130px]"
-                          style={{
-                            color: UI.text.light,
-                            fontFamily: "'Cormorant Garamond', serif",
-                          }}
-                        >
-                          {room.label}
-                        </div>
-
-                        <div className="absolute bottom-6 right-6 flex gap-2">
-                          {rooms.map((_, index) => (
-                            <motion.button
-                              key={index}
-                              onClick={() => setActive(index)}
-                              className="h-2 rounded-full"
-                              style={{
-                                width: index === active ? 34 : 10,
-                                background:
-                                  index === active
-                                    ? UI.button.primary
-                                    : "rgba(255,255,255,0.5)",
-                              }}
-                              whileHover={{ scale: 1.15 }}
-                              whileTap={{ scale: 0.92 }}
-                              aria-label={`Go to room ${index + 1}`}
-                            />
-                          ))}
-                        </div>
-
-                        <div className="absolute inset-x-4 top-1/2 z-20 flex -translate-y-1/2 justify-between lg:hidden">
-                          <motion.button
-                            onClick={prev}
-                            whileTap={{ scale: 0.92 }}
-                            className="flex h-11 w-11 items-center justify-center rounded-full"
-                            style={{
-                              background: UI.card.light,
-                              color: UI.text.dark,
-                              border: `1px solid ${UI.border.white}`,
-                            }}
-                            aria-label="Previous room"
-                          >
-                            <ChevronLeft className="h-5 w-5" />
-                          </motion.button>
-
-                          <motion.button
-                            onClick={next}
-                            whileTap={{ scale: 0.92 }}
-                            className="flex h-11 w-11 items-center justify-center rounded-full"
-                            style={{
-                              background: UI.card.light,
-                              color: UI.text.dark,
-                              border: `1px solid ${UI.border.white}`,
-                            }}
-                            aria-label="Next room"
-                          >
-                            <ChevronRight className="h-5 w-5" />
-                          </motion.button>
-                        </div>
-                      </motion.div>
-                    </AnimatePresence>
-                  </div>
-
-                  {/* Content Panel */}
-                  <div className="flex flex-col justify-center p-6 md:p-10 lg:p-12">
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={`${room.id}-content`}
-                        initial={{
-                          opacity: 0,
-                          y: 24,
-                        }}
-                        animate={{
-                          opacity: 1,
-                          y: 0,
-                        }}
-                        exit={{
-                          opacity: 0,
-                          y: -18,
-                        }}
-                        transition={{
-                          duration: 0.5,
-                          ease: [0.22, 1, 0.36, 1],
-                        }}
-                        className="flex h-full flex-col"
-                      >
-                        <span
-                          className="mb-4 text-[11px] font-black uppercase tracking-[0.26em]"
-                          style={{ color: UI.text.accent }}
-                        >
-                          {room.category} Room
-                        </span>
-
-                        <h3
-                          className="text-4xl font-semibold leading-[1.05] md:text-5xl"
-                          style={{
-                            color: UI.text.dark,
-                            fontFamily: "'Cormorant Garamond', serif",
-                          }}
-                        >
-                          {room.title}
-                        </h3>
-
-                        <p
-                          className="mt-4 text-lg font-semibold leading-snug"
-                          style={{
-                            color: UI.text.accent,
-                            fontFamily: "'Cormorant Garamond', serif",
-                          }}
-                        >
-                          {room.tagline}
-                        </p>
-
-                        <p
-                          className="mt-5 text-sm font-normal leading-7 md:text-base"
-                          style={{ color: UI.text.accent }}
-                        >
-                          {room.description}
-                        </p>
-
-                        <div
-                          className="my-8 h-px w-full"
-                          style={{ background: UI.border.light }}
-                        />
-
-                        <div className="mb-9 grid grid-cols-2 gap-3 sm:gap-4">
-                          {room.features.map((feature, index) => {
-                            const Icon = getFeatureIcon(feature)
-
-                            return (
-                              <motion.div
-                                key={feature}
-                                initial={{ opacity: 0, y: 12 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                whileHover={{ scale: 1.02, y: -2 }}
-                                transition={{
-                                  delay: 0.08 + index * 0.05,
-                                  duration: 0.35,
-                                  ease: "easeOut",
-                                }}
-                                className="flex min-h-[80px] items-center gap-4 rounded-2xl bg-white p-3 sm:p-4 transition-all hover:shadow-md group"
-                                style={{
-                                  boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
-                                }}
-                              >
-                                <div
-                                  className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl transition-colors group-hover:bg-[#E2E8F0]"
-                                  style={{
-                                    background: "#F1F5F9",
-                                    color: "#475569",
-                                  }}
-                                >
-                                  <Icon className="h-6 w-6" />
-                                </div>
-
-                                <div className="flex flex-col">
-                                  <span
-                                    className="text-[15px] font-bold leading-[1.3] text-[#2A3B50]"
-                                  >
-                                    {feature}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={`${room.id}-${viewMode}`}
+                    initial={{ opacity: 0, scale: 1.05 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.05 }}
+                    transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute inset-0"
+                  >
+                    {viewMode === "360" ? (
+                      <div className="absolute inset-0 bg-[#060d18]">
+                        <Canvas camera={{ position: [0, 0, 0.1], fov: 75 }}>
+                          <ambientLight intensity={0.8} />
+                          <Suspense
+                            fallback={
+                              <Html center>
+                                <div className="flex flex-col items-center gap-2">
+                                  <div className="w-8 h-8 rounded-full border-2 border-t-[#567C8D] border-r-transparent border-b-transparent border-l-transparent animate-spin" />
+                                  <span className="text-[10px] tracking-[0.2em] uppercase font-bold text-[#567C8D]">
+                                    Loading 360°…
                                   </span>
                                 </div>
-                              </motion.div>
-                            )
-                          })}
+                              </Html>
+                            }
+                          >
+                            <PanoramaSphere url="/room360.jpg" />
+                          </Suspense>
+                          <OrbitControls enableZoom enablePan={false} maxDistance={10} minDistance={0.1} autoRotate={false} />
+                        </Canvas>
+                        <div className="pointer-events-none absolute inset-x-0 bottom-10 z-10 flex justify-center">
+                          <motion.span
+                            animate={{ opacity: [0.3, 0.7, 0.3] }}
+                            transition={{ duration: 3, repeat: Infinity }}
+                            className="text-[9px] font-bold uppercase tracking-[0.22em] text-white/40"
+                          >
+                            Drag to look around
+                          </motion.span>
                         </div>
+                      </div>
+                    ) : (
+                      <>
+                        <motion.div style={{ y: imageY }} className="absolute inset-[-8%]">
+                          <Image
+                            src={room.image}
+                            alt={room.title}
+                            fill
+                            className="object-cover"
+                            priority
+                          />
+                        </motion.div>
+                        {/* depth gradients */}
+                        <div
+                          className="absolute inset-0"
+                          style={{ background: "linear-gradient(135deg, rgba(10,18,30,0.30) 0%, transparent 55%)" }}
+                        />
+                        <div
+                          className="absolute inset-0"
+                          style={{ background: "linear-gradient(to top, rgba(10,18,30,0.70) 0%, transparent 55%)" }}
+                        />
+                      </>
+                    )}
 
-                        <div className="mt-auto flex flex-col gap-4 sm:flex-row sm:items-center">
-                          <motion.button
-                            whileHover={{
-                              scale: 1.03,
-                              y: -2,
-                              backgroundColor: UI.button.primaryHover,
-                            }}
-                            whileTap={{ scale: 0.97 }}
-                            className="group flex items-center justify-center gap-3 rounded-2xl px-7 py-4 text-sm font-black transition-all"
+                    {/* Category badge */}
+                    <div className="absolute left-5 top-5">
+                      <span
+                        className="inline-flex items-center rounded-full px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.24em] backdrop-blur-md"
+                        style={{
+                          background: "rgba(10,18,30,0.55)",
+                          color: COLORS.sky,
+                          border: "1px solid rgba(255,255,255,0.14)",
+                        }}
+                      >
+                        {room.category}
+                      </span>
+                    </div>
+
+                    {/* Giant watermark number */}
+                    <div
+                      className="pointer-events-none absolute bottom-0 left-2 select-none text-[120px] font-black leading-none opacity-[0.12] md:text-[170px]"
+                      style={{ color: "#fff", fontFamily: "'Cormorant Garamond', serif", lineHeight: 0.82 }}
+                    >
+                      {room.label}
+                    </div>
+
+                    {/* Progress dots */}
+                    <div className="absolute bottom-5 right-5 flex items-center gap-2">
+                      {rooms.map((_, i) => (
+                        <motion.button
+                          key={i}
+                          onClick={() => setActive(i)}
+                          className="h-1.5 rounded-full"
+                          style={{
+                            width: i === active ? 28 : 8,
+                            background: i === active ? UI.button.primary : "rgba(255,255,255,0.40)",
+                          }}
+                          whileHover={{ scale: 1.25 }}
+                          whileTap={{ scale: 0.9 }}
+                          aria-label={`Room ${i + 1}`}
+                        />
+                      ))}
+                    </div>
+
+                    {/* Mobile nav arrows */}
+                    <div className="absolute inset-x-4 top-1/2 z-20 flex -translate-y-1/2 justify-between lg:hidden">
+                      <motion.button
+                        onClick={prev}
+                        whileTap={{ scale: 0.9 }}
+                        className="flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-md"
+                        style={{ background: "rgba(10,18,30,0.55)", color: "#fff", border: "1px solid rgba(255,255,255,0.14)" }}
+                        aria-label="Previous room"
+                      >
+                        <ChevronLeft className="h-5 w-5" />
+                      </motion.button>
+                      <motion.button
+                        onClick={next}
+                        whileTap={{ scale: 0.9 }}
+                        className="flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-md"
+                        style={{ background: "rgba(10,18,30,0.55)", color: "#fff", border: "1px solid rgba(255,255,255,0.14)" }}
+                        aria-label="Next room"
+                      >
+                        <ChevronRight className="h-5 w-5" />
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              {/* ── Content Panel ── */}
+              <div
+                className="flex flex-col justify-between p-7 sm:p-9 lg:p-11"
+                style={{ background: "#FAFBFC", borderLeft: `1px solid ${UI.border.lighter}` }}
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={`${room.id}-content`}
+                    initial={{ opacity: 0, y: 18 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -12 }}
+                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex h-full flex-col"
+                  >
+                    {/* Room identity */}
+                    <div>
+                      <span
+                        className="mb-3 inline-block text-[10px] font-black uppercase tracking-[0.28em]"
+                        style={{ color: UI.text.accent }}
+                      >
+                        {room.category} Room
+                      </span>
+
+                      <h3
+                        className="text-[2.4rem] font-semibold leading-[1.05] md:text-[2.8rem]"
+                        style={{
+                          color: UI.text.dark,
+                          fontFamily: "'Cormorant Garamond', serif",
+                        }}
+                      >
+                        {room.title}
+                      </h3>
+
+                      <p
+                        className="mt-2 text-[1.05rem] font-semibold leading-snug"
+                        style={{
+                          color: UI.text.accent,
+                          fontFamily: "'Cormorant Garamond', serif",
+                        }}
+                      >
+                        {room.tagline}
+                      </p>
+
+                      <p
+                        className="mt-3.5 text-sm leading-[1.85]"
+                        style={{ color: COLORS.softNavy, opacity: 0.72 }}
+                      >
+                        {room.description}
+                      </p>
+                    </div>
+
+                    {/* Divider */}
+                    <div
+                      className="my-6 h-px w-full"
+                      style={{ background: UI.border.lighter }}
+                    />
+
+                    {/* Feature chips */}
+                    <div className="grid grid-cols-2 gap-2">
+                      {room.features.map((feature, i) => {
+                        const Icon = getFeatureIcon(feature)
+                        return (
+                          <motion.div
+                            key={feature}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.05 + i * 0.04, duration: 0.3 }}
+                            className="flex items-center gap-2.5 rounded-xl px-3 py-2.5"
                             style={{
-                              background: UI.button.primary,
-                              color: UI.button.primaryText,
-                              boxShadow: UI.shadow.soft,
+                              background: "#F1F5F9",
+                              border: "1px solid #E2E8F0",
                             }}
                           >
-                            Enquire Now
-                            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                          </motion.button>
-
-                          {room.tourAvailable && (
-                            <div className="flex items-center gap-2">
-                              <span className="relative flex h-2.5 w-2.5">
-                                <span
-                                  className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
-                                  style={{ background: UI.button.primary }}
-                                />
-                                <span
-                                  className="relative inline-flex h-2.5 w-2.5 rounded-full"
-                                  style={{ background: UI.button.primary }}
-                                />
-                              </span>
-
-                              <span
-                                className="text-[10px] font-black uppercase tracking-[0.2em]"
-                                style={{ color: UI.text.accent }}
-                              >
-                                Tour available
-                              </span>
+                            <div
+                              className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg"
+                              style={{ background: COLORS.softSky, color: COLORS.teal }}
+                            >
+                              <Icon className="h-3.5 w-3.5" />
                             </div>
-                          )}
+                            <span
+                              className="text-[12px] font-semibold"
+                              style={{ color: COLORS.navy }}
+                            >
+                              {feature}
+                            </span>
+                          </motion.div>
+                        )
+                      })}
+                    </div>
+
+                    {/* Divider */}
+                    <div
+                      className="my-6 h-px w-full"
+                      style={{ background: UI.border.lighter }}
+                    />
+
+                    {/* CTA */}
+                    <div className="mt-auto flex flex-col gap-3 sm:flex-row sm:items-center">
+                      <motion.button
+                        whileHover={{ scale: 1.03, y: -2 }}
+                        whileTap={{ scale: 0.97 }}
+                        className="group flex flex-1 items-center justify-center gap-2.5 rounded-xl px-6 py-3.5 text-sm font-black transition-all"
+                        style={{
+                          background: UI.button.primary,
+                          color: "#fff",
+                          boxShadow: "0 12px 32px rgba(86,124,141,0.38)",
+                        }}
+                      >
+                        Enquire Now
+                        <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                      </motion.button>
+
+                      {room.tourAvailable && (
+                        <div className="flex items-center justify-center gap-2">
+                          <span className="relative flex h-2 w-2">
+                            <span
+                              className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
+                              style={{ background: UI.button.primary }}
+                            />
+                            <span
+                              className="relative inline-flex h-2 w-2 rounded-full"
+                              style={{ background: UI.button.primary }}
+                            />
+                          </span>
+                          <span
+                            className="text-[10px] font-black uppercase tracking-[0.2em]"
+                            style={{ color: UI.text.accent }}
+                          >
+                            Tour available
+                          </span>
                         </div>
-                      </motion.div>
-                    </AnimatePresence>
-                  </div>
-                </div>
+                      )}
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
               </div>
-            </SlideInView>
-          </div>
+            </div>
 
-          {/* Counter */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{
-              delay: 0.5,
-              duration: 0.6,
-            }}
-            viewport={{ once: true }}
-            className="mt-12 flex items-center justify-center gap-4"
-          >
+            {/* ── Bottom Bar (desktop) ── */}
             <div
-              className="h-px max-w-24 flex-1"
-              style={{ background: UI.border.soft }}
-            />
-
-            <span
-              className="text-xs font-mono tracking-widest"
-              style={{ color: UI.text.muted }}
+              className="hidden items-center justify-between px-10 py-4 lg:flex"
+              style={{
+                background: "#F5F8FA",
+                borderTop: "1px solid #E2E8F0",
+              }}
             >
-              {String(active + 1).padStart(2, "0")} /{" "}
-              {String(rooms.length).padStart(2, "0")}
-            </span>
+              {/* Prev / Next */}
+              <div className="flex items-center gap-2">
+                <motion.button
+                  onClick={prev}
+                  whileHover={{ scale: 1.1, backgroundColor: UI.button.primary, color: "#fff" }}
+                  whileTap={{ scale: 0.93 }}
+                  className="flex h-9 w-9 items-center justify-center rounded-full border transition-all"
+                  style={{ background: "#EEF2F5", borderColor: "#D8E1E8", color: COLORS.navy }}
+                  aria-label="Previous room"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </motion.button>
+                <motion.button
+                  onClick={next}
+                  whileHover={{ scale: 1.1, backgroundColor: UI.button.primary, color: "#fff" }}
+                  whileTap={{ scale: 0.93 }}
+                  className="flex h-9 w-9 items-center justify-center rounded-full border transition-all"
+                  style={{ background: "#EEF2F5", borderColor: "#D8E1E8", color: COLORS.navy }}
+                  aria-label="Next room"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </motion.button>
+              </div>
 
-            <div
-              className="h-px max-w-24 flex-1"
-              style={{ background: UI.border.soft }}
-            />
+              {/* Counter */}
+              <span
+                className="font-mono text-xs tracking-widest"
+                style={{ color: COLORS.softTeal }}
+              >
+                {String(active + 1).padStart(2, "0")} /{" "}
+                {String(rooms.length).padStart(2, "0")}
+              </span>
+
+              {/* Dot indicators */}
+              <div className="flex items-center gap-2">
+                {rooms.map((_, i) => (
+                  <motion.button
+                    key={i}
+                    onClick={() => setActive(i)}
+                    className="h-1.5 rounded-full"
+                    style={{
+                      width: i === active ? 24 : 8,
+                      background: i === active ? UI.button.primary : "#CBD5E0",
+                    }}
+                    whileHover={{ scale: 1.3 }}
+                    whileTap={{ scale: 0.9 }}
+                    aria-label={`Go to room ${i + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>

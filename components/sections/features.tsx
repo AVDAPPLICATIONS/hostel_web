@@ -1,12 +1,7 @@
 "use client"
 
-import type React from "react"
-
-import { useRef, useState, useEffect } from "react"
-import {
-  motion,
-  useInView,
-} from "framer-motion"
+import { useState } from "react"
+import { motion } from "framer-motion"
 import {
   BookOpen,
   Users,
@@ -22,18 +17,15 @@ import {
   Car,
   Video,
   Dumbbell,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react"
 import { COLORS, UI } from "@/lib/theme"
 import ScrollShineText from "@/components/shared/scroll-shine-text"
-import ScrollRevealCard from "@/components/shared/scroll-reveal-card"
 
 const features = [
   {
     icon: Landmark,
     title: "Temple",
-    description: "A serene temple where peace and spirituality prevails",
+    description: "A serene space where peace and spirituality prevails",
   },
   {
     icon: Car,
@@ -102,155 +94,73 @@ const features = [
   },
 ]
 
-const stats = [
-  { number: "1000+", label: "Prayer Hall Capacity" },
-  { number: "24/7", label: "Medical Support" },
-  { number: "5★", label: "Campus Rating" },
-]
+const row1 = features.slice(0, 7)
+const row2 = features.slice(7)
 
-function TiltCard({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) {
-  return <div className={className}>{children}</div>
-}
+type Feature = (typeof features)[number]
 
-function AnimatedStat({ value }: { value: string }) {
-  const ref = useRef<HTMLDivElement>(null)
-
-  const isInView = useInView(ref, {
-    once: true,
-    margin: "-50px",
-  })
-
-  const [displayValue, setDisplayValue] = useState("0")
-
-  useEffect(() => {
-    if (!isInView) return
-
-    const numericMatch = value.match(/(\d+)/)
-
-    if (!numericMatch) {
-      setDisplayValue(value)
-      return
-    }
-
-    const target = parseInt(numericMatch[1])
-    const suffix = value.replace(numericMatch[1], "").trim()
-    const prefix =
-      value.indexOf(numericMatch[1]) > 0
-        ? value.substring(0, value.indexOf(numericMatch[1]))
-        : ""
-
-    const duration = 1500
-    const steps = 40
-    let step = 0
-
-    const timer = setInterval(() => {
-      step++
-
-      const progress = 1 - Math.pow(1 - step / steps, 3)
-      let current = Math.round(target * progress)
-
-      if (step >= steps) {
-        current = target
-        clearInterval(timer)
-      }
-
-      setDisplayValue(`${prefix}${current}${suffix}`)
-    }, duration / steps)
-
-    return () => clearInterval(timer)
-  }, [isInView, value])
-
+function FeatureCard({ icon: Icon, title, description }: Feature) {
   return (
     <div
-      ref={ref}
-      className="mb-2 text-4xl font-black tabular-nums transition-colors duration-500 md:text-5xl"
+      className="group flex w-[268px] flex-shrink-0 cursor-default select-none flex-col gap-3.5 rounded-2xl p-5 transition-all duration-300"
       style={{
-        fontFamily: "'Cormorant Garamond', serif",
-        color: COLORS.white,
+        background: "rgba(255,255,255,0.048)",
+        border: "1px solid rgba(255,255,255,0.08)",
+        backdropFilter: "blur(10px)",
+      }}
+      onMouseEnter={(e) => {
+        const el = e.currentTarget
+        el.style.background = "rgba(255,255,255,0.072)"
+        el.style.border = "1px solid rgba(200,217,230,0.18)"
+        el.style.boxShadow = "0 8px 32px rgba(0,0,0,0.22)"
+      }}
+      onMouseLeave={(e) => {
+        const el = e.currentTarget
+        el.style.background = "rgba(255,255,255,0.048)"
+        el.style.border = "1px solid rgba(255,255,255,0.08)"
+        el.style.boxShadow = "none"
       }}
     >
-      {isInView ? displayValue : "0"}
+      <div
+        className="flex h-11 w-11 items-center justify-center rounded-xl transition-colors duration-300 group-hover:bg-[#4d7080]"
+        style={{
+          background: "rgba(86,124,141,0.16)",
+          border: "1px solid rgba(86,124,141,0.22)",
+        }}
+      >
+        <Icon className="h-5 w-5" style={{ color: COLORS.sky }} />
+      </div>
+
+      <div>
+        <h3 className="mb-1.5 text-[15px] font-bold leading-tight text-white">
+          {title}
+        </h3>
+        <p
+          className="text-[13px] leading-relaxed"
+          style={{ color: COLORS.sky, opacity: 0.72 }}
+        >
+          {description}
+        </p>
+      </div>
     </div>
   )
 }
 
 export default function Features() {
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
-
-  const isCarouselInView = useInView(scrollContainerRef, {
-    // Only auto-scroll when the carousel is actually visible
-    amount: 0.2,
-  })
-
-  const [isMobile, setIsMobile] = useState(false)
-  const [isUserInteracting, setIsUserInteracting] = useState(false)
-
-
-
-  useEffect(() => {
-    // Mobile-only auto scroll (Tailwind "md" starts at 768px)
-    const update = () => setIsMobile(window.innerWidth < 768)
-    update()
-    window.addEventListener("resize", update)
-    return () => window.removeEventListener("resize", update)
-  }, [])
-
-  const scroll = (direction: "left" | "right") => {
-    if (!scrollContainerRef.current) return
-
-    const { current } = scrollContainerRef
-    const scrollAmount = current.clientWidth * 0.6
-
-    current.scrollBy({
-      left: direction === "left" ? -scrollAmount : scrollAmount,
-      behavior: "smooth",
-    })
-  }
-
-  useEffect(() => {
-    if (!isMobile) return
-    if (!isCarouselInView) return
-    if (isUserInteracting) return
-    if (!scrollContainerRef.current) return
-
-    const interval = window.setInterval(() => {
-      const el = scrollContainerRef.current
-      if (!el) return
-
-      const scrollAmount = el.clientWidth * 0.6
-      // Because we render 2x the items, "half" is a full cycle.
-      const loopWidth = Math.max(1, el.scrollWidth / 2)
-
-      // Reset to the matching position in the first half (seamless loop).
-      if (el.scrollLeft >= loopWidth - 2) {
-        el.scrollTo({ left: el.scrollLeft - loopWidth, behavior: "auto" })
-        return
-      }
-
-      el.scrollBy({ left: scrollAmount, behavior: "smooth" })
-    }, 2600)
-
-    return () => window.clearInterval(interval)
-  }, [isMobile, isCarouselInView, isUserInteracting])
+  const [paused, setPaused] = useState(false)
 
   return (
     <>
       <style
         dangerouslySetInnerHTML={{
           __html: `
-            .features-scroll::-webkit-scrollbar {
-              display: none;
+            @keyframes marquee-left {
+              0%   { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
             }
-
-            .features-scroll {
-              -ms-overflow-style: none;
-              scrollbar-width: none;
+            @keyframes marquee-right {
+              0%   { transform: translateX(-50%); }
+              100% { transform: translateX(0%); }
             }
           `,
         }}
@@ -258,32 +168,21 @@ export default function Features() {
 
       <section
         className="relative overflow-hidden py-24 md:py-36"
-        style={{
-          background: UI.section.dark,
-          fontFamily: "'DM Sans', sans-serif",
-        }}
+        style={{ background: UI.section.dark, fontFamily: "'DM Sans', sans-serif" }}
       >
-        <div className="relative container mx-auto max-w-7xl px-4">
-          {/* Header */}
+        {/* Header */}
+        <div className="container mx-auto max-w-7xl px-4">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.9,
-              ease: [0.22, 1, 0.36, 1],
-            }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             viewport={{ once: true }}
             className="mb-16 text-center md:mb-20"
           >
-
-
             <ScrollShineText
               as="h2"
               className="mb-5 block justify-center text-center text-5xl font-semibold leading-[1.05] md:text-7xl"
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                color: UI.text.light,
-              }}
+              style={{ fontFamily: "'Cormorant Garamond', serif", color: UI.text.light }}
             >
               Why Choose Us?
             </ScrollShineText>
@@ -300,184 +199,73 @@ export default function Features() {
               growth, discipline, and community.
             </motion.p>
           </motion.div>
+        </div>
 
-          {/* Feature Cards */}
-          <div className="relative">
+        {/* Marquee — full-width, outside container */}
+        <div
+          className="relative"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+        >
+          {/* Left fade */}
+          <div
+            className="pointer-events-none absolute inset-y-0 left-0 z-10 w-28 md:w-48"
+            style={{ background: `linear-gradient(to right, ${COLORS.navy} 10%, transparent)` }}
+          />
+          {/* Right fade */}
+          <div
+            className="pointer-events-none absolute inset-y-0 right-0 z-10 w-28 md:w-48"
+            style={{ background: `linear-gradient(to left, ${COLORS.navy} 10%, transparent)` }}
+          />
+
+          {/* Row 1 — scrolls left */}
+          <div className="mb-4 overflow-hidden">
             <div
-              ref={scrollContainerRef}
-              className="features-scroll grid auto-cols-[85%] grid-flow-col grid-rows-2 gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 pb-6 pt-2 md:auto-cols-[calc(33.333%-0.875rem)] md:gap-5 lg:auto-cols-[calc(25%-0.9375rem)]"
-              onTouchStart={() => setIsUserInteracting(true)}
-              onTouchEnd={() => setIsUserInteracting(false)}
-              onTouchCancel={() => setIsUserInteracting(false)}
-              onMouseEnter={() => setIsUserInteracting(true)}
-              onMouseLeave={() => setIsUserInteracting(false)}
+              className="flex w-max gap-4 px-4"
+              style={{
+                animation: "marquee-left 38s linear infinite",
+                animationPlayState: paused ? "paused" : "running",
+              }}
             >
-              {features.map((feature, index) => {
-                const Icon = feature.icon
-                const baseIndex = index
-                return (
-                  <ScrollRevealCard
-                    key={`${feature.title}-${index}`}
-                    delay={baseIndex * 0.06}
-                    direction="left"
-                    className="snap-center py-4"
-                  >
-                    <div
-                      className="group relative h-full overflow-hidden rounded-[1.5rem] p-5 transition-shadow duration-300 md:rounded-[2rem] md:p-6 hover:shadow-lg"
-                      style={{
-                        background: `linear-gradient(145deg, ${COLORS.softNavy} 0%, ${COLORS.deepNavy} 100%)`,
-                        border: `1px solid rgba(255, 255, 255, 0.08)`,
-                        boxShadow: "0 16px 32px rgba(0, 0, 0, 0.3)",
-                      }}
-                    >
-                      <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl transition-colors duration-300 group-hover:bg-teal-600"
-                        style={{
-                          background: "rgba(255, 255, 255, 0.06)",
-                          border: "1px solid rgba(255, 255, 255, 0.1)",
-                        }}
-                      >
-                        <Icon className="h-6 w-6 text-white" />
-                      </div>
-
-                      <h3
-                        className="mb-2 text-xl font-bold leading-tight text-white"
-                        style={{ fontFamily: "'Cormorant Garamond', serif" }}
-                      >
-                        {feature.title}
-                      </h3>
-
-                      <p
-                        className="text-sm leading-relaxed"
-                        style={{ color: COLORS.sky, opacity: 0.8 }}
-                      >
-                        {feature.description}
-                      </p>
-                    </div>
-                  </ScrollRevealCard>
-                )
-              })}
+              {[...row1, ...row1].map((f, i) => (
+                <FeatureCard key={i} {...f} />
+              ))}
             </div>
           </div>
 
-          {/* Scroll Controls */}
+          {/* Row 2 — scrolls right */}
+          <div className="overflow-hidden">
+            <div
+              className="flex w-max gap-4 px-4"
+              style={{
+                animation: "marquee-right 32s linear infinite",
+                animationPlayState: paused ? "paused" : "running",
+              }}
+            >
+              {[...row2, ...row2].map((f, i) => (
+                <FeatureCard key={i} {...f} />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Footer count */}
+        <div className="container mx-auto max-w-7xl px-4">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
             viewport={{ once: true }}
-            className="mt-6 flex items-center justify-center gap-3"
+            className="mt-12 flex items-center justify-center gap-4"
           >
-            <motion.button
-              whileHover={{
-                scale: 1.1,
-                backgroundColor: UI.card.light,
-                color: UI.text.dark,
-              }}
-              whileTap={{ scale: 0.92 }}
-              onClick={() => scroll("left")}
-              className="flex h-10 w-10 items-center justify-center rounded-full border transition-all"
-              style={{
-                borderColor: UI.border.soft,
-                background: UI.card.darkStrong,
-                color: UI.text.muted,
-              }}
-              aria-label="Scroll amenities left"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </motion.button>
-
+            <div className="h-px max-w-24 flex-1" style={{ background: UI.border.soft }} />
             <span
-              className="mx-2 text-[10px] font-bold uppercase tracking-[0.2em]"
+              className="text-[10px] font-bold uppercase tracking-[0.28em]"
               style={{ color: UI.text.muted }}
             >
-              Scroll
+              {features.length} Amenities
             </span>
-
-            <motion.button
-              whileHover={{
-                scale: 1.1,
-                backgroundColor: UI.card.light,
-                color: UI.text.dark,
-              }}
-              whileTap={{ scale: 0.92 }}
-              onClick={() => scroll("right")}
-              className="flex h-10 w-10 items-center justify-center rounded-full border transition-all"
-              style={{
-                borderColor: UI.border.soft,
-                background: UI.card.darkSoft,
-                color: UI.text.muted,
-              }}
-              aria-label="Scroll amenities right"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </motion.button>
-          </motion.div>
-
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.3,
-            }}
-            viewport={{ once: true }}
-            className="mt-24 md:mt-32"
-          >
-            <div className="mb-14 flex items-center justify-center gap-4">
-              <div
-                className="h-px max-w-[120px] flex-1"
-                style={{ background: UI.border.soft }}
-              />
-
-              <span
-                className="rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.3em]"
-                style={{
-                  background: UI.card.light,
-                  color: UI.text.accent,
-                  border: `1px solid ${UI.border.white}`,
-                }}
-              >
-                At a Glance
-              </span>
-
-              <div
-                className="h-px max-w-[120px] flex-1"
-                style={{ background: UI.border.soft }}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 md:grid-cols-3 md:gap-10">
-              {stats.map((stat, index) => (
-                <ScrollRevealCard
-                  key={stat.label}
-                  delay={index * 0.1}
-                  direction="up"
-                >
-                  <div
-                    className="relative h-full overflow-hidden rounded-[2rem] p-6 text-center"
-                    style={{
-                      background: `linear-gradient(145deg, ${COLORS.softNavy} 0%, ${COLORS.deepNavy} 100%)`,
-                      border: `1px solid rgba(200, 217, 230, 0.2)`,
-                      boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4)",
-                    }}
-                  >
-                    <AnimatedStat value={stat.number} />
-
-                    <div
-                      className="text-xs font-bold uppercase tracking-[0.25em] md:text-sm"
-                      style={{
-                        color: COLORS.sky,
-                        fontFamily: "'DM Sans', sans-serif",
-                        opacity: 0.8,
-                      }}
-                    >
-                      {stat.label}
-                    </div>
-                  </div>
-                </ScrollRevealCard>
-              ))}
-            </div>
+            <div className="h-px max-w-24 flex-1" style={{ background: UI.border.soft }} />
           </motion.div>
         </div>
       </section>
