@@ -112,7 +112,7 @@ export const viewport: Viewport = {
   themeColor: COLORS.navy,
   width: "device-width",
   initialScale: 1,
-  colorScheme: "dark",
+  colorScheme: "only light",
 }
 
 /* ── Structured Data (JSON-LD) ──────────────────────────────────────────── */
