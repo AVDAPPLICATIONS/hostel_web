@@ -41,13 +41,38 @@ export default function Navbar() {
     if (typeof window === "undefined") return
     setScrolled(window.scrollY > window.innerHeight * 2.5)
 
+    // Keep track of which elements are visible and their ratio
+    const visibleEntries = new Map<string, number>()
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) setActiveSection(entry.target.id)
+          if (entry.isIntersecting) {
+            visibleEntries.set(entry.target.id, entry.intersectionRatio)
+          } else {
+            visibleEntries.delete(entry.target.id)
+          }
         })
+
+        // Find the one with highest intersection ratio
+        let winnerId: string | null = null
+        let maxRatio = 0
+        visibleEntries.forEach((ratio, id) => {
+          if (ratio > maxRatio) {
+            maxRatio = ratio
+            winnerId = id
+          }
+        })
+
+        if (winnerId) {
+          setActiveSection(winnerId)
+        }
       },
-      { root: null, rootMargin: "-120px 0px -60% 0px", threshold: [0, 0.1, 0.2, 0.5] }
+      { 
+        root: null, 
+        rootMargin: "-15% 0px -35% 0px", 
+        threshold: [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.7, 0.8, 0.9, 1.0] 
+      }
     )
 
     navItems.forEach(({ href }) => {

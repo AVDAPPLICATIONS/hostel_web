@@ -37,7 +37,13 @@ const rooms = [
     tagline: "Maximum comfort, zero compromise.",
     description:
       "Spacious air-conditioned rooms designed for deep focus and restful nights — because great academics start with great sleep.",
-    image: "https://www.avdvvn.org/assets/images/final_room%202.jpg",
+    image: "/ac-room/1.jpg",
+    images: [
+      "/ac-room/1.jpg",
+      "/ac-room/2.jpg",
+      "/ac-room/3.jpg",
+      "/ac-room/4.jpg",
+    ],
     features: [
       "2 Sharing",
       "Attached Bathroom",
@@ -56,7 +62,11 @@ const rooms = [
     tagline: "Naturally ventilated, thoughtfully designed.",
     description:
       "Well-ventilated rooms with premium furniture and all essential amenities — comfort that breathes with you.",
-    image: "https://www.avdvvn.org/assets/images/final%20room%204.jpg",
+    image: "/non-ac-room/2.jpg",
+    images: [
+      "/non-ac-room/2.jpg",
+      "/non-ac-room/1.jpg",
+    ],
     features: [
       "2 Sharing",
       "Attached Bathroom",
@@ -76,6 +86,11 @@ const rooms = [
     description:
       "Budget-friendly shared spaces that foster lifelong friendships and a culture of collaborative growth.",
     image: "https://www.avdvvn.org/assets/images/d1.jpg",
+    images: [
+      "https://www.avdvvn.org/assets/images/d1.jpg",
+      "/dormitory/1.jpg",
+      "/dormitory/2.jpg",
+    ],
     features: [
       "6 Sharing",
       "Attached Bathroom",
@@ -95,6 +110,11 @@ const rooms = [
     description:
       "Dedicated spaces for high school students with extra care and supervision for a smooth transition.",
     image: "https://www.avdvvn.org/assets/images/jr1.jpg",
+    images: [
+      "https://www.avdvvn.org/assets/images/jr1.jpg",
+      "/junior-room/1.jpg",
+      "/junior-room/2.jpg",
+    ],
     features: ["3 Sharing", "Personal Wardrobe", "Study Table", "Laundry Bag"],
     tourAvailable: true,
   },
@@ -167,6 +187,7 @@ function PanoramaSphere({ url }: { url: string }) {
 
 export default function Rooms() {
   const [active, setActive] = useState(0)
+  const [innerIdx, setInnerIdx] = useState(0)
   const [viewMode, setViewMode] = useState<"photo" | "360">("photo")
   const sectionRef = useRef<HTMLDivElement>(null)
   const tabsScrollRef = useRef<HTMLDivElement>(null)
@@ -177,7 +198,17 @@ export default function Rooms() {
 
   useEffect(() => {
     setViewMode("photo")
+    setInnerIdx(0)
   }, [active])
+
+  // Cycle inner images if more than one exists
+  useEffect(() => {
+    if (viewMode !== "photo" || room.images.length <= 1) return
+    const t = setInterval(() => {
+      setInnerIdx(prev => (prev + 1) % room.images.length)
+    }, 4500)
+    return () => clearInterval(t)
+  }, [room.images.length, viewMode, active])
 
   useEffect(() => {
     const update = () => setIsMobile(window.innerWidth < 768)
@@ -407,21 +438,49 @@ export default function Rooms() {
                     ) : (
                       <>
                         <motion.div style={{ y: imageY }} className="absolute inset-[-8%]">
-                          <Image
-                            src={room.image}
-                            alt={room.title}
-                            fill
-                            className="object-cover"
-                            priority
-                          />
+                          <AnimatePresence mode="popLayout" initial={false}>
+                            <motion.div
+                              key={`${room.id}-${innerIdx}`}
+                              initial={{ opacity: 0, scale: 1.05 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+                              className="absolute inset-0"
+                            >
+                              <Image
+                                src={room.images[innerIdx]}
+                                alt={`${room.title} aspect ${innerIdx + 1}`}
+                                fill
+                                className="object-cover"
+                                priority
+                              />
+                            </motion.div>
+                          </AnimatePresence>
                         </motion.div>
+
+                        {/* Internal Sub-dots if multiple pictures exist */}
+                        {room.images.length > 1 && (
+                          <div className="absolute bottom-6 inset-x-0 z-20 flex justify-center gap-1.5">
+                            {room.images.map((_, j) => (
+                              <div 
+                                key={j}
+                                className="h-1 rounded-full transition-all duration-300"
+                                style={{ 
+                                  width: j === innerIdx ? 20 : 5,
+                                  background: j === innerIdx ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.3)"
+                                }}
+                              />
+                            ))}
+                          </div>
+                        )}
+
                         {/* depth gradients */}
                         <div
-                          className="absolute inset-0"
+                          className="absolute inset-0 z-10"
                           style={{ background: "linear-gradient(135deg, rgba(10,18,30,0.30) 0%, transparent 55%)" }}
                         />
                         <div
-                          className="absolute inset-0"
+                          className="absolute inset-0 z-10"
                           style={{ background: "linear-gradient(to top, rgba(10,18,30,0.70) 0%, transparent 55%)" }}
                         />
                       </>

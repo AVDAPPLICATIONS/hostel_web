@@ -16,7 +16,6 @@ const reviews = [
     review:
       "I never thought that somebody can be helpful without any expectations. Also, I never felt I am away from home as the place just suited me with itself. I found the best mentors here, came in contact with good individuals, and along with that my every expectation of college life is answered.",
     tag: "Student",
-    badge: "Found a Family",
     imagePosition: "object-center",
   },
   {
@@ -27,7 +26,6 @@ const reviews = [
     review:
       "Stepping out from the protected environment and studying far away from home was a challenge for me. But maybe my parent's decision of admitting me here at Harisaurabh Hostel was a blessing for me. Not only I secured my Academics but me being able with a healthy attitude and just cultural and moral values is possible because of the environment here I perceived.",
     tag: "4th yr Student (BE IT, ADIT)",
-    badge: "Blessed Environment",
     imagePosition: "object-center",
   },
   {
@@ -38,7 +36,6 @@ const reviews = [
     review:
       "Frankly, it wasn't my initial choice but was more of a dad's. But till date, if I miss anything in about my entire academic life is staying at AVD. The atmosphere made an impact which I realized later when I cracked CAT. So much attention was paid to me. And damn that breakfast! Class-apart! I didn't make friends instead came out with a family. The guidance provided by Anand Sagar Swamiji and Gurus' talks enabled a life-altering experience at AVD.",
     tag: "Business Analyst, American Express",
-    badge: "Life Impact",
     imagePosition: "object-top",
   },
 ]
@@ -189,53 +186,20 @@ export default function Reviews() {
                 style={{ background: "#FAFBFC", borderLeft: "1px solid #E2E8F0" }}
               >
                 <div>
-                  {/* Stars + badge */}
-                  <div className="mb-6 flex flex-wrap items-center gap-3">
-                    <div className="flex gap-0.5">
-                      {Array.from({ length: review.rating }).map((_, i) => (
-                        <Star
-                          key={i}
-                          className="h-4 w-4"
-                          style={{ fill: COLORS.teal, color: COLORS.teal }}
-                        />
-                      ))}
-                    </div>
-                    <span
-                      className="inline-flex items-center rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em]"
-                      style={{
-                        background: "rgba(86,124,141,0.10)",
-                        color: COLORS.teal,
-                        border: "1px solid rgba(86,124,141,0.20)",
-                      }}
-                    >
-                      {review.badge}
-                    </span>
-                  </div>
 
                   {/* Decorative quote glyph */}
-                  <div
-                    className="mb-2 select-none text-[80px] font-black leading-none"
-                    style={{
-                      color: COLORS.teal,
-                      opacity: 0.15,
-                      fontFamily: "'Cormorant Garamond', serif",
-                      lineHeight: 0.75,
-                    }}
-                  >
-                    ❝
-                  </div>
+
 
                   {/* Quote */}
-                  <blockquote
+                  <p
                     className="text-[1rem] leading-[1.92] lg:text-[1.08rem]"
                     style={{
                       color: COLORS.navy,
                       fontFamily: "'Cormorant Garamond', serif",
-                      fontStyle: "italic",
                     }}
                   >
                     {review.review}
-                  </blockquote>
+                  </p>
                 </div>
 
                 {/* Bottom: counter + dots */}

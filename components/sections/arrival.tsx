@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   MapPin,
@@ -46,6 +46,16 @@ const transportOptions = [
 
 export default function Arrival() {
   const [selected, setSelected] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const check = () => setIsMobile(window.innerWidth < 1024)
+    check()
+    window.addEventListener("resize", check)
+    return () => window.removeEventListener("resize", check)
+  }, [])
+
   const current = transportOptions[selected]
 
   return (
@@ -111,7 +121,7 @@ export default function Arrival() {
 
             {/* ── Map Panel ── */}
             <div
-              className="relative h-[300px] w-full overflow-hidden lg:h-auto lg:w-[54%]"
+              className="relative h-[450px] w-full overflow-hidden lg:h-auto lg:w-[54%]"
               style={{ background: COLORS.deepNavy }}
             >
               {transportOptions.map((option, index) => (

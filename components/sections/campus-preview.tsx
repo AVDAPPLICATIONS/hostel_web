@@ -9,11 +9,11 @@ import ScrollShineText from "@/components/shared/scroll-shine-text"
 const campusHighlights = [
   {
     id: 1,
-    title: "Hari Saurabh",
+    title: "Hari Saurabh Hostel",
     subtitle: "a home away from home",
     description:
       "A student is always an empty shell without a pure heart. Along with studies what good he imbibes in his life helps to shapes a better future for him. We with the blessings of our Guru always try to impart brotherhood, humanity, love, and discipline in our students which are the sole practices an Indian culture is known for.",
-    image: "/hostel-building.png",
+    image: "/hostel-building.jpg",
     tag: "Student Residence",
   },
   {
@@ -22,7 +22,7 @@ const campusHighlights = [
     subtitle: "where peace prevails",
     description:
       "A place of cool stone, beauty, shafting sunlight, warmth, and satisfaction where every heart flashes purity is what a temple implies. With the blessings of Lord Swaminarayan, AVD campus comprises of a beautiful temple with enormous devotees stepping in for peace and positivity.",
-    image: "/temple.png",
+    image: "/temple.jpg",
     tag: "Spiritual Space",
   },
   {
@@ -31,12 +31,12 @@ const campusHighlights = [
     subtitle: "togetherness is half success",
     description:
       "A large prayer hall with the capacity of 1000+ individuals is a symbol of togetherness. Prayer hall symbolizes the ancient Gurukul culture where students come together for prayers and augment positive energy. Every evening, prayer is performed here by the students of Harisaurabh Hostel.",
-    image: "/prayer-hall.png",
+    image: "/prayer-hall.jpg",
     tag: "Community Space",
   },
 ]
 
-const AUTO_DELAY = 5000
+const AUTO_DELAY = 4000
 
 export default function CampusPreview() {
   const [activeIndex, setActiveIndex] = useState(0)
@@ -123,8 +123,6 @@ export default function CampusPreview() {
             boxShadow: "0 40px 100px rgba(0,0,0,0.45)",
             border: "1px solid rgba(255,255,255,0.08)",
           }}
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
         >
           <div className="flex min-h-[540px] flex-col lg:flex-row">
 
@@ -137,22 +135,34 @@ export default function CampusPreview() {
                   variants={{
                     enter: (d: number) => ({
                       opacity: 0,
-                      x: d > 0 ? 80 : -80,
-                      scale: 1.06,
-                      filter: "blur(8px)",
+                      x: d > 0 ? 100 : -100,
+                      scale: 1.15,
+                      filter: "blur(15px)",
                     }),
-                    center: { opacity: 1, x: 0, scale: 1, filter: "blur(0px)" },
+                    center: {
+                      zIndex: 1,
+                      opacity: 1,
+                      x: 0,
+                      scale: 1,
+                      filter: "blur(0px)",
+                    },
                     exit: (d: number) => ({
+                      zIndex: 0,
                       opacity: 0,
                       x: d > 0 ? -60 : 60,
-                      scale: 0.96,
-                      filter: "blur(4px)",
+                      scale: 0.95,
+                      filter: "blur(5px)",
                     }),
                   }}
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{
+                    opacity: { duration: 0.65, ease: "easeInOut" },
+                    x: { type: "spring", stiffness: 200, damping: 30 },
+                    scale: { duration: 0.8, ease: [0.25, 1, 0.5, 1] },
+                    filter: { duration: 0.5 }
+                  }}
                   className="absolute inset-0"
                 >
                   {/* Ken Burns slow zoom */}
@@ -160,8 +170,11 @@ export default function CampusPreview() {
                     className="absolute inset-0 bg-cover bg-center"
                     style={{ backgroundImage: `url(${current.image})` }}
                     initial={{ scale: 1 }}
-                    animate={{ scale: 1.09 }}
-                    transition={{ duration: AUTO_DELAY / 1000 + 0.5, ease: "linear" }}
+                    animate={{ scale: 1.12 }}
+                    transition={{
+                      duration: (AUTO_DELAY / 1000) + 1,
+                      ease: "linear"
+                    }}
                   />
                 </motion.div>
               </AnimatePresence>
@@ -262,13 +275,14 @@ export default function CampusPreview() {
 
               {/* Animated text content */}
               <div className="relative flex-1">
-                <AnimatePresence mode="wait">
+                <AnimatePresence mode="wait" custom={direction}>
                   <motion.div
                     key={current.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
+                    custom={direction}
+                    initial={{ opacity: 0, x: direction > 0 ? 20 : -20, filter: "blur(8px)" }}
+                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, x: direction > 0 ? -20 : 20, filter: "blur(4px)" }}
+                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                     className="flex h-full flex-col"
                   >
                     {/* Subtitle */}
@@ -320,49 +334,6 @@ export default function CampusPreview() {
 
               {/* ── Bottom: slide selector + nav ── */}
               <div className="mt-8 border-t pt-6" style={{ borderColor: "#E2E8F0" }}>
-                {/* Numbered slide selector */}
-                <div className="mb-5 space-y-0.5">
-                  {campusHighlights.map((item, i) => {
-                    const active = i === activeIndex
-                    return (
-                      <motion.button
-                        key={i}
-                        onClick={() => handleSelect(i)}
-                        className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-all duration-200"
-                        style={{
-                          background: active ? "rgba(86,124,141,0.08)" : "transparent",
-                          borderLeft: active
-                            ? `3px solid ${COLORS.teal}`
-                            : "3px solid transparent",
-                        }}
-                        whileHover={{ x: 3 }}
-                      >
-                        <span
-                          className="flex-shrink-0 font-mono text-[9px] font-black tracking-widest"
-                          style={{ color: active ? COLORS.teal : "rgba(86,124,141,0.30)" }}
-                        >
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span
-                          className="text-[13px] font-semibold transition-colors duration-200"
-                          style={{
-                            color: active ? COLORS.navy : "rgba(47,65,86,0.40)",
-                            fontFamily: "'Cormorant Garamond', serif",
-                          }}
-                        >
-                          {item.title}
-                        </span>
-                        {active && (
-                          <motion.span
-                            layoutId="campusActiveDot"
-                            className="ml-auto h-1.5 w-1.5 rounded-full"
-                            style={{ background: COLORS.teal }}
-                          />
-                        )}
-                      </motion.button>
-                    )
-                  })}
-                </div>
 
                 {/* Prev / Next */}
                 <div className="flex items-center gap-2.5">
