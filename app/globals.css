@@ -67,7 +67,7 @@
 */
 
 :root {
-  color-scheme: only light;
+  color-scheme: light dark;
   --brand-navy: #2f4156;
   --brand-teal: #567c8d;
   --brand-sky: #c8d9e6;
@@ -298,4 +298,11 @@ button {
 ::selection {
   background: rgba(200, 217, 230, 0.35);
   color: #2f4156;
+}
+
+/* Signal to browser heuristics that the app natively adapts to dark preferences, disabling forced external filters */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light dark;
+  }
 }
