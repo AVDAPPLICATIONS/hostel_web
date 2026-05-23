@@ -191,14 +191,14 @@ export default function Booking() {
               delay: 0.1,
             }}
             viewport={{ once: true }}
-            className="mx-auto max-w-5xl rounded-[2rem] p-1"
+            className="mx-auto max-w-5xl rounded-common p-1"
             style={{
               background: UI.card.soft,
               boxShadow: UI.shadow.card,
             }}
           >
             <Card
-              className="overflow-hidden rounded-[1.8rem] border-0 shadow-none"
+              className="overflow-hidden rounded-common border-0 shadow-none"
               style={{
                 background: UI.card.light,
                 border: `1px solid ${UI.border.white}`,

@@ -87,28 +87,19 @@ export default function Navbar() {
         duration: 0.6,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="pointer-events-none fixed left-0 right-0 top-0 z-50 px-3 md:px-4"
+      className="pointer-events-auto fixed left-0 right-0 top-0 z-50 w-full"
       style={{
-        paddingTop: scrolled ? "10px" : "16px",
-        transition: "padding-top 0.4s ease",
+        background: scrolled ? UI.section.dark : "rgba(47, 65, 86, 0.92)",
+        backdropFilter: "blur(22px)",
+        WebkitBackdropFilter: "blur(22px)",
+        boxShadow: scrolled
+          ? "0 16px 46px rgba(0, 0, 0, 0.22)"
+          : "0 10px 30px rgba(0, 0, 0, 0.16)",
+        transition: "all 0.45s cubic-bezier(0.22, 1, 0.36, 1)",
       }}
     >
-      <div className="container mx-auto max-w-7xl">
-        <motion.div
-          className="pointer-events-auto flex h-14 items-center justify-between rounded-[20px] px-4 md:h-16 md:rounded-[28px] md:px-7"
-          style={{
-            background: scrolled ? UI.section.dark : "rgba(47, 65, 86, 0.92)",
-            backdropFilter: "blur(22px)",
-            WebkitBackdropFilter: "blur(22px)",
-            border: `1px solid ${
-              scrolled ? UI.border.soft : "rgba(200, 217, 230, 0.22)"
-            }`,
-            boxShadow: scrolled
-              ? "0 16px 46px rgba(0, 0, 0, 0.22)"
-              : "0 10px 30px rgba(0, 0, 0, 0.16)",
-            transition: "all 0.45s cubic-bezier(0.22, 1, 0.36, 1)",
-          }}
-        >
+      <div className="container mx-auto max-w-7xl px-4 md:px-8">
+        <div className="flex h-14 items-center justify-between md:h-16">
           {/* Logo */}
           <motion.button
             whileHover={{ scale: 1.03 }}
@@ -153,13 +144,7 @@ export default function Navbar() {
           </motion.button>
 
           {/* Desktop Navigation */}
-          <div
-            className="hidden items-center gap-1 rounded-full p-1 lg:flex"
-            style={{
-              background: "rgba(245, 239, 235, 0.08)",
-              border: `1px solid ${UI.border.soft}`,
-            }}
-          >
+          <div className="hidden items-center gap-8 lg:flex">
             {navItems.map((item) => {
               const isActive = activeSection === item.href.substring(1)
 
@@ -167,31 +152,17 @@ export default function Navbar() {
                 <button
                   key={item.name}
                   onClick={() => scrollToSection(item.href)}
-                  className="relative rounded-full px-4 py-2 text-[13px] font-bold outline-none transition-colors duration-300 xl:px-5"
+                  className="relative text-[14px] font-normal tracking-wide lowercase outline-none transition-all duration-300"
                   style={{
-                    color: isActive ? UI.text.dark : UI.text.muted,
+                    color: isActive ? UI.text.light : UI.text.muted,
                   }}
                 >
-                  {isActive && (
-                    <motion.div
-                      layoutId="nav-pill"
-                      className="absolute inset-0 rounded-full"
-                      style={{
-                        background: UI.card.light,
-                        boxShadow: "0 8px 20px rgba(0, 0, 0, 0.14)",
-                      }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 420,
-                        damping: 32,
-                      }}
-                    />
-                  )}
-
                   <span
-                    className="relative z-10 transition-colors duration-300 hover:text-white"
+                    className="pb-1 transition-all duration-300 border-b hover:text-white"
                     style={{
-                      color: isActive ? UI.text.dark : undefined,
+                      borderColor: isActive 
+                        ? UI.text.light 
+                        : "rgba(200, 217, 230, 0.3)",
                     }}
                   >
                     {item.name}
@@ -202,31 +173,18 @@ export default function Navbar() {
           </div>
 
           {/* CTA + Mobile Toggle */}
-          <div className="flex items-center gap-2.5">
-            <motion.button
-              whileHover={{
-                scale: 1.04,
-                y: -1,
-                backgroundColor: UI.button.primaryHover,
-              }}
-              whileTap={{ scale: 0.96 }}
+          <div className="flex items-center gap-6">
+            <button
               onClick={() => scrollToSection("#contact")}
-              className="group relative hidden h-9 items-center gap-2 overflow-hidden rounded-xl px-5 text-xs font-black sm:flex md:h-10 md:rounded-2xl md:px-6 md:text-[13px]"
+              className="hidden text-[14px] font-normal tracking-wide lowercase outline-none transition-all duration-300 sm:block"
               style={{
-                background: UI.button.primary,
-                color: UI.button.primaryText,
-                boxShadow: UI.shadow.soft,
+                color: UI.text.light,
               }}
             >
-              <span className="relative z-10">Enquire Now</span>
-
-              <ArrowRight className="relative z-10 h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-
-              <span
-                className="absolute inset-y-0 left-0 w-0 transition-all duration-500 group-hover:w-full"
-                style={{ background: "rgba(255,255,255,0.12)" }}
-              />
-            </motion.button>
+              <span className="pb-1 transition-all duration-300 border-b border-current hover:text-white">
+                enquire now
+              </span>
+            </button>
 
             <motion.button
               whileTap={{ scale: 0.9 }}
@@ -264,28 +222,29 @@ export default function Navbar() {
               </AnimatePresence>
             </motion.button>
           </div>
-        </motion.div>
+        </div>
+      </div>
 
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -10, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.98 }}
-              transition={{
-                duration: 0.3,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="pointer-events-auto absolute left-3 right-3 top-[68px] overflow-hidden rounded-[20px] p-5 md:top-[76px] md:rounded-[24px] md:p-6 lg:hidden"
-              style={{
-                background: UI.section.dark,
-                backdropFilter: "blur(28px)",
-                WebkitBackdropFilter: "blur(28px)",
-                border: `1px solid ${UI.border.soft}`,
-                boxShadow: UI.shadow.card,
-              }}
-            >
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.98 }}
+            transition={{
+              duration: 0.3,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="pointer-events-auto absolute left-0 right-0 top-full overflow-hidden p-5 md:p-6 lg:hidden"
+            style={{
+              background: UI.section.dark,
+              backdropFilter: "blur(28px)",
+              WebkitBackdropFilter: "blur(28px)",
+              boxShadow: UI.shadow.card,
+            }}
+          >
+            <div className="container mx-auto max-w-7xl px-4 md:px-8">
               <div className="relative flex flex-col gap-1">
                 {navItems.map((item, index) => {
                   const isActive = activeSection === item.href.substring(1)
@@ -300,25 +259,19 @@ export default function Navbar() {
                         ease: [0.22, 1, 0.36, 1],
                       }}
                       onClick={() => scrollToSection(item.href)}
-                      className="group flex items-center justify-between rounded-xl px-5 py-3.5 text-left text-[15px] font-bold transition-all duration-300"
+                      className="group flex items-center justify-between py-3.5 text-left text-[15px] font-normal tracking-wide lowercase transition-all duration-300"
                       style={{
-                        background: isActive ? UI.card.light : "transparent",
-                        color: isActive ? UI.text.dark : UI.text.muted,
-                        border: `1px solid ${
-                          isActive ? UI.border.white : "transparent"
-                        }`,
+                        color: isActive ? UI.text.light : UI.text.muted,
                       }}
                     >
-                      <span>{item.name}</span>
-
-                      {isActive && (
-                        <motion.span
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          className="h-1.5 w-1.5 rounded-full"
-                          style={{ background: UI.button.primary }}
-                        />
-                      )}
+                      <span
+                        className="pb-0.5 border-b transition-all duration-300"
+                        style={{
+                          borderColor: isActive ? UI.text.light : "transparent",
+                        }}
+                      >
+                        {item.name}
+                      </span>
                     </motion.button>
                   )
                 })}
@@ -331,33 +284,22 @@ export default function Navbar() {
                   style={{ borderTop: `1px solid ${UI.border.soft}` }}
                 >
                   <motion.button
-                    whileTap={{ scale: 0.97 }}
-                    whileHover={{
-                      backgroundColor: UI.button.primaryHover,
-                    }}
                     onClick={() => scrollToSection("#contact")}
-                    className="group relative flex h-14 w-full items-center justify-center gap-2.5 overflow-hidden rounded-2xl text-base font-black"
+                    className="flex py-3.5 text-left text-[15px] font-normal tracking-wide lowercase transition-all duration-300"
                     style={{
-                      background: UI.button.primary,
-                      color: UI.button.primaryText,
-                      boxShadow: UI.shadow.soft,
+                      color: UI.text.light,
                     }}
                   >
-                    <span className="relative z-10">Enquire Now</span>
-
-                    <ArrowRight className="relative z-10 h-4 w-4 transition-transform group-hover:translate-x-1" />
-
-                    <span
-                      className="absolute inset-y-0 left-0 w-0 transition-all duration-500 group-hover:w-full"
-                      style={{ background: "rgba(255,255,255,0.12)" }}
-                    />
+                    <span className="pb-0.5 border-b border-current">
+                      enquire now
+                    </span>
                   </motion.button>
                 </motion.div>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   )
 }

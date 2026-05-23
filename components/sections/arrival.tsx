@@ -114,7 +114,7 @@ export default function Arrival() {
 
           {/* Main Card */}
           <ScrollRevealCard
-            className="overflow-hidden rounded-[1.8rem] sm:rounded-[2rem] p-0.5 sm:p-1"
+            className="overflow-hidden rounded-common p-0.5 sm:p-1"
             delay={0.1}
             style={{
               background: UI.card.soft,
@@ -122,7 +122,7 @@ export default function Arrival() {
             }}
           >
             <div
-              className="overflow-hidden rounded-[1.6rem] sm:rounded-[1.8rem]"
+              className="overflow-hidden rounded-common"
               style={{
                 background: UI.card.light,
                 border: `1px solid ${UI.border.white}`,

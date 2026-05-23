@@ -762,7 +762,7 @@ export default function Rooms() {
                                 className="flex min-h-[56px] items-center gap-2 rounded-xl p-2 sm:min-h-0 sm:gap-3 sm:rounded-2xl sm:p-3 transition-shadow hover:shadow-sm"
                                 style={{
                                   background: UI.card.white,
-                                  border: `1px solid ${UI.border.light}`,
+                                  border: "none",
                                 }}
                               >
                                 <div

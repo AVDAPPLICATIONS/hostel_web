@@ -154,6 +154,10 @@ export const UI = {
 
     image: "0 22px 50px rgba(47, 65, 86, 0.18)",
   },
+  radius: {
+    common: "22px",
+    rounded22: "22px",
+  },
 } as const
 
 export const CSS_VARS = {
@@ -166,4 +170,5 @@ export const CSS_VARS = {
   "--color-beige": COLORS.beige,
   "--color-soft-beige": COLORS.softBeige,
   "--color-white": COLORS.white,
+  "--radius-common": "22px",
 } as const

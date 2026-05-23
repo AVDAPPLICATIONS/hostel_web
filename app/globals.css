@@ -48,13 +48,15 @@
   --color-foreground: var(--foreground);
   --color-background: var(--background);
 
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-sm: 22px;
+  --radius-md: 22px;
+  --radius-lg: 22px;
+  --radius-xl: 22px;
+  --radius-2xl: 22px;
+  --radius-3xl: 22px;
+  --radius-4xl: 22px;
+  --radius-common: 22px;
+  --radius-22: 22px;
 }
 
 /* 
@@ -106,7 +108,7 @@
   --chart-4: #f5efeb;
   --chart-5: #ffffff;
 
-  --radius: 0.875rem;
+  --radius: 22px;
 
   --sidebar: #2f4156;
   --sidebar-foreground: #ffffff;

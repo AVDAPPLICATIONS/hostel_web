@@ -24,7 +24,6 @@ import Image from "next/image"
 import { UI } from "@/lib/theme"
 import ScrollShineText from "@/components/shared/scroll-shine-text"
 import ScrollRevealCard from "@/components/shared/scroll-reveal-card"
-import CinematicPhoto from "@/components/shared/cinematic-photo"
 
 const categories = ["All", "Rooms", "Common Area", "Outdoor"]
 
@@ -180,15 +179,13 @@ function GalleryCard({
   const masonryHeight = layout === "masonry" ? heights[index % heights.length] : "h-64"
 
   return (
-    <CinematicPhoto
-      className="min-w-[82vw] snap-center md:min-w-0"
-    >
+    <div className="min-w-[82vw] snap-center md:min-w-0">
       <MagneticCard
         className="group block w-full cursor-pointer"
         onClick={onClick}
       >
         <div
-          className={`relative overflow-hidden rounded-[1.6rem] ${masonryHeight}`}
+          className={`relative overflow-hidden rounded-common ${masonryHeight}`}
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
           style={{
@@ -287,7 +284,7 @@ function GalleryCard({
           </div>
         </div>
       </MagneticCard>
-    </CinematicPhoto>
+    </div>
   )
 }
 
@@ -380,14 +377,14 @@ function Lightbox({
         onClick={(e) => e.stopPropagation()}
       >
         <div
-          className="relative overflow-hidden rounded-[1.8rem] p-1"
+          className="relative overflow-hidden rounded-common p-1"
           style={{
             background: UI.card.soft,
             boxShadow: UI.shadow.card,
           }}
         >
           <div
-            className="overflow-hidden rounded-[1.55rem]"
+            className="overflow-hidden rounded-common"
             style={{
               border: `1px solid ${UI.border.white}`,
               background: UI.card.light,

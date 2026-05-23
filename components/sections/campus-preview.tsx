@@ -140,14 +140,14 @@ export default function CampusPreview() {
               ease: [0.22, 1, 0.36, 1],
             }}
             viewport={{ once: true }}
-            className="relative overflow-hidden rounded-[2rem] p-1"
+            className="relative overflow-hidden rounded-common p-1"
             style={{
               background: UI.card.soft,
               boxShadow: UI.shadow.card,
             }}
           >
             <div
-              className="rounded-[1.8rem] p-5 md:p-8 lg:p-10"
+              className="rounded-common p-5 md:p-8 lg:p-10"
               style={{
                 background: UI.card.light,
                 border: `1px solid ${UI.border.white}`,
@@ -157,7 +157,7 @@ export default function CampusPreview() {
                 <div className="grid flex-1 items-center gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
                   {/* Visual */}
                   <motion.div
-                    className="relative h-[280px] overflow-hidden rounded-[1.5rem] md:h-[430px]"
+                    className="relative h-[280px] overflow-hidden rounded-common md:h-[430px]"
                     style={{
                       background: UI.card.light,
                       border: `1px solid ${UI.border.white}`,
