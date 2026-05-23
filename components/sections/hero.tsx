@@ -85,6 +85,7 @@ export default function Hero() {
     >
 
 
+
       {/* Subtle floating dots */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {floatingParticles.map((particle) => (
@@ -173,11 +174,12 @@ export default function Hero() {
                   }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => scrollToSection("#contact")}
-                  className="group relative flex h-14 min-w-[190px] items-center justify-center gap-2.5 overflow-hidden rounded-2xl px-8 py-4 text-base font-black"
+                  className="group relative flex h-14 min-w-[190px] items-center justify-center gap-2.5 overflow-hidden rounded-2xl px-8 py-4 text-base font-black backdrop-blur-md border"
                   style={{
-                    background: UI.button.primary,
+                    background: "rgba(200, 169, 110, 0.85)",
+                    borderColor: "rgba(255, 255, 255, 0.2)",
                     color: UI.button.primaryText,
-                    boxShadow: UI.shadow.soft,
+                    boxShadow: "0 10px 30px rgba(0, 0, 0, 0.15)",
                   }}
                 >
                   <span className="relative z-10">Book Your Stay</span>
@@ -270,7 +272,7 @@ export default function Hero() {
       <div
         className="pointer-events-none absolute bottom-0 left-0 right-0 h-24"
         style={{
-          background: UI.section.dark,
+          background: `linear-gradient(to bottom, transparent, ${UI.section.dark})`,
         }}
       />
     </section>
