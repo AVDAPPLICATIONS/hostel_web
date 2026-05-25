@@ -187,7 +187,7 @@ export default function RootLayout({
         } as React.CSSProperties
       }
     >
-      <body className="min-h-screen overflow-x-hidden bg-background text-foreground">
+      <body className="min-h-screen overflow-x-hidden bg-background text-foreground tracking-wide">
         <ThemeProvider>
           <SmoothScroll>
             <main className="relative min-h-screen">{children}</main>

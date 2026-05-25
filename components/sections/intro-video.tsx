@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { OVERLAYS } from "@/lib/theme"
 
 export default function IntroVideo() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -78,7 +79,7 @@ export default function IntroVideo() {
                 onClick={handleVideoEnd}
                 className="rounded-full px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white/70 transition-all hover:bg-white/10 hover:text-white"
                 style={{
-                  border: "1px solid rgba(255,255,255,0.2)",
+                  border: `1px solid ${OVERLAYS.borderWhiteMedium}`,
                   backdropFilter: "blur(4px)"
                 }}
               >

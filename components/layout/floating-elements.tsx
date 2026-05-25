@@ -1,5 +1,7 @@
 "use client"
 
+import { OVERLAYS } from "@/lib/theme"
+
 export default function FloatingElements() {
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
@@ -7,7 +9,7 @@ export default function FloatingElements() {
       <div
         className="absolute w-[500px] h-[500px] rounded-full"
         style={{
-          background: "rgba(86, 124, 141, 0.05)",
+          background: OVERLAYS.tealSoft,
           filter: "blur(80px)",
           right: "10%",
           top: "15%",
@@ -16,7 +18,7 @@ export default function FloatingElements() {
       <div
         className="absolute w-[360px] h-[360px] rounded-full"
         style={{
-          background: "rgba(200, 217, 230, 0.05)",
+          background: OVERLAYS.glassSubtle,
           filter: "blur(60px)",
           left: "5%",
           bottom: "25%",

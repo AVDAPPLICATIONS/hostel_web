@@ -21,7 +21,7 @@ import {
   Phone,
   User,
 } from "lucide-react"
-import { UI } from "@/lib/theme"
+import { UI, FONT_FAMILY } from "@/lib/theme"
 
 const steps = [
   {
@@ -100,20 +100,12 @@ export default function Booking() {
 
   return (
     <>
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-            @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap');
-          `,
-        }}
-      />
-
       <section
         id="booking"
         className="relative overflow-hidden px-4 py-24 md:py-32"
         style={{
           background: UI.section.dark,
-          fontFamily: "'DM Sans', sans-serif",
+          fontFamily: FONT_FAMILY.sans,
         }}
       >
         <div className="container relative z-10 mx-auto max-w-6xl">
@@ -128,30 +120,13 @@ export default function Booking() {
             viewport={{ once: true }}
             className="mb-14 text-center md:mb-16"
           >
-            <motion.div
-              className="mb-5 inline-flex items-center gap-2 rounded-full px-5 py-2 text-[10px] font-bold uppercase tracking-[0.28em]"
-              style={{
-                background: UI.card.light,
-                color: UI.text.accent,
-                border: `1px solid ${UI.border.white}`,
-                boxShadow: UI.shadow.light,
-              }}
-              animate={{ y: [0, -5, 0] }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
-              <Sparkles size={14} />
-              Smart Booking System
-            </motion.div>
+
 
             <h2
               className="text-5xl font-semibold leading-[1.05] md:text-7xl"
               style={{
                 color: UI.text.light,
-                fontFamily: "'Cormorant Garamond', serif",
+                fontFamily: FONT_FAMILY.heading,
               }}
             >
               Book Your{" "}
@@ -224,7 +199,7 @@ export default function Booking() {
                           className="text-3xl font-semibold leading-tight md:text-4xl"
                           style={{
                             color: UI.text.dark,
-                            fontFamily: "'Cormorant Garamond', serif",
+                            fontFamily: FONT_FAMILY.heading,
                           }}
                         >
                           {step === 1 && "Select Dates & Room"}
@@ -259,9 +234,8 @@ export default function Booking() {
                                 background: active
                                   ? UI.card.white
                                   : UI.card.soft,
-                                border: `1.5px solid ${
-                                  active ? UI.button.primary : UI.border.white
-                                }`,
+                                border: `1.5px solid ${active ? UI.button.primary : UI.border.white
+                                  }`,
                                 boxShadow: active ? UI.shadow.light : "none",
                               }}
                               animate={{
@@ -754,7 +728,7 @@ export default function Booking() {
                         className="text-4xl font-semibold md:text-5xl"
                         style={{
                           color: UI.text.dark,
-                          fontFamily: "'Cormorant Garamond', serif",
+                          fontFamily: FONT_FAMILY.heading,
                         }}
                       >
                         Booking Confirmed!

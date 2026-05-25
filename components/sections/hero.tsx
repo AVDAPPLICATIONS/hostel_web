@@ -11,7 +11,8 @@ import {
 import { Play, ArrowDown } from "lucide-react"
 import Magnetic from "@/components/shared/magnetic"
 import ScrollShineText from "@/components/shared/scroll-shine-text"
-import { UI } from "@/lib/theme"
+import { AnimatedButton } from "@/components/ui/animated-button"
+import { COLORS, UI, SHADOWS, OVERLAYS, FONT_FAMILY } from "@/lib/theme"
 
 const floatingParticles = Array.from({ length: 6 }, (_, i) => ({
   id: i,
@@ -80,7 +81,7 @@ export default function Hero() {
       className="relative min-h-screen overflow-hidden"
       style={{
         background: UI.section.dark,
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: FONT_FAMILY.sans,
       }}
     >
 
@@ -114,7 +115,6 @@ export default function Hero() {
           />
         ))}
       </div>
-
 
 
 
@@ -166,68 +166,26 @@ export default function Hero() {
               className="mb-16 flex flex-col gap-4 sm:flex-row md:mb-20"
             >
               <Magnetic>
-                <motion.button
+                <AnimatedButton
                   whileHover={{
-                    scale: 1.035,
-                    y: -3,
+                    scale: 1.04,
+                    y: -2,
                     backgroundColor: UI.button.primaryHover,
                   }}
-                  whileTap={{ scale: 0.97 }}
+                  whileTap={{ scale: 0.96 }}
                   onClick={() => scrollToSection("#contact")}
-                  className="group relative flex h-14 min-w-[190px] items-center justify-center gap-2.5 overflow-hidden rounded-2xl px-8 py-4 text-base font-black backdrop-blur-md border"
+                  className="h-14 min-w-[190px] rounded-full px-8 py-4 text-base font-black transition-all"
                   style={{
-                    background: "rgba(200, 169, 110, 0.85)",
-                    borderColor: "rgba(255, 255, 255, 0.2)",
-                    color: UI.button.primaryText,
-                    boxShadow: "0 10px 30px rgba(0, 0, 0, 0.15)",
+                    background: UI.button.primary,
+                    color: COLORS.white,
+                    boxShadow: SHADOWS.buttonPrimary,
                   }}
                 >
-                  <span className="relative z-10">Book Your Stay</span>
-
-                  <span
-                    className="absolute inset-y-0 left-0 w-0 transition-all duration-500 group-hover:w-full"
-                    style={{ background: "rgba(255,255,255,0.12)" }}
-                  />
-                </motion.button>
+                  Book Your Stay
+                </AnimatedButton>
               </Magnetic>
             </motion.div>
 
-            {/* Scroll Indicator */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 1.5 }}
-              className="flex flex-col items-start gap-3"
-            >
-              <div className="flex items-center gap-3">
-                <div
-                  className="h-10 w-px"
-                  style={{ background: UI.text.muted }}
-                />
-
-                <span
-                  className="text-[10px] font-semibold uppercase tracking-[0.25em]"
-                  style={{ color: UI.text.muted }}
-                >
-                  Scroll to explore
-                </span>
-              </div>
-
-              <motion.div
-                animate={{ y: [0, 8, 0] }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="ml-[1px]"
-              >
-                <ArrowDown
-                  className="h-4 w-4"
-                  style={{ color: UI.text.muted }}
-                />
-              </motion.div>
-            </motion.div>
           </motion.div>
 
           {/* Image Content */}
@@ -245,7 +203,8 @@ export default function Hero() {
 
 
             <motion.div
-              className="relative z-10 drop-shadow-[0_24px_34px_rgba(0,0,0,0.25)]"
+              className="relative z-10"
+              style={{ filter: `drop-shadow(${SHADOWS.heroImage})` }}
               animate={{ y: [0, -12, 0] }}
               transition={{
                 duration: 6,

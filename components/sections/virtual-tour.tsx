@@ -7,6 +7,7 @@ import { OrbitControls, Environment, Html, useTexture } from "@react-three/drei"
 import { Eye, ChevronLeft, ChevronRight } from "lucide-react"
 import ScrollShineText from "@/components/shared/scroll-shine-text"
 import * as THREE from "three"
+import { COLORS, UI, OVERLAYS, SHADOWS, FONT_FAMILY } from "@/lib/theme"
 
 function PanoramaSphere({ url }: { url: string }) {
   const [texture, setTexture] = useState<THREE.Texture | null>(null)
@@ -223,20 +224,12 @@ export default function VirtualTour() {
 
   return (
     <>
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
-      `,
-        }}
-      />
-
       <section
         id="virtual-tour"
         className="relative py-24 md:py-36 overflow-hidden"
         style={{
           background: "linear-gradient(170deg, #060d16 0%, #0d1b2a 50%, #091520 100%)",
-          fontFamily: "'DM Sans', sans-serif",
+          fontFamily: FONT_FAMILY.sans,
         }}
       >
         {/* Grain */}
@@ -263,7 +256,7 @@ export default function VirtualTour() {
         {/* Top rule */}
         <div
           className="absolute top-0 left-0 right-0 h-px opacity-[0.08]"
-          style={{ background: "linear-gradient(90deg, transparent, #fff, transparent)" }}
+          style={{ background: `linear-gradient(90deg, transparent, ${COLORS.white}, transparent)` }}
         />
 
         <div className="relative container mx-auto px-4 max-w-7xl">
@@ -295,7 +288,7 @@ export default function VirtualTour() {
             <ScrollShineText
               as="h2"
               className="text-5xl md:text-7xl font-semibold text-white mb-5 leading-[1.05] justify-center text-center"
-              style={{ fontFamily: "'Cormorant Garamond', serif" }}
+              style={{ fontFamily: FONT_FAMILY.heading }}
             >
               Explore Our Rooms
             </ScrollShineText>
@@ -312,8 +305,8 @@ export default function VirtualTour() {
             viewport={{ once: true }}
             className="rounded-[28px] md:rounded-[36px] overflow-hidden"
             style={{
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.08)",
+              background: OVERLAYS.glassMicro,
+              border: `1px solid ${OVERLAYS.borderWhiteFaint}`,
               boxShadow: `0 40px 100px -30px ${currentRoom.accent}18`,
               transition: "box-shadow 0.8s ease",
             }}
@@ -355,7 +348,7 @@ export default function VirtualTour() {
                 <div
                   className="absolute top-6 left-7 select-none pointer-events-none"
                   style={{
-                    fontFamily: "'Cormorant Garamond', serif",
+                    fontFamily: FONT_FAMILY.heading,
                     fontSize: "clamp(64px, 10vw, 100px)",
                     fontWeight: 700,
                     color: "white",
@@ -401,7 +394,7 @@ export default function VirtualTour() {
                     </span>
                     <h3
                       className="text-2xl md:text-3xl font-semibold text-white"
-                      style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                      style={{ fontFamily: FONT_FAMILY.heading }}
                     >
                       {currentRoom.title}
                     </h3>
@@ -446,12 +439,12 @@ export default function VirtualTour() {
               {/* Right — Room Selector + Details */}
               <div
                 className="w-full lg:w-[42%] p-7 md:p-10 flex flex-col"
-                style={{ background: "rgba(255,255,255,0.02)" }}
+                style={{ background: OVERLAYS.glassThin }}
               >
                 <div className="mb-8">
                   <h3
                     className="text-xl md:text-2xl font-semibold text-white mb-1.5"
-                    style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                    style={{ fontFamily: FONT_FAMILY.heading }}
                   >
                     Choose Room Type
                   </h3>
@@ -472,8 +465,8 @@ export default function VirtualTour() {
                         whileTap={{ scale: 0.98 }}
                         className="w-full text-left relative rounded-2xl overflow-hidden transition-all duration-300"
                         style={{
-                          background: active ? "rgba(255,255,255,0.07)" : "rgba(255,255,255,0.02)",
-                          border: `1px solid ${active ? `${room.accent}40` : "rgba(255,255,255,0.05)"}`,
+                          background: active ? OVERLAYS.glassSoft : OVERLAYS.glassThin,
+                          border: `1px solid ${active ? `${room.accent}40` : OVERLAYS.borderWhiteMicro}`,
                           boxShadow: active ? `0 8px 30px -10px ${room.accent}20` : "none",
                         }}
                       >
@@ -491,13 +484,13 @@ export default function VirtualTour() {
                             <div className="flex items-center gap-2.5">
                               <span
                                 className="text-[9px] font-bold tracking-[0.2em] uppercase font-mono"
-                                style={{ color: active ? room.accent : "rgba(255,255,255,0.2)" }}
+                                style={{ color: active ? room.accent : OVERLAYS.white20 }}
                               >
                                 {room.label}
                               </span>
                               <span
                                 className="font-medium text-sm"
-                                style={{ color: active ? "white" : "rgba(255,255,255,0.45)" }}
+                                style={{ color: active ? COLORS.white : OVERLAYS.white45 }}
                               >
                                 {room.title}
                               </span>
@@ -505,9 +498,9 @@ export default function VirtualTour() {
                             <span
                               className="text-[9px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full"
                               style={{
-                                background: active ? `${room.accent}20` : "rgba(255,255,255,0.04)",
-                                color: active ? room.accent : "rgba(255,255,255,0.25)",
-                                border: `1px solid ${active ? `${room.accent}30` : "rgba(255,255,255,0.06)"}`,
+                                background: active ? `${room.accent}20` : OVERLAYS.white04,
+                                color: active ? room.accent : OVERLAYS.white25,
+                                border: `1px solid ${active ? `${room.accent}30` : OVERLAYS.white06}`,
                               }}
                             >
                               {room.duration}
@@ -515,7 +508,7 @@ export default function VirtualTour() {
                           </div>
                           <p
                             className="text-xs leading-relaxed line-clamp-2"
-                            style={{ color: active ? "rgba(255,255,255,0.45)" : "rgba(255,255,255,0.2)" }}
+                            style={{ color: active ? OVERLAYS.white45 : OVERLAYS.white20 }}
                           >
                             {room.description}
                           </p>
@@ -526,7 +519,7 @@ export default function VirtualTour() {
                 </div>
 
                 {/* Highlights */}
-                <div className="mt-6 pt-6" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                <div className="mt-6 pt-6" style={{ borderTop: `1px solid ${OVERLAYS.white06}` }}>
                   <span
                     className="text-[9px] font-bold tracking-[0.2em] uppercase block mb-3"
                     style={{ color: currentRoom.accent }}

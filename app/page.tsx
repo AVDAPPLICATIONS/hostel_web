@@ -17,6 +17,7 @@ import Contact from "@/components/sections/contact"
 import Footer from "@/components/layout/footer"
 import ScrollProgress from "@/components/layout/scroll-progress"
 import FloatingElements from "@/components/layout/floating-elements"
+import { COLORS } from "@/lib/theme"
 
 
 export default function Home() {
@@ -31,7 +32,7 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-[#F5EFEB] overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden" style={{ background: COLORS.beige }}>
       <ScrollProgress />
       <FloatingElements />
       <Navbar />

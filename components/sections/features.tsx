@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+
 import { motion } from "framer-motion"
 import {
   BookOpen,
@@ -18,7 +18,7 @@ import {
   Video,
   Dumbbell,
 } from "lucide-react"
-import { COLORS, UI } from "@/lib/theme"
+import { COLORS, UI, SHADOWS, OVERLAYS, FONT_FAMILY } from "@/lib/theme"
 import ScrollShineText from "@/components/shared/scroll-shine-text"
 
 const features = [
@@ -104,28 +104,28 @@ function FeatureCard({ icon: Icon, title, description }: Feature) {
     <div
       className="group flex w-[268px] flex-shrink-0 cursor-default select-none flex-col gap-3.5 rounded-2xl p-5 transition-all duration-300"
       style={{
-        background: "rgba(255,255,255,0.048)",
-        border: "1px solid rgba(255,255,255,0.08)",
+        background: OVERLAYS.cardGlassLight,
+        border: `1px solid ${OVERLAYS.borderWhiteFaint}`,
         backdropFilter: "blur(10px)",
       }}
       onMouseEnter={(e) => {
         const el = e.currentTarget
-        el.style.background = "rgba(255,255,255,0.072)"
-        el.style.border = "1px solid rgba(200,217,230,0.18)"
-        el.style.boxShadow = "0 8px 32px rgba(0,0,0,0.22)"
+        el.style.background = OVERLAYS.cardGlassHover
+        el.style.border = `1px solid ${OVERLAYS.borderSkyMuted}`
+        el.style.boxShadow = SHADOWS.featureHover
       }}
       onMouseLeave={(e) => {
         const el = e.currentTarget
-        el.style.background = "rgba(255,255,255,0.048)"
-        el.style.border = "1px solid rgba(255,255,255,0.08)"
+        el.style.background = OVERLAYS.cardGlassLight
+        el.style.border = `1px solid ${OVERLAYS.borderWhiteFaint}`
         el.style.boxShadow = "none"
       }}
     >
       <div
-        className="flex h-11 w-11 items-center justify-center rounded-xl transition-colors duration-300 group-hover:bg-[#4d7080]"
+        className="flex h-11 w-11 items-center justify-center rounded-xl transition-colors duration-300 group-hover:bg-[var(--color-deep-teal)]"
         style={{
-          background: "rgba(86,124,141,0.16)",
-          border: "1px solid rgba(86,124,141,0.22)",
+          background: OVERLAYS.tealMedium,
+          border: `1px solid ${OVERLAYS.tealBorderSoft}`,
         }}
       >
         <Icon className="h-5 w-5" style={{ color: COLORS.sky }} />
@@ -147,8 +147,6 @@ function FeatureCard({ icon: Icon, title, description }: Feature) {
 }
 
 export default function Features() {
-  const [paused, setPaused] = useState(false)
-
   return (
     <>
       <style
@@ -168,7 +166,7 @@ export default function Features() {
 
       <section
         className="relative overflow-hidden py-24 md:py-36"
-        style={{ background: UI.section.dark, fontFamily: "'DM Sans', sans-serif" }}
+        style={{ background: UI.section.dark, fontFamily: FONT_FAMILY.sans }}
       >
         {/* Header */}
         <div className="container mx-auto max-w-7xl px-4">
@@ -182,7 +180,7 @@ export default function Features() {
             <ScrollShineText
               as="h2"
               className="mb-5 block justify-center text-center text-5xl font-semibold leading-[1.05] md:text-7xl"
-              style={{ fontFamily: "'Cormorant Garamond', serif", color: UI.text.light }}
+              style={{ fontFamily: FONT_FAMILY.heading, color: UI.text.light }}
             >
               Why Choose Us?
             </ScrollShineText>
@@ -202,11 +200,7 @@ export default function Features() {
         </div>
 
         {/* Marquee — full-width, outside container */}
-        <div
-          className="relative"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-        >
+        <div className="relative">
           {/* Left fade */}
           <div
             className="pointer-events-none absolute inset-y-0 left-0 z-10 w-28 md:w-48"
@@ -224,7 +218,6 @@ export default function Features() {
               className="flex w-max gap-4 px-4"
               style={{
                 animation: "marquee-left 38s linear infinite",
-                animationPlayState: paused ? "paused" : "running",
               }}
             >
               {[...row1, ...row1].map((f, i) => (
@@ -239,7 +232,6 @@ export default function Features() {
               className="flex w-max gap-4 px-4"
               style={{
                 animation: "marquee-right 32s linear infinite",
-                animationPlayState: paused ? "paused" : "running",
               }}
             >
               {[...row2, ...row2].map((f, i) => (

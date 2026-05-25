@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Star, Sparkles, ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
-import { COLORS, UI } from "@/lib/theme"
+import { COLORS, UI, SHADOWS, OVERLAYS, FONT_FAMILY } from "@/lib/theme"
 import ScrollShineText from "@/components/shared/scroll-shine-text"
 
 const reviews = [
@@ -69,7 +69,7 @@ export default function Reviews() {
     <section
       id="reviews"
       className="relative overflow-hidden py-24 md:py-36"
-      style={{ background: UI.section.dark, fontFamily: "'DM Sans', sans-serif" }}
+      style={{ background: UI.section.dark, fontFamily: FONT_FAMILY.sans }}
     >
       <div className="container mx-auto max-w-6xl px-4">
 
@@ -81,24 +81,12 @@ export default function Reviews() {
           viewport={{ once: true }}
           className="mb-16 text-center md:mb-20"
         >
-          <motion.div
-            className="mb-5 inline-flex items-center gap-2 rounded-full px-5 py-2 text-[10px] font-bold uppercase tracking-[0.28em]"
-            style={{
-              background: UI.card.darkSoft,
-              color: UI.text.muted,
-              border: "1px solid rgba(200,217,230,0.12)",
-            }}
-            animate={{ y: [0, -5, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <Sparkles size={14} />
-            Testimonials
-          </motion.div>
+
 
           <ScrollShineText
             as="h2"
             className="block justify-center text-center text-5xl font-semibold leading-[1.05] md:text-7xl"
-            style={{ color: UI.text.light, fontFamily: "'Cormorant Garamond', serif" }}
+            style={{ color: UI.text.light, fontFamily: FONT_FAMILY.heading }}
           >
             Voices of Alumni
           </ScrollShineText>
@@ -119,8 +107,8 @@ export default function Reviews() {
           viewport={{ once: true }}
           className="relative overflow-hidden rounded-[2rem] md:rounded-[2.5rem]"
           style={{
-            boxShadow: "0 40px 100px rgba(0,0,0,0.40)",
-            border: "1px solid rgba(255,255,255,0.08)",
+            boxShadow: SHADOWS.showcaseDeep,
+            border: `1px solid ${OVERLAYS.borderWhiteFaint}`,
           }}
         >
           <AnimatePresence mode="wait" custom={direction}>
@@ -151,15 +139,13 @@ export default function Reviews() {
                 <div
                   className="absolute inset-0"
                   style={{
-                    background:
-                      "linear-gradient(to top, rgba(10,18,30,0.90) 0%, rgba(10,18,30,0.25) 45%, transparent 70%)",
+                    background: OVERLAYS.depthTop,
                   }}
                 />
                 <div
                   className="absolute inset-0"
                   style={{
-                    background:
-                      "linear-gradient(to right, rgba(10,18,30,0.18) 0%, transparent 50%)",
+                    background: OVERLAYS.depthRight,
                   }}
                 />
 
@@ -167,7 +153,7 @@ export default function Reviews() {
                 <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
                   <p
                     className="mb-1 text-[1.35rem] font-semibold text-white"
-                    style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                    style={{ fontFamily: FONT_FAMILY.heading }}
                   >
                     {review.name}
                   </p>
@@ -183,7 +169,7 @@ export default function Reviews() {
               {/* ── Content Panel ── */}
               <div
                 className="flex flex-col justify-between p-7 sm:p-9 lg:p-12"
-                style={{ background: "#FAFBFC", borderLeft: "1px solid #E2E8F0" }}
+                style={{ background: COLORS.panelBg, borderLeft: `1px solid ${COLORS.panelBorder}` }}
               >
                 <div>
 
@@ -195,7 +181,7 @@ export default function Reviews() {
                     className="text-[1rem] leading-[1.92] lg:text-[1.08rem]"
                     style={{
                       color: COLORS.navy,
-                      fontFamily: "'Cormorant Garamond', serif",
+                      fontFamily: FONT_FAMILY.heading,
                     }}
                   >
                     {review.review}
@@ -205,7 +191,7 @@ export default function Reviews() {
                 {/* Bottom: counter + dots */}
                 <div
                   className="mt-8 flex items-center gap-4 border-t pt-6"
-                  style={{ borderColor: "#E2E8F0" }}
+                  style={{ borderColor: COLORS.panelBorder }}
                 >
                   <span
                     className="font-mono text-xs tracking-widest"
@@ -223,7 +209,7 @@ export default function Reviews() {
                         className="h-1.5 rounded-full transition-all duration-500"
                         style={{
                           width: i === currentIndex ? 28 : 8,
-                          background: i === currentIndex ? COLORS.teal : "#CBD5E0",
+                          background: i === currentIndex ? COLORS.teal : COLORS.panelBorder,
                         }}
                         whileHover={{ scale: 1.3 }}
                         whileTap={{ scale: 0.9 }}
@@ -237,77 +223,6 @@ export default function Reviews() {
           </AnimatePresence>
         </motion.div>
 
-        {/* ── Navigation ── */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          viewport={{ once: true }}
-          className="mt-8 flex items-center justify-center gap-5"
-        >
-          <motion.button
-            whileHover={{ scale: 1.1, backgroundColor: UI.button.primary, color: "#fff" }}
-            whileTap={{ scale: 0.92 }}
-            onClick={goPrev}
-            className="flex h-11 w-11 items-center justify-center rounded-full border transition-all"
-            style={{
-              background: UI.card.darkTransparent,
-              color: UI.text.muted,
-              borderColor: UI.border.soft,
-            }}
-            aria-label="Previous review"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </motion.button>
-
-          {/* Progress bars */}
-          <div className="flex items-center gap-3">
-            {reviews.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => handleSelect(i)}
-                className="group relative flex h-5 items-center"
-                aria-label={`Go to review ${i + 1}`}
-              >
-                <div
-                  className="h-1 overflow-hidden rounded-full transition-all duration-500"
-                  style={{
-                    width: i === currentIndex ? 52 : 14,
-                    background:
-                      i === currentIndex
-                        ? "rgba(200,217,230,0.20)"
-                        : "rgba(200,217,230,0.12)",
-                  }}
-                >
-                  {i === currentIndex && (
-                    <motion.div
-                      className="h-full rounded-full"
-                      style={{ background: UI.button.primary }}
-                      initial={{ width: "0%" }}
-                      animate={{ width: "100%" }}
-                      transition={{ duration: 5.5, ease: "linear" }}
-                    />
-                  )}
-                </div>
-              </button>
-            ))}
-          </div>
-
-          <motion.button
-            whileHover={{ scale: 1.1, backgroundColor: UI.button.primary, color: "#fff" }}
-            whileTap={{ scale: 0.92 }}
-            onClick={goNext}
-            className="flex h-11 w-11 items-center justify-center rounded-full border transition-all"
-            style={{
-              background: UI.card.darkTransparent,
-              color: UI.text.muted,
-              borderColor: UI.border.soft,
-            }}
-            aria-label="Next review"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </motion.button>
-        </motion.div>
 
       </div>
     </section>

@@ -1,27 +1,26 @@
 // lib/theme.ts
+// ─── Central Design System ─────────────────────────────────────────────────────
+// Re-exports raw constants AND provides the composed UI token object that
+// components consume.  All design tokens originate from `lib/constants/`.
 
-export const COLORS = {
-  // Main palette
-  navy: "#2F4156",
-  teal: "#567C8D",
-  sky: "#C8D9E6",
-  beige: "#F5EFEB",
-  white: "#FFFFFF",
+import { COLORS } from "@/lib/constants/colors"
+import { SHADOWS } from "@/lib/constants/shadows"
+import { RADIUS } from "@/lib/constants/radius"
+import { OVERLAYS } from "@/lib/constants/overlays"
+import { FONT_FAMILY } from "@/lib/constants/typography"
 
-  // Supporting shades
-  deepNavy: "#243447",
-  darkerNavy: "#1D2A38",
-  softNavy: "#3B5066",
+// Re-export everything so consumers can `import { COLORS, UI, SHADOWS, … } from "@/lib/theme"`
+export { COLORS } from "@/lib/constants/colors"
+export { SHADOWS } from "@/lib/constants/shadows"
+export { RADIUS } from "@/lib/constants/radius"
+export { OVERLAYS } from "@/lib/constants/overlays"
+export { FONT_FAMILY, TEXT_STYLES } from "@/lib/constants/typography"
+export { EASING, DURATION, SPRING, TRANSITION } from "@/lib/constants/animations"
+export { BREAKPOINTS } from "@/lib/constants/breakpoints"
+export { SPACING } from "@/lib/constants/spacing"
 
-  deepTeal: "#466A79",
-  softTeal: "#6E91A0",
-
-  softSky: "#D9E6EE",
-  paleSky: "#EEF5F8",
-
-  softBeige: "#FAF7F4",
-  warmBeige: "#EFE7E1",
-} as const
+// ─── Composed UI Tokens ────────────────────────────────────────────────────────
+// High-level semantic tokens that map raw values to UI concerns.
 
 export const UI = {
   section: {
@@ -54,7 +53,6 @@ export const UI = {
   },
 
   card: {
-    // light: COLORS.beige,
     light: COLORS.paleSky,
     lighter: COLORS.softBeige,
     warm: COLORS.warmBeige,
@@ -65,13 +63,16 @@ export const UI = {
 
     white: COLORS.white,
 
+    /** Light content panel (rooms, reviews, arrival, campus-preview, gallery) */
+    panel: COLORS.panelBg,
+
     dark: COLORS.navy,
-    darkSoft: "rgba(245, 239, 235, 0.08)",
-    darkMedium: "rgba(245, 239, 235, 0.12)",
-    darkStrong: "rgba(245, 239, 235, 0.18)",
+    darkSoft: OVERLAYS.darkCardSoft,
+    darkMedium: OVERLAYS.darkCardMedium,
+    darkStrong: OVERLAYS.darkCardStrong,
 
     // Backward-compatible alias
-    darkTransparent: "rgba(245, 239, 235, 0.08)",
+    darkTransparent: OVERLAYS.darkCardSoft,
   },
 
   border: {
@@ -79,12 +80,17 @@ export const UI = {
     lighter: COLORS.softSky,
     white: COLORS.white,
 
-    soft: "rgba(200, 217, 230, 0.35)",
-    medium: "rgba(200, 217, 230, 0.5)",
-    strong: "rgba(200, 217, 230, 0.72)",
+    /** Light panel border (#E2E8F0) */
+    panel: COLORS.panelBorder,
+    /** Alternate panel border (#F1F5F9) */
+    panelAlt: COLORS.panelBorderAlt,
 
-    dark: "rgba(47, 65, 86, 0.16)",
-    darkMedium: "rgba(47, 65, 86, 0.28)",
+    soft: OVERLAYS.borderSkySoft,
+    medium: OVERLAYS.borderSkyMedium,
+    strong: OVERLAYS.borderSkyStrong,
+
+    dark: OVERLAYS.borderNavy,
+    darkMedium: OVERLAYS.borderNavyMedium,
   },
 
   button: {
@@ -110,7 +116,7 @@ export const UI = {
     backgroundSoft: COLORS.softBeige,
 
     text: COLORS.navy,
-    placeholder: "rgba(47, 65, 86, 0.45)",
+    placeholder: OVERLAYS.inputPlaceholder,
 
     border: COLORS.sky,
     borderHover: COLORS.softTeal,
@@ -119,7 +125,7 @@ export const UI = {
     icon: COLORS.navy,
     iconFocus: COLORS.teal,
 
-    focusRing: "rgba(200, 217, 230, 0.9)",
+    focusRing: OVERLAYS.focusRing,
   },
 
   icon: {
@@ -135,30 +141,30 @@ export const UI = {
     text: COLORS.teal,
     border: COLORS.white,
 
-    darkBackground: "rgba(245, 239, 235, 0.08)",
+    darkBackground: OVERLAYS.darkCardSoft,
     darkText: COLORS.sky,
-    darkBorder: "rgba(200, 217, 230, 0.35)",
+    darkBorder: OVERLAYS.borderSkySoft,
   },
 
-  shadow: {
-    card: "0 32px 90px rgba(0, 0, 0, 0.28)",
-    cardSoft: "0 28px 70px rgba(0, 0, 0, 0.22)",
+  shadow: SHADOWS,
 
-    soft: "0 18px 40px rgba(47, 65, 86, 0.18)",
-    light: "0 12px 28px rgba(47, 65, 86, 0.12)",
-
-    button: "0 16px 34px rgba(47, 65, 86, 0.18)",
-
-    focus:
-      "0 0 0 4px rgba(200, 217, 230, 0.9), 0 12px 28px rgba(47, 65, 86, 0.16)",
-
-    image: "0 22px 50px rgba(47, 65, 86, 0.18)",
-  },
   radius: {
-    common: "22px",
-    rounded22: "22px",
+    common: RADIUS.lg,
+    rounded22: RADIUS.lg,
+    sm: RADIUS.sm,
+    md: RADIUS.md,
+    xl: RADIUS.xl,
+    "2xl": RADIUS["2xl"],
+    full: RADIUS.full,
   },
+
+  overlay: OVERLAYS,
+
+  font: FONT_FAMILY,
 } as const
+
+// ─── CSS Custom Properties ─────────────────────────────────────────────────────
+// Injected on <html> for Tailwind / CSS consumption.
 
 export const CSS_VARS = {
   "--color-navy": COLORS.navy,
@@ -170,5 +176,5 @@ export const CSS_VARS = {
   "--color-beige": COLORS.beige,
   "--color-soft-beige": COLORS.softBeige,
   "--color-white": COLORS.white,
-  "--radius-common": "22px",
+  "--radius-common": RADIUS.lg,
 } as const

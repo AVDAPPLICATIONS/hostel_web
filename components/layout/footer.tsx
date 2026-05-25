@@ -12,7 +12,7 @@ import {
   Sparkles,
   Heart,
 } from "lucide-react"
-import { COLORS, UI } from "@/lib/theme"
+import { COLORS, UI, SHADOWS, OVERLAYS, FONT_FAMILY } from "@/lib/theme"
 
 const InstagramIcon = (props: any) => (
   <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -75,42 +75,13 @@ export default function Footer() {
 
   return (
     <>
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-            @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
-          `,
-        }}
-      />
-
       <footer
         className="relative overflow-hidden"
-        style={{ background: UI.section.dark, fontFamily: "'DM Sans', sans-serif" }}
+        style={{ background: UI.section.dark, fontFamily: FONT_FAMILY.sans }}
       >
-        {/* Ambient glow */}
-        <div
-          className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.055]"
-          style={{ background: `radial-gradient(ellipse, ${COLORS.teal}, transparent 70%)` }}
-        />
+        {/* Ambient glow removed for seamless transition */}
 
-        {/* Top divider with centered floating badge */}
-        <div className="relative flex items-center justify-center py-10">
-          <div className="absolute inset-x-0 h-px" style={{ background: UI.border.soft }} />
-          <motion.div
-            className="relative z-10 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[10px] font-black uppercase tracking-[0.28em]"
-            style={{
-              background: UI.section.dark,
-              color: UI.text.muted,
-              border: "1px solid rgba(200,217,230,0.14)",
-              boxShadow: `0 0 0 8px ${UI.section.dark}`,
-            }}
-            animate={{ y: [0, -4, 0] }}
-            transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <Sparkles size={12} />
-            Atmiya Vidya Dham
-          </motion.div>
-        </div>
+
 
         <div className="container mx-auto max-w-7xl px-4 pb-8 md:pb-14">
 
@@ -126,12 +97,7 @@ export default function Footer() {
             >
               <div className="mb-6 flex items-center gap-3.5">
                 <motion.div
-                  className="flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl"
-                  style={{
-                    background: UI.card.light,
-                    border: "1.5px solid rgba(255,255,255,0.55)",
-                    boxShadow: "0 4px 20px rgba(0,0,0,0.18)",
-                  }}
+                  className="flex flex-shrink-0 items-center justify-center overflow-hidden"
                   whileHover={{ scale: 1.05, rotate: 2 }}
                   transition={{ type: "spring", stiffness: 280, damping: 18 }}
                 >
@@ -146,37 +112,31 @@ export default function Footer() {
 
                 <div>
                   <h3
-                    className="text-[1.55rem] font-semibold leading-none tracking-tight"
-                    style={{ color: UI.text.light, fontFamily: "'Cormorant Garamond', serif" }}
+                    className="text-[1.55rem] font-semibold leading-none tracking-wide"
+                    style={{ color: UI.text.light, fontFamily: FONT_FAMILY.heading }}
                   >
                     Atmiya Vidya Dham
                   </h3>
-                  <p
-                    className="mt-1 text-[9px] font-black uppercase tracking-[0.28em]"
-                    style={{ color: UI.text.muted }}
-                  >
-                    Student Residence · Est. 1989
-                  </p>
                 </div>
               </div>
 
               <p
                 className="mb-6 max-w-[340px] text-sm leading-[1.85]"
-                style={{ color: UI.text.muted }}
+                style={{ color: OVERLAYS.textWhite75 }}
               >
                 A secure, value-driven environment for students — built on care, community,
                 and purpose. Your home away from home.
               </p>
 
               <motion.button
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{ scale: 1.04, y: -2 }}
+                whileTap={{ scale: 0.96 }}
                 onClick={() => scrollToSection("#contact")}
                 className="group mb-8 flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-black"
                 style={{
-                  background: "rgba(86,124,141,0.14)",
+                  background: OVERLAYS.tealSubtle,
                   color: COLORS.sky,
-                  border: "1px solid rgba(86,124,141,0.28)",
+                  border: `1px solid ${OVERLAYS.tealBorder}`,
                 }}
               >
                 Enquire Now
@@ -197,13 +157,13 @@ export default function Footer() {
                       style={{
                         background: UI.card.darkSoft,
                         borderColor: UI.border.soft,
-                        color: UI.text.muted,
+                        color: OVERLAYS.textWhite75,
                       }}
                       whileHover={{
                         y: -3,
                         scale: 1.08,
                         backgroundColor: COLORS.teal,
-                        color: "#fff",
+                        color: COLORS.white,
                         borderColor: COLORS.teal,
                       }}
                       whileTap={{ scale: 0.92 }}
@@ -229,16 +189,16 @@ export default function Footer() {
                     <motion.button
                       onClick={() => scrollToSection(link.href)}
                       className="group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium"
-                      style={{ color: UI.text.muted }}
+                      style={{ color: OVERLAYS.textWhite75 }}
                       whileHover={{
                         x: 4,
                         color: UI.text.light,
-                        backgroundColor: "rgba(200,217,230,0.05)",
+                        backgroundColor: OVERLAYS.hoverLightBg,
                       }}
                     >
                       <span
                         className="flex-shrink-0 font-mono text-[9px] font-black tracking-widest"
-                        style={{ color: "rgba(86,124,141,0.45)" }}
+                        style={{ color: OVERLAYS.tealMuted }}
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
@@ -279,9 +239,9 @@ export default function Footer() {
                   <div
                     className="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl"
                     style={{
-                      background: "rgba(86,124,141,0.12)",
+                      background: OVERLAYS.tealLight,
                       color: COLORS.teal,
-                      border: "1px solid rgba(86,124,141,0.20)",
+                      border: `1px solid ${OVERLAYS.tealBorderLight}`,
                     }}
                   >
                     <MapPin className="h-4 w-4" />
@@ -295,7 +255,7 @@ export default function Footer() {
                     </p>
                     <p
                       className="text-[12px] leading-[1.7]"
-                      style={{ color: UI.text.muted }}
+                      style={{ color: OVERLAYS.textWhite75 }}
                     >
                       {CONTACT.address}
                     </p>
@@ -328,11 +288,11 @@ export default function Footer() {
                   <motion.li
                     key={service}
                     className="flex cursor-default items-center gap-3 rounded-lg px-3 py-2 text-sm"
-                    style={{ color: UI.text.muted }}
+                    style={{ color: OVERLAYS.textWhite75 }}
                     whileHover={{
                       x: 4,
                       color: UI.text.light,
-                      backgroundColor: "rgba(200,217,230,0.04)",
+                      backgroundColor: OVERLAYS.borderSkySubtle,
                     }}
                   >
                     <span
@@ -357,7 +317,7 @@ export default function Footer() {
             style={{ borderColor: UI.border.soft }}
           >
             <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-              <p className="text-xs tracking-wide" style={{ color: UI.text.muted }}>
+              <p className="text-xs tracking-wide" style={{ color: OVERLAYS.textWhite75 }}>
                 © {new Date().getFullYear()} Atmiya Vidya Dham. All rights reserved.
               </p>
 
@@ -365,8 +325,8 @@ export default function Footer() {
                 className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.22em]"
                 style={{
                   background: UI.card.darkSoft,
-                  color: UI.text.muted,
-                  border: "1px solid rgba(200,217,230,0.10)",
+                  color: OVERLAYS.textWhite75,
+                  border: `1px solid ${OVERLAYS.borderSkyGlow}`,
                 }}
               >
                 Crafted with
@@ -411,15 +371,15 @@ function FooterContactLink({
     <motion.a
       href={href}
       className="flex items-start gap-3 text-sm transition-all"
-      style={{ color: UI.text.muted }}
+      style={{ color: OVERLAYS.textWhite75 }}
       whileHover={{ x: 4, color: UI.text.light }}
     >
       <div
         className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl"
         style={{
-          background: "rgba(86,124,141,0.12)",
+          background: OVERLAYS.tealLight,
           color: COLORS.teal,
-          border: "1px solid rgba(86,124,141,0.20)",
+          border: `1px solid ${OVERLAYS.tealBorderLight}`,
         }}
       >
         <Icon className="h-4 w-4" />

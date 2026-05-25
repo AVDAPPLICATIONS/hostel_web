@@ -2,6 +2,7 @@
 
 import { useRef, useEffect } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
+import { UI, FONT_FAMILY } from "@/lib/theme"
 
 export default function VideoLaunch() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -46,8 +47,8 @@ export default function VideoLaunch() {
   return (
     <div
       ref={containerRef}
-      className="relative h-[400vh] w-full bg-[#0F172A]"
-      style={{ zIndex: 100 }}
+      className="relative h-[400vh] w-full"
+      style={{ zIndex: 100, background: UI.section.dark }}
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center pointer-events-none">
         <motion.div
@@ -108,7 +109,7 @@ export default function VideoLaunch() {
             </h2>
             <h1
               className="text-white text-6xl md:text-8xl font-bold tracking-tight"
-              style={{ fontFamily: "'Cormorant Garamond', serif" }}
+              style={{ fontFamily: FONT_FAMILY.heading }}
             >
               Experience the Journey
             </h1>

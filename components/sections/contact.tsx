@@ -25,23 +25,30 @@ import {
   Lightbulb,
 } from "lucide-react"
 import confetti from "canvas-confetti"
-import { COLORS, UI } from "@/lib/theme"
+import { COLORS, UI, OVERLAYS, SHADOWS, FONT_FAMILY } from "@/lib/theme"
 import ScrollShineText from "@/components/shared/scroll-shine-text"
+import { AnimatedButton } from "@/components/ui/animated-button"
 
 // ── Static data ───────────────────────────────────────────
+const steps = [
+  { id: 1, title: "Personal Info" },
+  { id: 2, title: "Location" },
+  { id: 3, title: "Academic Details" },
+]
+
 const fields = [
-  { name: "firstName",      label: "First Name",        placeholder: "Rahul",            required: true, icon: User },
-  { name: "middleName",     label: "Middle Name",       placeholder: "Father Name",                      icon: User },
-  { name: "lastName",       label: "Last Name",         placeholder: "Patel",                            icon: User },
-  { name: "contactNo",      label: "Contact No",        placeholder: "+91 98765 43210",                  icon: Phone },
-  { name: "fatherContactNo",label: "Father Contact No", placeholder: "+91 98765 43210",                  icon: Phone },
-  { name: "state",          label: "State",             placeholder: "Select State",                     icon: Building2 },
-  { name: "district",       label: "District",          placeholder: "Select District",                  icon: Building2 },
-  { name: "city",           label: "City",              placeholder: "Enter or Select City",             icon: MapPin },
-  { name: "school",         label: "College / School",  placeholder: "Select College",                   icon: GraduationCap },
-  { name: "course",         label: "Course",            placeholder: "B.Tech",                           icon: BookOpen },
-  { name: "semester",       label: "Semester",          placeholder: "Select Semester",                  icon: CalendarDays },
-  { name: "reference",      label: "Reference",         placeholder: "Friend, Family, etc.",             icon: Users },
+  { name: "firstName", label: "First Name", placeholder: "Rahul", required: true, icon: User },
+  { name: "middleName", label: "Middle Name", placeholder: "Father Name", icon: User },
+  { name: "lastName", label: "Last Name", placeholder: "Patel", icon: User },
+  { name: "contactNo", label: "Contact No", placeholder: "+91 98765 43210", icon: Phone },
+  { name: "fatherContactNo", label: "Father Contact No", placeholder: "+91 98765 43210", icon: Phone },
+  { name: "state", label: "State", placeholder: "Select State", icon: Building2 },
+  { name: "district", label: "District", placeholder: "Select District", icon: Building2 },
+  { name: "city", label: "City", placeholder: "Enter or Select City", icon: MapPin },
+  { name: "school", label: "College / School", placeholder: "Select College", icon: GraduationCap },
+  { name: "course", label: "Course", placeholder: "B.Tech", icon: BookOpen },
+  { name: "semester", label: "Semester", placeholder: "Select Semester", icon: CalendarDays },
+  { name: "reference", label: "Reference", placeholder: "Friend, Family, etc.", icon: Users },
 ] as const
 
 const collegeOptions = [
@@ -82,26 +89,24 @@ const buildSelectStyles = (isFocused: boolean) => ({
   control: (base: any, state: any) => ({
     ...base,
     minHeight: "52px",
-    borderRadius: "0.75rem",
-    background: "#fff",
+    borderRadius: UI.radius.md,
+    background: COLORS.white,
     border: state.isFocused ? `1.5px solid ${UI.button.primary}` : "1.5px solid transparent",
-    boxShadow: state.isFocused
-      ? `0 0 0 4px rgba(200,217,230,0.85), 0 4px 20px rgba(0,0,0,0.03)`
-      : "0 2px 12px rgba(0,0,0,0.04)",
+    boxShadow: state.isFocused ? SHADOWS.inputFocus : SHADOWS.inputRest,
     paddingLeft: "2.6rem",
     transition: "all 0.25s ease",
     cursor: "pointer",
     "&:hover": { borderColor: state.isFocused ? UI.button.primary : "transparent" },
   }),
   valueContainer: (base: any) => ({ ...base, padding: "0 8px" }),
-  input:        (base: any) => ({ ...base, fontSize: "15px", color: UI.text.dark, margin: 0, padding: 0 }),
-  singleValue:  (base: any) => ({ ...base, fontSize: "15px", color: UI.text.dark }),
-  placeholder:  (base: any) => ({ ...base, color: "#94a3b8", fontSize: "15px" }),
-  menu:         (base: any) => ({
-    ...base, borderRadius: "0.75rem", boxShadow: "0 12px 40px rgba(0,0,0,0.12)",
+  input: (base: any) => ({ ...base, fontSize: "15px", color: UI.text.dark, margin: 0, padding: 0 }),
+  singleValue: (base: any) => ({ ...base, fontSize: "15px", color: UI.text.dark }),
+  placeholder: (base: any) => ({ ...base, color: "#94a3b8", fontSize: "15px" }),
+  menu: (base: any) => ({
+    ...base, borderRadius: UI.radius.md, boxShadow: SHADOWS.menuDropdown,
     overflow: "hidden", border: "none", zIndex: 50,
   }),
-  option:       (base: any, state: any) => ({
+  option: (base: any, state: any) => ({
     ...base,
     background: state.isSelected ? UI.button.primary : state.isFocused ? "#f1f5f9" : "white",
     color: state.isSelected ? "white" : UI.text.dark,
@@ -170,14 +175,13 @@ const FormInput = ({
             placeholder={placeholder} value={value}
             onChange={(e) => onChange(e.target.value)}
             onFocus={onFocus} onBlur={onBlur}
-            className="w-full rounded-xl py-[14px] pl-12 pr-4 text-[15px] outline-none transition-all duration-250 placeholder:text-slate-400"
+            className="w-full py-[14px] pl-12 pr-4 text-[15px] outline-none transition-all duration-250 placeholder:text-slate-400"
             style={{
-              background: "#fff",
+              borderRadius: UI.radius.md,
+              background: COLORS.white,
               color: UI.text.dark,
               border: `1.5px solid ${isFocused ? UI.button.primary : "transparent"}`,
-              boxShadow: isFocused
-                ? "0 0 0 4px rgba(200,217,230,0.85), 0 4px 20px rgba(0,0,0,0.03)"
-                : "0 2px 12px rgba(0,0,0,0.04)",
+              boxShadow: isFocused ? SHADOWS.inputFocus : SHADOWS.inputRest,
             }}
           />
         )}
@@ -188,10 +192,10 @@ const FormInput = ({
 
 // ── Benefits shown in the left panel ─────────────────────
 const benefits = [
-  { icon: ShieldCheck,    text: "Safe & supervised 24/7 environment" },
+  { icon: ShieldCheck, text: "Safe & supervised 24/7 environment" },
   { icon: HeartHandshake, text: "Mentorship & spiritual guidance" },
-  { icon: Lightbulb,      text: "Academic focus with 14+ amenities" },
-  { icon: Star,           text: "500+ students, 5-star rated" },
+  { icon: Lightbulb, text: "Academic focus with 14+ amenities" },
+  { icon: Star, text: "500+ students, 5-star rated" },
 ]
 
 // ── Main component ────────────────────────────────────────
@@ -203,13 +207,24 @@ export default function Contact() {
     city: "", district: "", state: "",
     school: "", course: "", semester: "", reference: "",
   })
-  const [isSubmitting, setIsSubmitting]   = useState(false)
-  const [submitted,    setSubmitted]      = useState(false)
-  const [focusedField, setFocusedField]   = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [focusedField, setFocusedField] = useState<string | null>(null)
   const [districtsList, setDistrictsList] = useState<string[]>([])
-  const [citiesList,    setCitiesList]    = useState<string[]>([])
+  const [citiesList, setCitiesList] = useState<string[]>([])
+  const [currentStep, setCurrentStep] = useState(1)
+  const totalSteps = 3
 
   const statesList = Object.keys(indianGeoData).sort()
+
+  const nextStep = () => {
+    if (currentStep === 1 && !formData.firstName.trim()) {
+      alert("Please enter your First Name")
+      return
+    }
+    setCurrentStep((prev) => Math.min(prev + 1, totalSteps))
+  }
+  const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1))
 
   useEffect(() => { setMounted(true) }, [])
 
@@ -245,16 +260,21 @@ export default function Contact() {
       scalar: 1.2,
     })
     setTimeout(() => {
-      confetti({ particleCount: 55, angle: 65, spread: 52, origin: { x: 0.08, y: 0.62 }, colors: [COLORS.teal, COLORS.sky, "#fff"] })
+      confetti({ particleCount: 55, angle: 65, spread: 52, origin: { x: 0.08, y: 0.62 }, colors: [COLORS.teal, COLORS.sky, COLORS.white] })
       confetti({ particleCount: 55, angle: 115, spread: 52, origin: { x: 0.92, y: 0.62 }, colors: [COLORS.navy, COLORS.teal, COLORS.sky] })
     }, 250)
     setTimeout(() => {
-      confetti({ particleCount: 40, spread: 120, gravity: 0.65, origin: { y: 0.2 }, colors: [COLORS.sky, "#fff", COLORS.beige] })
+      confetti({ particleCount: 40, spread: 120, gravity: 0.65, origin: { y: 0.2 }, colors: [COLORS.sky, COLORS.white, COLORS.beige] })
     }, 650)
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (e?: React.FormEvent | React.MouseEvent) => {
+    if (e && e.preventDefault) e.preventDefault()
+    if (isSubmitting || submitted) return
+    if (currentStep < totalSteps) {
+      nextStep()
+      return
+    }
     setIsSubmitting(true)
     await new Promise((r) => setTimeout(r, 1800))
     setIsSubmitting(false)
@@ -262,6 +282,7 @@ export default function Contact() {
     fireConfetti()
     setTimeout(() => {
       setSubmitted(false)
+      setCurrentStep(1)
       const msg = "Thank you for your enquiry. Our team will contact you shortly."
       const phone = formData.fatherContactNo.replace(/\D/g, "")
       window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank")
@@ -276,11 +297,9 @@ export default function Contact() {
     <section
       id="contact"
       className="relative overflow-hidden py-24 md:py-36"
-      style={{ background: UI.section.dark, fontFamily: "'DM Sans', sans-serif" }}
+      style={{ background: UI.section.dark, fontFamily: FONT_FAMILY.sans }}
     >
       <div className="container mx-auto max-w-7xl px-4">
-
-        {/* ── Header ── */}
         <motion.div
           initial={{ opacity: 0, y: 36 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -288,20 +307,10 @@ export default function Contact() {
           viewport={{ once: true }}
           className="mb-14 text-center"
         >
-          <motion.div
-            className="mb-5 inline-flex items-center gap-2 rounded-full px-5 py-2 text-[10px] font-bold uppercase tracking-[0.28em]"
-            style={{ background: UI.card.darkSoft, color: UI.text.muted, border: "1px solid rgba(200,217,230,0.12)" }}
-            animate={{ y: [0, -5, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <Sparkles size={13} />
-            Student Enquiry
-          </motion.div>
-
           <ScrollShineText
             as="h2"
             className="block justify-center text-center text-5xl font-semibold leading-[1.05] md:text-7xl"
-            style={{ color: UI.text.light, fontFamily: "'Cormorant Garamond', serif" }}
+            style={{ color: UI.text.light, fontFamily: FONT_FAMILY.heading }}
           >
             Enquire Now
           </ScrollShineText>
@@ -314,104 +323,21 @@ export default function Contact() {
           </p>
         </motion.div>
 
-        {/* ── Two-column layout ── */}
-        <div className="mx-auto grid max-w-6xl items-start gap-6 lg:grid-cols-[5fr_7fr]">
-
-          {/* ── Left: Info Panel ── */}
-          <motion.div
-            initial={{ opacity: 0, x: -32 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true }}
-            className="overflow-hidden rounded-[2rem] p-8 lg:sticky lg:top-24 lg:p-10"
-            style={{
-              background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(200,217,230,0.12)",
-              backdropFilter: "blur(12px)",
-            }}
-          >
-            <p
-              className="mb-3 text-[10px] font-black uppercase tracking-[0.28em]"
-              style={{ color: UI.text.accent }}
-            >
-              Admissions Open
-            </p>
-
-            <h3
-              className="mb-4 text-3xl font-semibold leading-[1.12] md:text-4xl"
-              style={{ color: "#fff", fontFamily: "'Cormorant Garamond', serif" }}
-            >
-              Begin Your Chapter at AVD
-            </h3>
-
-            <p
-              className="mb-8 text-sm leading-[1.85]"
-              style={{ color: COLORS.sky, opacity: 0.75 }}
-            >
-              The right environment shapes the right future. Join hundreds of
-              students who found their academic home — and a lifelong family —
-              at Atmiya Vidya Dham.
-            </p>
-
-            {/* Benefits */}
-            <div className="mb-8 space-y-3">
-              {benefits.map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-center gap-3">
-                  <div
-                    className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg"
-                    style={{ background: "rgba(86,124,141,0.18)", border: "1px solid rgba(86,124,141,0.25)" }}
-                  >
-                    <Icon className="h-4 w-4" style={{ color: COLORS.sky }} />
-                  </div>
-                  <span className="text-[13px] font-medium" style={{ color: COLORS.sky, opacity: 0.85 }}>
-                    {text}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Stats */}
-            <div
-              className="grid grid-cols-2 gap-3 rounded-2xl p-4"
-              style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}
-            >
-              {[
-                { value: "500+",  label: "Happy Students" },
-                { value: "14+",   label: "Amenities" },
-                { value: "5 ★",   label: "Alumni Rating" },
-                { value: "24/7",  label: "Support" },
-              ].map(({ value, label }) => (
-                <div key={label} className="text-center">
-                  <p
-                    className="text-xl font-black md:text-2xl"
-                    style={{ color: "#fff", fontFamily: "'Cormorant Garamond', serif" }}
-                  >
-                    {value}
-                  </p>
-                  <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-wider" style={{ color: COLORS.sky, opacity: 0.6 }}>
-                    {label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* ── Right: Form Card ── */}
+        <div className="mx-auto grid max-w-6xl items-start gap-6">
           <motion.div
             initial={{ opacity: 0, x: 32 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.75, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             viewport={{ once: true }}
-            className="overflow-hidden rounded-[2rem] p-1"
-            style={{ background: UI.card.soft, boxShadow: "0 40px 100px rgba(0,0,0,0.38)" }}
+            className="overflow-hidden p-1"
+            style={{ borderRadius: UI.radius.common, background: UI.card.soft, boxShadow: SHADOWS.showcaseDeep }}
           >
             <div
-              className="rounded-[1.75rem] p-6 md:p-8"
-              style={{ background: UI.card.light, border: `1px solid ${UI.border.white}` }}
+              className="p-6 md:p-8"
+              style={{ borderRadius: UI.radius.common, background: UI.card.light, border: `1px solid ${UI.border.white}` }}
             >
               <AnimatePresence mode="wait">
                 {submitted ? (
-                  /* ── Success State ── */
                   <motion.div
                     key="success"
                     className="relative flex min-h-[480px] flex-col items-center justify-center overflow-hidden px-6 text-center"
@@ -420,19 +346,17 @@ export default function Contact() {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.35 }}
                   >
-                    {/* Radial background glow */}
                     <motion.div
                       className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
                       style={{
                         width: 400, height: 400,
-                        background: `radial-gradient(circle, rgba(86,124,141,0.13) 0%, transparent 70%)`,
+                        background: `radial-gradient(circle, ${OVERLAYS.tealSubtle} 0%, transparent 70%)`,
                       }}
                       initial={{ scale: 0, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ duration: 1.1, ease: "easeOut" }}
                     />
 
-                    {/* SVG: ring + checkmark */}
                     <motion.div
                       className="relative mb-7"
                       initial={{ scale: 0.4, opacity: 0 }}
@@ -440,10 +364,7 @@ export default function Contact() {
                       transition={{ type: "spring", stiffness: 220, damping: 16, delay: 0.1 }}
                     >
                       <svg viewBox="0 0 100 100" width="112" height="112">
-                        {/* Soft inner fill */}
-                        <circle cx="50" cy="50" r="44" fill="rgba(86,124,141,0.09)" />
-
-                        {/* Glow ring (blurred, fades out as main ring draws) */}
+                        <circle cx="50" cy="50" r="44" fill={OVERLAYS.tealSoft} />
                         <motion.circle
                           cx="50" cy="50" r="44"
                           fill="none"
@@ -457,8 +378,6 @@ export default function Contact() {
                           animate={{ strokeDashoffset: 0, opacity: 0 }}
                           transition={{ duration: 0.95, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
                         />
-
-                        {/* Main ring */}
                         <motion.circle
                           cx="50" cy="50" r="44"
                           fill="none"
@@ -471,8 +390,6 @@ export default function Contact() {
                           animate={{ strokeDashoffset: 0 }}
                           transition={{ duration: 0.95, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
                         />
-
-                        {/* Checkmark */}
                         <motion.path
                           d="M30 51 L43 64 L70 37"
                           fill="none"
@@ -486,33 +403,11 @@ export default function Contact() {
                           transition={{ duration: 0.48, delay: 0.95, ease: "easeOut" }}
                         />
                       </svg>
-
-                      {/* Sparkle burst dots */}
-                      {[0, 45, 90, 135, 180, 225, 270, 315].map((deg, i) => (
-                        <motion.div
-                          key={deg}
-                          className="pointer-events-none absolute rounded-full"
-                          style={{
-                            width: 6, height: 6,
-                            background: i % 2 === 0 ? COLORS.teal : COLORS.sky,
-                            left: "50%", top: "50%",
-                          }}
-                          initial={{ x: -3, y: -3, scale: 0, opacity: 0 }}
-                          animate={{
-                            x: Math.cos((deg * Math.PI) / 180) * 70 - 3,
-                            y: Math.sin((deg * Math.PI) / 180) * 70 - 3,
-                            scale: [0, 1.5, 0],
-                            opacity: [0, 1, 0],
-                          }}
-                          transition={{ delay: 1.1 + i * 0.04, duration: 0.55, ease: "easeOut" }}
-                        />
-                      ))}
                     </motion.div>
 
-                    {/* Heading */}
                     <motion.h3
                       className="text-3xl font-black md:text-4xl"
-                      style={{ color: UI.text.dark, fontFamily: "'Cormorant Garamond', serif" }}
+                      style={{ color: UI.text.dark, fontFamily: FONT_FAMILY.heading }}
                       initial={{ opacity: 0, y: 18 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 1.2, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -520,7 +415,6 @@ export default function Contact() {
                       Enquiry Submitted!
                     </motion.h3>
 
-                    {/* Subtext */}
                     <motion.p
                       className="mt-2 max-w-[260px] text-sm leading-relaxed"
                       style={{ color: UI.text.accent }}
@@ -530,30 +424,8 @@ export default function Contact() {
                     >
                       Our team will contact you within 24 hours.
                     </motion.p>
-
-                    {/* WhatsApp redirect pill */}
-                    <motion.div
-                      className="mt-6 flex items-center gap-2 rounded-full px-5 py-2 text-[11px] font-black uppercase tracking-[0.18em]"
-                      style={{
-                        background: "rgba(86,124,141,0.10)",
-                        color: COLORS.teal,
-                        border: "1px solid rgba(86,124,141,0.22)",
-                      }}
-                      initial={{ opacity: 0, scale: 0.88 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 1.55, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                    >
-                      <motion.span
-                        className="inline-block h-2 w-2 rounded-full"
-                        style={{ background: COLORS.teal }}
-                        animate={{ scale: [1, 1.5, 1], opacity: [1, 0.4, 1] }}
-                        transition={{ duration: 1.1, repeat: Infinity, ease: "easeInOut" }}
-                      />
-                      Redirecting to WhatsApp…
-                    </motion.div>
                   </motion.div>
                 ) : (
-                  /* ── Form ── */
                   <motion.form
                     key="form"
                     onSubmit={handleSubmit}
@@ -562,117 +434,199 @@ export default function Contact() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                   >
-                    {/* Personal Info group */}
-                    <div>
-                      <p className="mb-4 text-[11px] font-black uppercase tracking-[0.24em]" style={{ color: UI.text.accent }}>
-                        Personal Information
-                      </p>
-                      <div className="grid gap-x-5 gap-y-4 sm:grid-cols-2">
-                        {fields.slice(0, 5).map((field, i) => {
-                          return (
-                            <FormInput
-                              key={field.name} name={field.name} label={field.label}
-                              placeholder={field.placeholder} required={"required" in field ? (field as any).required : false}
-                              icon={field.icon} index={i}
-                              value={formData[field.name as keyof typeof formData]}
-                              isFocused={focusedField === field.name}
-                              onChange={(v) => handleValueChange(field.name, v)}
-                              onFocus={() => setFocusedField(field.name)}
-                              onBlur={() => setFocusedField(null)}
-                            />
-                          )
-                        })}
-                      </div>
+                    <div className="mb-10 flex items-center justify-between relative px-2">
+                      <div className="absolute left-0 top-1/2 h-0.5 w-full -translate-y-1/2" style={{ background: UI.border.lighter, zIndex: 0 }} />
+                      <div className="absolute left-0 top-1/2 h-0.5 -translate-y-1/2 transition-all duration-500 ease-in-out" style={{ width: `${((currentStep - 1) / (totalSteps - 1)) * 100}%`, background: UI.button.primary, zIndex: 0 }} />
+                      
+                      {steps.map((step) => (
+                        <div key={step.id} className="relative z-10 flex flex-col items-center">
+                          <motion.div
+                            initial={false}
+                            animate={{
+                              backgroundColor: currentStep >= step.id ? UI.button.primary : COLORS.white,
+                              borderColor: currentStep >= step.id ? UI.button.primary : UI.border.lighter,
+                              color: currentStep >= step.id ? COLORS.white : "#94a3b8",
+                              boxShadow: currentStep >= step.id ? SHADOWS.buttonPrimary : "none",
+                            }}
+                            className="flex h-10 w-10 items-center justify-center rounded-full border-2 text-[15px] font-bold transition-colors duration-300"
+                          >
+                            {step.id}
+                          </motion.div>
+                          <span
+                            className="absolute -bottom-7 w-max text-[11px] font-bold uppercase tracking-wider transition-colors duration-300 hidden sm:block"
+                            style={{ color: currentStep >= step.id ? UI.text.dark : UI.text.muted }}
+                          >
+                            {step.title}
+                          </span>
+                        </div>
+                      ))}
                     </div>
 
-                    {/* Divider */}
-                    <div className="h-px w-full" style={{ background: UI.border.lighter }} />
+                    <div className="mt-8 overflow-visible px-1 pb-2 min-h-[360px]">
+                      <AnimatePresence mode="wait">
+                        {currentStep === 1 && (
+                          <motion.div
+                            key="step1"
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <p className="mb-4 text-[11px] font-black uppercase tracking-[0.24em]" style={{ color: UI.text.accent }}>
+                              Personal Information
+                            </p>
+                            <div className="grid gap-x-5 gap-y-4 sm:grid-cols-2">
+                              {fields.slice(0, 5).map((field, i) => (
+                                <FormInput
+                                  key={field.name} name={field.name} label={field.label}
+                                  placeholder={field.placeholder} required={"required" in field ? (field as any).required : false}
+                                  icon={field.icon} index={i}
+                                  value={formData[field.name as keyof typeof formData]}
+                                  isFocused={focusedField === field.name}
+                                  onChange={(v) => handleValueChange(field.name, v)}
+                                  onFocus={() => setFocusedField(field.name)}
+                                  onBlur={() => setFocusedField(null)}
+                                />
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
 
-                    {/* Location group */}
-                    <div>
-                      <p className="mb-4 text-[11px] font-black uppercase tracking-[0.24em]" style={{ color: UI.text.accent }}>
-                        Location
-                      </p>
-                      <div className="grid gap-x-5 gap-y-4 sm:grid-cols-2">
-                        {fields.slice(5, 8).map((field, i) => {
-                          let opts: string[] | undefined
-                          let disabled = false
-                          if (field.name === "state")    { opts = statesList; }
-                          if (field.name === "district") { opts = districtsList; disabled = !formData.state }
-                          if (field.name === "city")     { opts = citiesList;    disabled = !formData.district }
-                          return (
-                            <FormInput
-                              key={field.name} name={field.name} label={field.label}
-                              placeholder={field.placeholder} icon={field.icon} index={5 + i}
-                              value={formData[field.name as keyof typeof formData]}
-                              isFocused={focusedField === field.name}
-                              onChange={(v) => handleValueChange(field.name, v)}
-                              onFocus={() => setFocusedField(field.name)}
-                              onBlur={() => setFocusedField(null)}
-                              options={opts} disabled={disabled} isCreatable
-                            />
-                          )
-                        })}
-                      </div>
+                        {currentStep === 2 && (
+                          <motion.div
+                            key="step2"
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <p className="mb-4 text-[11px] font-black uppercase tracking-[0.24em]" style={{ color: UI.text.accent }}>
+                              Location
+                            </p>
+                            <div className="grid gap-x-5 gap-y-4 sm:grid-cols-2">
+                              {fields.slice(5, 8).map((field, i) => {
+                                let opts: string[] | undefined
+                                let disabled = false
+                                if (field.name === "state") { opts = statesList; }
+                                if (field.name === "district") { opts = districtsList; disabled = !formData.state }
+                                if (field.name === "city") { opts = citiesList; disabled = !formData.district }
+                                return (
+                                  <FormInput
+                                    key={field.name} name={field.name} label={field.label}
+                                    placeholder={field.placeholder} icon={field.icon} index={i}
+                                    value={formData[field.name as keyof typeof formData]}
+                                    isFocused={focusedField === field.name}
+                                    onChange={(v) => handleValueChange(field.name, v)}
+                                    onFocus={() => setFocusedField(field.name)}
+                                    onBlur={() => setFocusedField(null)}
+                                    options={opts} disabled={disabled} isCreatable
+                                  />
+                                )
+                              })}
+                            </div>
+                          </motion.div>
+                        )}
+
+                        {currentStep === 3 && (
+                          <motion.div
+                            key="step3"
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <p className="mb-4 text-[11px] font-black uppercase tracking-[0.24em]" style={{ color: UI.text.accent }}>
+                              Academic Details
+                            </p>
+                            <div className="grid gap-x-5 gap-y-4 sm:grid-cols-2">
+                              {fields.slice(8).map((field, i) => {
+                                let opts: string[] | undefined
+                                let isCreatable = false
+                                if (field.name === "school") { opts = collegeOptions; isCreatable = true }
+                                if (field.name === "course") { opts = courseOptions; isCreatable = true }
+                                if (field.name === "semester") { opts = semesterOptions }
+                                if (field.name === "reference") { opts = referenceOptions; isCreatable = true }
+                                return (
+                                  <FormInput
+                                    key={field.name} name={field.name} label={field.label}
+                                    placeholder={field.placeholder} icon={field.icon} index={i}
+                                    value={formData[field.name as keyof typeof formData]}
+                                    isFocused={focusedField === field.name}
+                                    onChange={(v) => handleValueChange(field.name, v)}
+                                    onFocus={() => setFocusedField(field.name)}
+                                    onBlur={() => setFocusedField(null)}
+                                    options={opts} isCreatable={isCreatable}
+                                  />
+                                )
+                              })}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
 
-                    {/* Divider */}
-                    <div className="h-px w-full" style={{ background: UI.border.lighter }} />
-
-                    {/* Academic group */}
-                    <div>
-                      <p className="mb-4 text-[11px] font-black uppercase tracking-[0.24em]" style={{ color: UI.text.accent }}>
-                        Academic Details
-                      </p>
-                      <div className="grid gap-x-5 gap-y-4 sm:grid-cols-2">
-                        {fields.slice(8).map((field, i) => {
-                          let opts: string[] | undefined
-                          let isCreatable = false
-                          if (field.name === "school")    { opts = collegeOptions;   isCreatable = true }
-                          if (field.name === "course")    { opts = courseOptions;    isCreatable = true }
-                          if (field.name === "semester")  { opts = semesterOptions }
-                          if (field.name === "reference") { opts = referenceOptions; isCreatable = true }
-                          return (
-                            <FormInput
-                              key={field.name} name={field.name} label={field.label}
-                              placeholder={field.placeholder} icon={field.icon} index={8 + i}
-                              value={formData[field.name as keyof typeof formData]}
-                              isFocused={focusedField === field.name}
-                              onChange={(v) => handleValueChange(field.name, v)}
-                              onFocus={() => setFocusedField(field.name)}
-                              onBlur={() => setFocusedField(null)}
-                              options={opts} isCreatable={isCreatable}
-                            />
-                          )
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Submit */}
-                    <motion.button
-                      type="submit"
-                      disabled={isSubmitting}
-                      whileHover={{ scale: 1.015, y: -2 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="group flex w-full items-center justify-center gap-3 rounded-xl py-4 text-[15px] font-black transition-all disabled:cursor-not-allowed disabled:opacity-70 md:py-[18px]"
-                      style={{
-                        background: UI.button.primary,
-                        color: "#fff",
-                        boxShadow: "0 12px 32px rgba(86,124,141,0.38)",
-                      }}
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="animate-spin" size={20} />
-                          Processing…
-                        </>
-                      ) : (
-                        <>
-                          Submit Enquiry
-                          <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1" />
-                        </>
+                    <div className="mt-8 flex gap-4 pt-4">
+                      {currentStep > 1 && (
+                        <AnimatedButton
+                          type="button"
+                          onClick={prevStep}
+                          whileHover={{ scale: 1.04, y: -2 }}
+                          whileTap={{ scale: 0.96 }}
+                          className="flex w-full items-center justify-center gap-3 rounded-full py-4 text-[15px] font-black transition-all md:py-[18px]"
+                          style={{
+                            background: COLORS.white,
+                            color: UI.button.primary,
+                            border: `2px solid ${UI.button.primary}`,
+                          }}
+                        >
+                          Back
+                        </AnimatedButton>
                       )}
-                    </motion.button>
+                      
+                      {currentStep < totalSteps ? (
+                        <AnimatedButton
+                          type="button"
+                          onClick={nextStep}
+                          whileHover={{ scale: 1.04, y: -2, backgroundColor: UI.button.primaryHover }}
+                          whileTap={{ scale: 0.96 }}
+                          className="group flex w-full items-center justify-center gap-3 rounded-full py-4 text-[15px] font-black transition-all md:py-[18px]"
+                          style={{
+                            background: UI.button.primary,
+                            color: COLORS.white,
+                            boxShadow: SHADOWS.buttonPrimary,
+                          }}
+                        >
+                          Next Step
+                          <ArrowRight size={20} className="transition-transform duration-300" />
+                        </AnimatedButton>
+                      ) : (
+                        <AnimatedButton
+                          type="submit"
+                          onClick={handleSubmit}
+                          disabled={isSubmitting}
+                          whileHover={{ scale: 1.04, y: -2, backgroundColor: UI.button.primaryHover }}
+                          whileTap={{ scale: 0.96 }}
+                          className="group flex w-full items-center justify-center gap-3 rounded-full py-4 text-[15px] font-black transition-all disabled:cursor-not-allowed disabled:opacity-70 md:py-[18px]"
+                          style={{
+                            background: UI.button.primary,
+                            color: COLORS.white,
+                            boxShadow: SHADOWS.buttonPrimary,
+                          }}
+                        >
+                          {isSubmitting ? (
+                            <>
+                              <Loader2 className="animate-spin" size={20} />
+                              Processing…
+                            </>
+                          ) : (
+                            <>
+                              Submit Enquiry
+                              <ArrowRight size={20} className="transition-transform duration-300" />
+                            </>
+                          )}
+                        </AnimatedButton>
+                      )}
+                    </div>
                   </motion.form>
                 )}
               </AnimatePresence>

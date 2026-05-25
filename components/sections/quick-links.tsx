@@ -1,9 +1,10 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { MapPin, Crown, Landmark, ArrowRight, Sparkles } from "lucide-react"
-import { COLORS, UI } from "@/lib/theme"
+import { MapPin, Crown, Landmark, ArrowRight } from "lucide-react"
+import { COLORS, UI, SHADOWS, OVERLAYS, FONT_FAMILY } from "@/lib/theme"
 import ScrollShineText from "@/components/shared/scroll-shine-text"
+import { AnimatedButton } from "@/components/ui/animated-button"
 
 const highlights = [
   {
@@ -43,8 +44,11 @@ const slideFrom = [{ x: -80 }, { x: 0, y: 40 }, { x: 80 }]
 export default function QuickLinks() {
   const scrollToSection = (href: string) => {
     if (typeof document === "undefined") return
+
     try {
-      document.querySelector(href)?.scrollIntoView({ behavior: "smooth" })
+      document.querySelector(href)?.scrollIntoView({
+        behavior: "smooth",
+      })
     } catch (e) {
       console.warn("Scroll error:", e)
     }
@@ -53,42 +57,38 @@ export default function QuickLinks() {
   return (
     <section
       className="relative overflow-hidden py-24 md:py-36"
-      style={{ background: UI.section.dark, fontFamily: "'DM Sans', sans-serif" }}
+      style={{
+        background: UI.section.dark,
+        fontFamily: FONT_FAMILY.sans,
+      }}
     >
-      {/* Ambient glow */}
+      {/* Ambient Glow */}
       <div
         className="pointer-events-none absolute left-1/2 top-0 h-[600px] w-[1000px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.05]"
-        style={{ background: `radial-gradient(ellipse, ${COLORS.teal}, transparent 70%)` }}
+        style={{
+          background: `radial-gradient(ellipse, ${COLORS.teal}, transparent 70%)`,
+        }}
       />
 
       <div className="container mx-auto max-w-7xl px-4">
-
-        {/* ── Header ── */}
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 34 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          transition={{
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
+          }}
           viewport={{ once: true }}
           className="mb-16 text-center md:mb-20"
         >
-          <motion.div
-            className="mb-5 inline-flex items-center gap-2 rounded-full px-5 py-2 text-[10px] font-bold uppercase tracking-[0.28em]"
-            style={{
-              background: UI.card.darkSoft,
-              color: UI.text.muted,
-              border: "1px solid rgba(200,217,230,0.12)",
-            }}
-            animate={{ y: [0, -5, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <Sparkles size={13} />
-            Quick Access
-          </motion.div>
-
           <ScrollShineText
             as="h2"
             className="block justify-center text-center text-5xl font-semibold leading-[1.05] md:text-7xl"
-            style={{ color: UI.text.light, fontFamily: "'Cormorant Garamond', serif" }}
+            style={{
+              color: UI.text.light,
+              fontFamily: FONT_FAMILY.heading,
+            }}
           >
             Explore Campus Life
           </ScrollShineText>
@@ -97,120 +97,120 @@ export default function QuickLinks() {
             className="mx-auto mt-5 max-w-xl text-base font-light leading-relaxed md:text-lg"
             style={{ color: UI.text.muted }}
           >
-            Location, accommodation, facilities, and student activities — all in one place.
+            Location, accommodation, facilities, and student activities —
+            all in one place.
           </p>
         </motion.div>
 
-        {/* ── Cards Grid ── */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3 lg:gap-7">
+        {/* Cards */}
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 lg:gap-7">
           {highlights.map((item, index) => {
             const Icon = item.icon
 
             return (
               <motion.div
                 key={item.id}
-                initial={{ opacity: 0, x: slideFrom[index].x, y: slideFrom[index].y ?? 0 }}
-                whileInView={{ opacity: 1, x: 0, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
-                viewport={{ once: true, amount: 0.15 }}
+                initial={{
+                  opacity: 0,
+                  x: slideFrom[index].x,
+                  y: slideFrom[index].y ?? 0,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                }}
+                transition={{
+                  duration: 0.8,
+                  delay: index * 0.12,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                viewport={{
+                  once: true,
+                  amount: 0.15,
+                }}
                 className="h-full"
               >
                 <motion.div
-                  whileHover={{ y: -10 }}
-                  transition={{ type: "spring", stiffness: 260, damping: 22 }}
                   className="group relative flex h-full min-h-[420px] flex-col overflow-hidden rounded-[2rem] p-7 lg:p-8"
                   style={{
-                    background: "#FAFBFC",
-                    border: "1px solid #E2E8F0",
-                    boxShadow: "0 24px 60px rgba(0,0,0,0.22)",
+                    background: COLORS.panelBg,
+                    border: `1px solid ${COLORS.panelBorder}`,
+                    boxShadow: SHADOWS.cardLight,
                   }}
                 >
-                  {/* Hover tint overlay */}
+                  {/* Number */}
                   <div
-                    className="pointer-events-none absolute inset-0 rounded-[2rem] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                    style={{ background: "linear-gradient(135deg, rgba(86,124,141,0.04) 0%, transparent 60%)" }}
-                  />
-
-                  {/* Watermark number */}
-                  <motion.div
                     className="pointer-events-none absolute right-6 top-5 select-none text-[68px] font-black leading-none"
                     style={{
                       color: COLORS.teal,
                       opacity: 0.08,
-                      fontFamily: "'Cormorant Garamond', serif",
+                      fontFamily: FONT_FAMILY.heading,
                     }}
-                    whileHover={{ opacity: 0.13, y: -6 }}
-                    transition={{ duration: 0.4 }}
                   >
                     {item.label}
-                  </motion.div>
-
-                  {/* Icon chip */}
-                  <div className="relative mb-7">
-                    <motion.div
-                      className="flex h-14 w-14 items-center justify-center rounded-2xl"
-                      style={{
-                        background: "rgba(86,124,141,0.10)",
-                        border: "1px solid rgba(86,124,141,0.20)",
-                        color: COLORS.teal,
-                      }}
-                      whileHover={{ rotate: 6, scale: 1.08 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 18 }}
-                    >
-                      <Icon className="h-6 w-6" />
-                    </motion.div>
                   </div>
 
-                  {/* Text */}
+                  {/* Icon */}
+                  <div className="relative mb-7">
+                    <div
+                      className="flex h-14 w-14 items-center justify-center rounded-2xl"
+                      style={{
+                        background: OVERLAYS.tealSoft,
+                        border: `1px solid ${OVERLAYS.tealBorderLight}`,
+                        color: COLORS.teal,
+                      }}
+                    >
+                      <Icon className="h-6 w-6" />
+                    </div>
+                  </div>
+
+                  {/* Title */}
                   <h3
                     className="mb-4 text-2xl font-semibold leading-tight md:text-[1.65rem]"
-                    style={{ color: COLORS.navy, fontFamily: "'Cormorant Garamond', serif" }}
+                    style={{
+                      color: COLORS.navy,
+                      fontFamily: FONT_FAMILY.heading,
+                    }}
                   >
                     {item.title}
                   </h3>
 
+                  {/* Description */}
                   <p
                     className="mb-8 flex-1 text-sm leading-[1.85]"
-                    style={{ color: COLORS.teal, opacity: 0.85 }}
+                    style={{
+                      color: COLORS.teal,
+                      opacity: 0.85,
+                    }}
                   >
                     {item.description}
                   </p>
 
-                  {/* CTA */}
-                  <motion.button
+                  {/* Button */}
+                  <AnimatedButton
                     onClick={() => scrollToSection(item.href)}
-                    whileHover={{ scale: 1.02, y: -2 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="group/btn relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-xl py-3.5 text-sm font-black uppercase tracking-[0.14em]"
+                    whileTap={{ scale: 0.96 }}
+                    className="relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full py-3.5 text-sm font-black uppercase tracking-[0.14em] transition-all duration-300"
                     style={{
                       background: COLORS.teal,
-                      color: "#fff",
-                      boxShadow: "0 10px 28px rgba(86,124,141,0.32)",
+                      color: COLORS.white,
+                      border: "none",
+                      outline: "none",
+                      boxShadow: "none",
                     }}
                   >
-                    <span className="relative z-10">{item.action}</span>
-                    <ArrowRight className="relative z-10 h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
-                    <span
-                      className="absolute inset-y-0 left-0 w-0 transition-all duration-500 group-hover/btn:w-full"
-                      style={{ background: "rgba(255,255,255,0.10)" }}
-                    />
-                  </motion.button>
+                    <span className="relative z-10">
+                      {item.action}
+                    </span>
 
-                  {/* Bottom accent bar */}
-                  <motion.div
-                    className="absolute bottom-0 left-0 h-[3px] rounded-b-[2rem]"
-                    style={{ background: `linear-gradient(to right, ${COLORS.teal}, rgba(86,124,141,0.3))` }}
-                    initial={{ width: "0%" }}
-                    whileInView={{ width: "100%" }}
-                    transition={{ duration: 0.9, delay: 0.3 + index * 0.1, ease: "easeOut" }}
-                    viewport={{ once: true }}
-                  />
+                    <ArrowRight className="relative z-10 h-4 w-4" />
+                  </AnimatedButton>
                 </motion.div>
               </motion.div>
             )
           })}
         </div>
-
       </div>
     </section>
   )
