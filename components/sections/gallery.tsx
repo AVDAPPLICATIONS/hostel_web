@@ -9,6 +9,7 @@ import {
   useCallback,
   useMemo,
   memo,
+  forwardRef,
 } from "react"
 import {
   motion,
@@ -38,18 +39,18 @@ type Category = (typeof CATEGORIES)[number]
 type Layout = "grid" | "list"
 
 const GALLERY_IMAGES = [
-  { id: 1, src: "https://www.avdvvn.org/assets/images/final_room%202.jpg",  category: "Rooms",       title: "AC Room"           },
-  { id: 2, src: "https://www.avdvvn.org/assets/images/final%20room%204.jpg",category: "Rooms",       title: "Non-AC Room"       },
-  { id: 3, src: "https://www.avdvvn.org/assets/images/d1.jpg",              category: "Rooms",       title: "Dormitory"         },
-  { id: 4, src: "https://www.avdvvn.org/assets/images/jr1.jpg",             category: "Rooms",       title: "Junior Room"       },
-  { id: 5, src: "https://www.avdvvn.org/assets/images/dh1.jpg",             category: "Common Area", title: "Dining Hall"       },
-  { id: 6, src: "https://www.avdvvn.org/assets/images/gym.jpg",             category: "Common Area", title: "Gymnasium"         },
-  { id: 7, src: "https://www.avdvvn.org/assets/images/r1.png",              category: "Common Area", title: "Reading Room"      },
-  { id: 8, src: "https://www.avdvvn.org/assets/images/e3.jpg",              category: "Outdoor",     title: "Cultural Event"    },
-  { id: 9, src: "https://www.avdvvn.org/assets/images/s1.jpg",              category: "Outdoor",     title: "Sports Event"      },
-  { id: 10,src: "https://www.avdvvn.org/assets/images/t1.jpeg",             category: "Outdoor",     title: "Temple"            },
-  { id: 11,src: "https://www.avdvvn.org/assets/images/e1.jpg",              category: "Outdoor",     title: "Celebration"       },
-  { id: 12,src: "https://www.avdvvn.org/assets/images/bathroom.jpg",        category: "Rooms",       title: "Attached Bathroom" },
+  { id: 1, src: "https://www.avdvvn.org/assets/images/final_room%202.jpg", category: "Rooms", title: "AC Room" },
+  { id: 2, src: "/non-ac-room/1.jpg", category: "Rooms", title: "Non-AC Room" },
+  { id: 3, src: "https://www.avdvvn.org/assets/images/d1.jpg", category: "Rooms", title: "Dormitory" },
+  { id: 4, src: "https://www.avdvvn.org/assets/images/jr1.jpg", category: "Rooms", title: "Junior Room" },
+  { id: 5, src: "https://www.avdvvn.org/assets/images/dh1.jpg", category: "Common Area", title: "Dining Hall" },
+  { id: 6, src: "https://www.avdvvn.org/assets/images/gym.jpg", category: "Common Area", title: "Gymnasium" },
+  { id: 7, src: "https://www.avdvvn.org/assets/images/r1.png", category: "Common Area", title: "Reading Room" },
+  { id: 8, src: "https://www.avdvvn.org/assets/images/e3.jpg", category: "Outdoor", title: "Cultural Event" },
+  { id: 9, src: "https://www.avdvvn.org/assets/images/s1.jpg", category: "Outdoor", title: "Sports Event" },
+  { id: 10, src: "https://www.avdvvn.org/assets/images/t1.jpeg", category: "Outdoor", title: "Temple" },
+  { id: 11, src: "https://www.avdvvn.org/assets/images/e1.jpg", category: "Outdoor", title: "Celebration" },
+  { id: 12, src: "https://www.avdvvn.org/assets/images/bathroom.jpg", category: "Rooms", title: "Attached Bathroom" },
 ] as const
 
 type GalleryImage = (typeof GALLERY_IMAGES)[number]
@@ -110,32 +111,30 @@ const MagneticCard = memo(function MagneticCard({
 
 // ── GalleryCard ───────────────────────────────────────────
 
-const GalleryCard = memo(function GalleryCard({
-  image,
-  index,
-  layout,
-  onClick,
-}: {
-  image: GalleryImage
-  index: number
-  layout: Layout
-  onClick: () => void
-}) {
-  const [hovered, setHovered] = useState(false)
+const GalleryCard = forwardRef<
+  HTMLDivElement,
+  {
+    image: GalleryImage
+    index: number
+    layout: Layout
+    onClick: () => void
+  }
+>(function GalleryCard({ image, index, layout, onClick }, ref) {
+    const [hovered, setHovered] = useState(false)
 
-  const sizeClass = layout === "list" ? "aspect-video md:aspect-[21/9]" : "aspect-[4/3]"
+    const sizeClass = layout === "list" ? "aspect-video md:aspect-[21/9]" : "aspect-[4/3]"
 
-  return (
-    <motion.div
-      className={`snap-center min-w-[82vw] ${
-        layout === "list" ? "md:min-w-[75vw] lg:min-w-[65vw]" : "md:min-w-0"
-      }`}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.4, delay: index * 0.05, ease: [0.22, 1, 0.36, 1] }}
-      layout
-    >
+    return (
+      <motion.div
+        ref={ref}
+        className={`snap-center min-w-[82vw] ${layout === "list" ? "md:min-w-[75vw] lg:min-w-[65vw]" : "md:min-w-0"
+          }`}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ duration: 0.4, delay: index * 0.05, ease: [0.22, 1, 0.36, 1] }}
+        layout
+      >
       <MagneticCard className="group block w-full cursor-pointer" onClick={onClick}>
         {/* Keyboard-accessible wrapper */}
         <div
@@ -463,9 +462,8 @@ function Lightbox({
       {(["prev", "next"] as const).map((dir) => (
         <motion.button
           key={dir}
-          className={`absolute ${
-            dir === "prev" ? "left-4 md:left-6" : "right-4 md:right-6"
-          } top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border transition-all`}
+          className={`absolute ${dir === "prev" ? "left-4 md:left-6" : "right-4 md:right-6"
+            } top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border transition-all`}
           style={{
             background: OVERLAYS.borderWhiteFaint,
             color: COLORS.white,

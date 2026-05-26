@@ -170,14 +170,11 @@ export default function Hero() {
                   whileHover={{
                     scale: 1.04,
                     y: -2,
-                    backgroundColor: UI.button.primaryHover,
                   }}
                   whileTap={{ scale: 0.96 }}
                   onClick={() => scrollToSection("#contact")}
                   className="h-14 min-w-[190px] rounded-full px-8 py-4 text-base font-black transition-all"
                   style={{
-                    background: UI.button.primary,
-                    color: COLORS.white,
                     boxShadow: SHADOWS.buttonPrimary,
                   }}
                 >

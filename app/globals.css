@@ -308,3 +308,31 @@ button {
     color-scheme: light dark;
   }
 }
+
+/* Custom Button Slide Hover Animations */
+.btn-slide-primary {
+  background: linear-gradient(to right, #2f4156 50%, #567c8d 50%) !important;
+  background-size: 200% 100% !important;
+  background-position: right bottom !important;
+  color: #ffffff !important;
+  transition: background-position 0.4s ease-out, color 0.4s ease-out, transform 0.2s ease-out, box-shadow 0.2s ease-out !important;
+}
+
+.btn-slide-primary:hover {
+  background-position: left bottom !important;
+  color: #ffffff !important;
+}
+
+.btn-slide-secondary {
+  background: linear-gradient(to right, #567c8d 50%, #ffffff 50%) !important;
+  background-size: 200% 100% !important;
+  background-position: right bottom !important;
+  color: #567c8d !important;
+  border: 2px solid #567c8d !important;
+  transition: background-position 0.4s ease-out, color 0.4s ease-out, transform 0.2s ease-out, box-shadow 0.2s ease-out !important;
+}
+
+.btn-slide-secondary:hover {
+  background-position: left bottom !important;
+  color: #ffffff !important;
+}

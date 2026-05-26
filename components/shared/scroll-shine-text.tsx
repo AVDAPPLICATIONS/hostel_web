@@ -11,6 +11,7 @@ interface ScrollShineTextProps {
   delay?: number
   style?: CSSProperties
   as?: ElementType
+  id?: string
 }
 
 /**
@@ -24,7 +25,8 @@ export default function ScrollShineText({
   once = true,
   delay = 0,
   style,
-  as: Component = "div"
+  as: Component = "div",
+  id,
 }: ScrollShineTextProps) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once, margin: "-10% 0px" })
@@ -64,6 +66,7 @@ export default function ScrollShineText({
   return (
     <motion.div
       ref={ref}
+      id={id}
       variants={containerVariants}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}

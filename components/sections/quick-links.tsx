@@ -193,8 +193,6 @@ export default function QuickLinks() {
                     whileTap={{ scale: 0.96 }}
                     className="relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full py-3.5 text-sm font-black uppercase tracking-[0.14em] transition-all duration-300"
                     style={{
-                      background: COLORS.teal,
-                      color: COLORS.white,
                       border: "none",
                       outline: "none",
                       boxShadow: "none",

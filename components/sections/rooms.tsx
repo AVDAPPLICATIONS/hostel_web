@@ -518,12 +518,10 @@ function ContentPanel({ room }: ContentPanelProps) {
           {/* CTA */}
           <div className="mt-auto flex flex-col gap-3 sm:flex-row sm:items-center">
             <AnimatedButton
-              whileHover={{ scale: 1.04, y: -2, backgroundColor: UI.button.primaryHover }}
+              whileHover={{ scale: 1.04, y: -2 }}
               whileTap={{ scale: 0.96 }}
               className="group flex flex-1 items-center justify-center gap-2.5 rounded-full px-6 py-3.5 text-sm font-black transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
               style={{
-                background: UI.button.primary,
-                color: COLORS.white,
                 boxShadow: SHADOWS.buttonPrimary,
               }}
               aria-label={`Enquire about the ${room.title}`}

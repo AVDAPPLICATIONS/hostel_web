@@ -40,7 +40,7 @@ const CONTACT = {
 }
 
 const SOCIAL_LINKS = [
-  { icon: InstagramIcon, link: "#", label: "Instagram" },
+  { icon: InstagramIcon, link: "https://www.instagram.com/harisaurabhhostel?igsh=Y2t3dmcxaWs4a3E4", label: "Instagram" },
   { icon: FacebookIcon, link: "#", label: "Facebook" },
   { icon: MessageCircle, link: "https://wa.me/919712977261", label: "WhatsApp" },
 ]

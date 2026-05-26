@@ -40,14 +40,14 @@ const fields = [
   { name: "firstName", label: "First Name", placeholder: "Rahul", required: true, icon: User },
   { name: "middleName", label: "Middle Name", placeholder: "Father Name", icon: User },
   { name: "lastName", label: "Last Name", placeholder: "Patel", icon: User },
-  { name: "contactNo", label: "Contact No", placeholder: "+91 98765 43210", icon: Phone },
+  { name: "contactNo", label: "Contact No", placeholder: "+91 98765 43210", required: true, icon: Phone },
   { name: "fatherContactNo", label: "Father Contact No", placeholder: "+91 98765 43210", icon: Phone },
-  { name: "state", label: "State", placeholder: "Select State", icon: Building2 },
-  { name: "district", label: "District", placeholder: "Select District", icon: Building2 },
-  { name: "city", label: "City", placeholder: "Enter or Select City", icon: MapPin },
-  { name: "school", label: "College / School", placeholder: "Select College", icon: GraduationCap },
-  { name: "course", label: "Course", placeholder: "B.Tech", icon: BookOpen },
-  { name: "semester", label: "Semester", placeholder: "Select Semester", icon: CalendarDays },
+  { name: "state", label: "State", placeholder: "Select State", required: true, icon: Building2 },
+  { name: "district", label: "District", placeholder: "Select District", required: true, icon: Building2 },
+  { name: "city", label: "City", placeholder: "Enter or Select City", required: true, icon: MapPin },
+  { name: "school", label: "College / School", placeholder: "Select College", required: true, icon: GraduationCap },
+  { name: "course", label: "Course", placeholder: "B.Tech", required: true, icon: BookOpen },
+  { name: "semester", label: "Semester", placeholder: "Select Semester", required: true, icon: CalendarDays },
   { name: "reference", label: "Reference", placeholder: "Friend, Family, etc.", icon: Users },
 ] as const
 
@@ -218,9 +218,29 @@ export default function Contact() {
   const statesList = Object.keys(indianGeoData).sort()
 
   const nextStep = () => {
-    if (currentStep === 1 && !formData.firstName.trim()) {
-      alert("Please enter your First Name")
-      return
+    if (currentStep === 1) {
+      if (!formData.firstName.trim()) {
+        alert("Please enter your First Name")
+        return
+      }
+      if (!formData.contactNo.trim()) {
+        alert("Please enter your Contact Number")
+        return
+      }
+    }
+    if (currentStep === 2) {
+      if (!formData.state) {
+        alert("Please select your State")
+        return
+      }
+      if (!formData.district) {
+        alert("Please select your District")
+        return
+      }
+      if (!formData.city.trim()) {
+        alert("Please select or enter your City")
+        return
+      }
     }
     setCurrentStep((prev) => Math.min(prev + 1, totalSteps))
   }
@@ -271,6 +291,54 @@ export default function Contact() {
   const handleSubmit = async (e?: React.FormEvent | React.MouseEvent) => {
     if (e && e.preventDefault) e.preventDefault()
     if (isSubmitting || submitted) return
+
+    // Validate Step 1
+    if (!formData.firstName.trim()) {
+      setCurrentStep(1)
+      alert("Please enter your First Name")
+      return
+    }
+    if (!formData.contactNo.trim()) {
+      setCurrentStep(1)
+      alert("Please enter your Contact Number")
+      return
+    }
+
+    // Validate Step 2
+    if (currentStep >= 2) {
+      if (!formData.state) {
+        setCurrentStep(2)
+        alert("Please select your State")
+        return
+      }
+      if (!formData.district) {
+        setCurrentStep(2)
+        alert("Please select your District")
+        return
+      }
+      if (!formData.city.trim()) {
+        setCurrentStep(2)
+        alert("Please select or enter your City")
+        return
+      }
+    }
+
+    // Validate Step 3
+    if (currentStep === 3) {
+      if (!formData.school.trim()) {
+        alert("Please select or enter your College / School")
+        return
+      }
+      if (!formData.course.trim()) {
+        alert("Please select or enter your Course")
+        return
+      }
+      if (!formData.semester.trim()) {
+        alert("Please select your Semester")
+        return
+      }
+    }
+
     if (currentStep < totalSteps) {
       nextStep()
       return
@@ -573,11 +641,7 @@ export default function Contact() {
                           whileHover={{ scale: 1.04, y: -2 }}
                           whileTap={{ scale: 0.96 }}
                           className="flex w-full items-center justify-center gap-3 rounded-full py-4 text-[15px] font-black transition-all md:py-[18px]"
-                          style={{
-                            background: COLORS.white,
-                            color: UI.button.primary,
-                            border: `2px solid ${UI.button.primary}`,
-                          }}
+                          variant="secondary"
                         >
                           Back
                         </AnimatedButton>
@@ -587,12 +651,10 @@ export default function Contact() {
                         <AnimatedButton
                           type="button"
                           onClick={nextStep}
-                          whileHover={{ scale: 1.04, y: -2, backgroundColor: UI.button.primaryHover }}
+                          whileHover={{ scale: 1.04, y: -2 }}
                           whileTap={{ scale: 0.96 }}
                           className="group flex w-full items-center justify-center gap-3 rounded-full py-4 text-[15px] font-black transition-all md:py-[18px]"
                           style={{
-                            background: UI.button.primary,
-                            color: COLORS.white,
                             boxShadow: SHADOWS.buttonPrimary,
                           }}
                         >
@@ -604,12 +666,10 @@ export default function Contact() {
                           type="submit"
                           onClick={handleSubmit}
                           disabled={isSubmitting}
-                          whileHover={{ scale: 1.04, y: -2, backgroundColor: UI.button.primaryHover }}
+                          whileHover={{ scale: 1.04, y: -2 }}
                           whileTap={{ scale: 0.96 }}
                           className="group flex w-full items-center justify-center gap-3 rounded-full py-4 text-[15px] font-black transition-all disabled:cursor-not-allowed disabled:opacity-70 md:py-[18px]"
                           style={{
-                            background: UI.button.primary,
-                            color: COLORS.white,
                             boxShadow: SHADOWS.buttonPrimary,
                           }}
                         >

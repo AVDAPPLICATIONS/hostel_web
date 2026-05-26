@@ -363,8 +363,6 @@ export default function Arrival() {
                   }
                   className="flex w-full items-center justify-center gap-2.5 rounded-full py-3.5 text-sm font-black sm:py-4"
                   style={{
-                    background: UI.button.primary,
-                    color: COLORS.white,
                     border: "none",
                     outline: "none",
                     boxShadow: "none",
