@@ -496,7 +496,7 @@ function ContentPanel({ room }: ContentPanelProps) {
 
             <p
               className="mt-3.5 text-sm leading-[1.85]"
-              style={{ color: COLORS.softNavy, opacity: 0.72 }}
+              style={{ color: "#6B7B8D" }}
             >
               {room.description}
             </p>

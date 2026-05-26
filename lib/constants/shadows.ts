@@ -1,57 +1,60 @@
 // lib/constants/shadows.ts
 // ─── Box-Shadow Tokens ─────────────────────────────────────────────────────────
+// Shadow base: #F5C0A8 (soft peach) — warm, light shadows matching the palette.
+// rgba(245,192,168,...) used for warm-toned shadows.
+// rgba(232,68,28,...) used for terracotta accent glows on buttons.
 
 export const SHADOWS = {
   // ── Card shadows ─────────────────────────────────────────
-  card: "0 32px 90px rgba(0, 0, 0, 0.28)",
-  cardSoft: "0 28px 70px rgba(0, 0, 0, 0.22)",
-  cardLight: "0 24px 60px rgba(0,0,0,0.22)",
-  cardSubtle: "0 6px 20px rgba(0,0,0,0.16)",
-  cardHover: "0 20px 50px rgba(0,0,0,0.28)",
+  card: "0 32px 90px rgba(245, 192, 168, 0.28)",
+  cardSoft: "0 28px 70px rgba(245, 192, 168, 0.22)",
+  cardLight: "0 24px 60px rgba(245, 192, 168, 0.18)",
+  cardSubtle: "0 6px 20px rgba(245, 192, 168, 0.14)",
+  cardHover: "0 20px 50px rgba(245, 192, 168, 0.28)",
 
   // ── Showcase (large feature cards) ───────────────────────
-  showcase: "0 40px 100px rgba(0,0,0,0.40)",
-  showcaseSoft: "0 40px 100px rgba(0,0,0,0.38)",
-  showcaseDeep: "0 40px 100px rgba(0,0,0,0.45)",
+  showcase: "0 40px 100px rgba(245, 192, 168, 0.32)",
+  showcaseSoft: "0 40px 100px rgba(245, 192, 168, 0.28)",
+  showcaseDeep: "0 40px 100px rgba(245, 192, 168, 0.38)",
 
   // ── General-purpose ──────────────────────────────────────
-  soft: "0 18px 40px rgba(47, 65, 86, 0.18)",
-  light: "0 12px 28px rgba(47, 65, 86, 0.12)",
-  image: "0 22px 50px rgba(47, 65, 86, 0.18)",
+  soft: "0 18px 40px rgba(245, 192, 168, 0.20)",
+  light: "0 12px 28px rgba(245, 192, 168, 0.16)",
+  image: "0 22px 50px rgba(245, 192, 168, 0.22)",
 
   // ── Navigation ───────────────────────────────────────────
-  nav: "0 16px 46px rgba(0, 0, 0, 0.22)",
+  nav: "0 16px 46px rgba(245, 192, 168, 0.18)",
 
   // ── Button shadows ───────────────────────────────────────
-  button: "0 16px 34px rgba(47, 65, 86, 0.18)",
-  buttonPrimary: "0 12px 32px rgba(86,124,141,0.38)",
-  buttonTeal: "0 10px 28px rgba(86,124,141,0.32)",
-  buttonActive: "0 8px 22px rgba(86,124,141,0.35)",
-  buttonRest: "0 2px 6px rgba(0,0,0,0.06)",
-  buttonHeroCta: "0 10px 30px rgba(0, 0, 0, 0.15)",
+  button: "0 16px 34px rgba(245, 192, 168, 0.22)",
+  buttonPrimary: "0 12px 32px rgba(232, 68, 28, 0.36)",
+  buttonTeal: "0 10px 28px rgba(232, 68, 28, 0.30)",
+  buttonActive: "0 8px 22px rgba(232, 68, 28, 0.32)",
+  buttonRest: "0 2px 6px rgba(245, 192, 168, 0.12)",
+  buttonHeroCta: "0 10px 30px rgba(232, 68, 28, 0.22)",
 
   // ── Route / transport card states ────────────────────────
-  routeActive: "0 8px 28px rgba(86,124,141,0.18)",
-  routeRest: "0 2px 8px rgba(0,0,0,0.04)",
+  routeActive: "0 8px 28px rgba(232, 68, 28, 0.20)",
+  routeRest: "0 2px 8px rgba(245, 192, 168, 0.10)",
 
   // ── Focus rings ──────────────────────────────────────────
-  focus: "0 0 0 4px rgba(200, 217, 230, 0.9), 0 12px 28px rgba(47, 65, 86, 0.16)",
-  inputFocus: "0 0 0 4px rgba(200,217,230,0.85), 0 4px 20px rgba(0,0,0,0.03)",
-  inputRest: "0 2px 12px rgba(0,0,0,0.04)",
+  focus: "0 0 0 4px rgba(232, 68, 28, 0.30), 0 12px 28px rgba(245, 192, 168, 0.20)",
+  inputFocus: "0 0 0 4px rgba(232, 68, 28, 0.28), 0 4px 20px rgba(245, 192, 168, 0.12)",
+  inputRest: "0 2px 12px rgba(245, 192, 168, 0.10)",
 
-  // ── Feature cards ────────────────────────────────────────
-  featureHover: "0 8px 32px rgba(0,0,0,0.22)",
+  // ── Feature cards (no shadow) ────────────────────────────
+  featureHover: "none",
 
   // ── Lightbox ─────────────────────────────────────────────
-  lightbox: "0 40px 100px rgba(0,0,0,0.55)",
+  lightbox: "0 40px 100px rgba(61, 32, 16, 0.50)",
 
   // ── Footer logo ──────────────────────────────────────────
-  logoFooter: "0 4px 20px rgba(0,0,0,0.18)",
+  logoFooter: "0 4px 20px rgba(245, 192, 168, 0.18)",
 
   // ── Select menu ──────────────────────────────────────────
-  menuDropdown: "0 12px 40px rgba(0,0,0,0.12)",
+  menuDropdown: "0 12px 40px rgba(245, 192, 168, 0.16)",
 
   // ── Specific Component Shadows ───────────────────────────
-  heroImage: "0 24px 34px rgba(0,0,0,0.25)",
-  insetTabs: "inset 0 2px 10px rgba(0,0,0,0.15)",
+  heroImage: "0 24px 34px rgba(245, 192, 168, 0.22)",
+  insetTabs: "inset 0 2px 10px rgba(245, 192, 168, 0.14)",
 } as const

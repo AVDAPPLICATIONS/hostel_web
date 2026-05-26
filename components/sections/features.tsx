@@ -108,21 +108,9 @@ function FeatureCard({ icon: Icon, title, description }: Feature) {
         border: `1px solid ${OVERLAYS.borderWhiteFaint}`,
         backdropFilter: "blur(10px)",
       }}
-      onMouseEnter={(e) => {
-        const el = e.currentTarget
-        el.style.background = OVERLAYS.cardGlassHover
-        el.style.border = `1px solid ${OVERLAYS.borderSkyMuted}`
-        el.style.boxShadow = SHADOWS.featureHover
-      }}
-      onMouseLeave={(e) => {
-        const el = e.currentTarget
-        el.style.background = OVERLAYS.cardGlassLight
-        el.style.border = `1px solid ${OVERLAYS.borderWhiteFaint}`
-        el.style.boxShadow = "none"
-      }}
     >
       <div
-        className="flex h-11 w-11 items-center justify-center rounded-xl transition-colors duration-300 group-hover:bg-[var(--color-deep-teal)]"
+        className="flex h-11 w-11 items-center justify-center rounded-xl"
         style={{
           background: OVERLAYS.tealMedium,
           border: `1px solid ${OVERLAYS.tealBorderSoft}`,
@@ -137,7 +125,7 @@ function FeatureCard({ icon: Icon, title, description }: Feature) {
         </h3>
         <p
           className="text-[13px] leading-relaxed"
-          style={{ color: COLORS.sky, opacity: 0.72 }}
+          style={{ color: "#6B7B8D" }}
         >
           {description}
         </p>
@@ -165,7 +153,7 @@ export default function Features() {
       />
 
       <section
-        className="relative overflow-hidden py-24 md:py-36"
+        className="relative overflow-hidden py-20 md:py-28"
         style={{ background: UI.section.dark, fontFamily: FONT_FAMILY.sans }}
       >
         {/* Header */}
@@ -204,12 +192,12 @@ export default function Features() {
           {/* Left fade */}
           <div
             className="pointer-events-none absolute inset-y-0 left-0 z-10 w-28 md:w-48"
-            style={{ background: `linear-gradient(to right, ${COLORS.navy} 10%, transparent)` }}
+            style={{ background: `linear-gradient(to right, ${COLORS.navy} 10%, ${COLORS.navy}00)` }}
           />
           {/* Right fade */}
           <div
             className="pointer-events-none absolute inset-y-0 right-0 z-10 w-28 md:w-48"
-            style={{ background: `linear-gradient(to left, ${COLORS.navy} 10%, transparent)` }}
+            style={{ background: `linear-gradient(to left, ${COLORS.navy} 10%, ${COLORS.navy}00)` }}
           />
 
           {/* Row 1 — scrolls left */}

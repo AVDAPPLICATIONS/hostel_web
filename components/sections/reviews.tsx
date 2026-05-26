@@ -68,7 +68,7 @@ export default function Reviews() {
   return (
     <section
       id="reviews"
-      className="relative overflow-hidden py-24 md:py-36"
+      className="relative overflow-hidden py-20 md:py-28"
       style={{ background: UI.section.dark, fontFamily: FONT_FAMILY.sans }}
     >
       <div className="container mx-auto max-w-6xl px-4">
@@ -159,7 +159,7 @@ export default function Reviews() {
                   </p>
                   <p
                     className="text-[10px] font-black uppercase tracking-[0.2em]"
-                    style={{ color: COLORS.sky, opacity: 0.8 }}
+                    style={{ color: "#6B7B8D", opacity: 0.8 }}
                   >
                     {review.tag}
                   </p>

@@ -364,7 +364,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden py-24 md:py-36"
+      className="relative overflow-hidden py-20 md:py-28"
       style={{ background: UI.section.dark, fontFamily: FONT_FAMILY.sans }}
     >
       <div className="container mx-auto max-w-7xl px-4">

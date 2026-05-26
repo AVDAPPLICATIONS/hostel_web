@@ -1,5 +1,17 @@
 "use client"
 
+// ─── ScrollShineText ──────────────────────────────────────────────────────────
+//
+// Props
+//   immediate  — skips the useInView gate and the initial hidden state.
+//                Use for headings in sections that are already in the viewport
+//                on first paint (e.g. the very first below-fold section heading).
+//                Above-fold H1 in the Hero should NOT use this component at all;
+//                it renders as plain <h1 className="shining-text"> instead.
+//
+//   once       — default true; don't re-animate when element scrolls in/out.
+//   delay      — stagger delay in seconds (default 0).
+
 import { motion, useInView } from "framer-motion"
 import { useRef, CSSProperties, ElementType, useMemo } from "react"
 import { cn } from "@/lib/utils"
@@ -12,54 +24,54 @@ interface ScrollShineTextProps {
   style?: CSSProperties
   as?: ElementType
   id?: string
+  /** Skip useInView gate — text visible immediately, animation plays from start. */
+  immediate?: boolean
 }
 
-/**
- * Optimized premium text component.
- * Automatically chooses between per-word and per-block animation based on length
- * to ensure high performance even on mobile.
- */
-export default function ScrollShineText({ 
-  children, 
-  className, 
+export default function ScrollShineText({
+  children,
+  className,
   once = true,
   delay = 0,
   style,
   as: Component = "div",
   id,
+  immediate = false,
 }: ScrollShineTextProps) {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once, margin: "-10% 0px" })
+  // When `immediate`, treat the element as always in-view
+  const isInViewNative = useInView(ref, { once, margin: "-8% 0px" })
+  const isInView = immediate || isInViewNative
 
-  // Performance Optimization: Only split by word if text is short (titles)
   const words = useMemo(() => children.split(" "), [children])
-  const isLongText = words.length > 20
+  // Use block animation for long text; word stagger for short headings
+  const isLongText = words.length > 18
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: isLongText ? 0 : 0.08,
         delayChildren: delay,
       },
     },
   }
 
   const revealVariants = {
-    hidden: { 
-      y: isLongText ? 20 : "110%", 
+    hidden: {
+      y: isLongText ? 16 : "105%",
       opacity: 0,
-      rotateX: isLongText ? 0 : 45,
+      rotateX: isLongText ? 0 : 30,
     },
-    visible: { 
-      y: 0, 
+    visible: {
+      y: 0,
       opacity: 1,
       rotateX: 0,
       transition: {
-        duration: isLongText ? 0.8 : 1.2,
-        ease: [0.22, 1, 0.36, 1]
-      }
+        duration: isLongText ? 0.7 : 1.0,
+        ease: [0.22, 1, 0.36, 1],
+      },
     },
   }
 
@@ -71,28 +83,20 @@ export default function ScrollShineText({
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       className={cn("relative flex flex-wrap", className)}
-      style={{ ...style, transform: "translateZ(0)" }} // Hardware acceleration
+      style={{ ...style, transform: "translateZ(0)" }}
     >
       <Component className="contents">
         {isLongText ? (
-          // Optimized for long text: single animation block
-          <motion.span
-            variants={revealVariants}
-            className="shining-text inline-block"
-          >
+          <motion.span variants={revealVariants} className="shining-text inline-block">
             {children}
           </motion.span>
         ) : (
-          // Premium for short text: word-by-word stagger
           words.map((word, i) => (
             <span
               key={i}
-              className="relative inline-flex overflow-hidden py-[0.1em] mr-[0.35em] last:mr-0"
+              className="relative mr-[0.32em] inline-flex overflow-hidden py-[0.08em] last:mr-0"
             >
-              <motion.span
-                variants={revealVariants}
-                className="shining-text inline-block"
-              >
+              <motion.span variants={revealVariants} className="shining-text inline-block">
                 {word}
               </motion.span>
             </span>

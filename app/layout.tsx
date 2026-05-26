@@ -14,17 +14,21 @@ import { cn } from "@/lib/utils"
 import { COLORS } from "@/lib/theme"
 
 /* ── Fonts ─────────────────────────────────────────────────────────────── */
+// display:"swap" lets text paint immediately with a fallback font,
+// then swap once the web font arrives — critical for LCP.
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
+  preload: true,
 })
 
 const fontMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
-  display: "swap",
+  display: "optional",   // mono font is non-critical — use optional to avoid FOUT
+  preload: false,
 })
 
 const dmSans = DM_Sans({
@@ -32,6 +36,7 @@ const dmSans = DM_Sans({
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-dm-sans",
   display: "swap",
+  preload: true,
 })
 
 const cormorant = Cormorant_Garamond({
@@ -40,6 +45,7 @@ const cormorant = Cormorant_Garamond({
   style: ["normal", "italic"],
   variable: "--font-cormorant",
   display: "swap",
+  preload: false, // heading font — swap is fine; don't preload to save connection slots
 })
 
 /* ── Constants ──────────────────────────────────────────────────────────── */
@@ -187,6 +193,14 @@ export default function RootLayout({
         } as React.CSSProperties
       }
     >
+      <head>
+        {/* Preconnect to external image/asset origins used in critical above-fold content */}
+        <link rel="preconnect" href="https://www.avdvvn.org" />
+        <link rel="dns-prefetch" href="https://www.avdvvn.org" />
+        {/* Google Fonts preconnect (Next.js also adds these, but explicit is safer) */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+      </head>
       <body className="min-h-screen overflow-x-hidden bg-background text-foreground tracking-wide">
         <ThemeProvider>
           <SmoothScroll>

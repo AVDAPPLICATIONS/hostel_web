@@ -1,41 +1,46 @@
 // lib/constants/colors.ts
 // ─── Brand Color Palette ───────────────────────────────────────────────────────
 // Single source of truth for every color used across the UI.
+// Warm orange / terracotta palette.
 
 export const COLORS = {
   // ── Main palette ─────────────────────────────────────────
-  navy: "#2F4156",
-  teal: "#567C8D",
-  sky: "#C8D9E6",
-  beige: "#F5EFEB",
+  navy: "#3D2010",        // dark warm brown  (replaces navy #2F4156)
+  teal: "#E8441C",        // terracotta red   (replaces teal #567C8D)
+  sky: "#F5C4A8",         // warm peach       (replaces sky #C8D9E6)
+  beige: "#FFF8F3",       // warm near-white  (replaces beige #F5EFEB)
   white: "#FFFFFF",
 
   // ── Supporting shades ────────────────────────────────────
-  deepNavy: "#243447",
-  darkerNavy: "#1D2A38",
-  softNavy: "#3B5066",
+  deepNavy: "#2C1508",    // deeper warm brown
+  darkerNavy: "#1E0E05",  // darkest warm brown
+  softNavy: "#5C3018",    // medium warm brown
+  peachBg: "#FDE7D9",       // Light peach — page background
+  brandDarker: "#1E1E1E",
+  brandDarkest: "#141414",
+  shadowBase: "#3E261A",
 
-  deepTeal: "#466A79",
-  softTeal: "#6E91A0",
+  deepTeal: "#C03A16",    // deeper terracotta
+  softTeal: "#F0704A",    // lighter terracotta
 
-  softSky: "#D9E6EE",
-  paleSky: "#EEF5F8",
+  softSky: "#FDDCC8",     // light warm peach
+  paleSky: "#FEF0E8",     // very light warm peach
 
-  softBeige: "#FAF7F4",
-  warmBeige: "#EFE7E1",
+  softBeige: "#FFFAF7",   // warm white
+  warmBeige: "#F5EDE5",   // warm cream
 
   // ── Panel / surface colors (light content panels) ────────
   panelBg: "#FAFBFC",
-  panelBorder: "#E2E8F0",
-  panelBorderAlt: "#F1F5F9",
+  panelBorder: "#F0DDD0",
+  panelBorderAlt: "#F8EDE5",
 
   // ── Neutral grays ───────────────────────────────────────
   muted400: "#CBD5E0",
   slate400: "#94a3b8",
 
   // ── Accent: gold / warm ──────────────────────────────────
-  gold: "#C8A96E",
-  heroCtaBg: "rgba(200, 169, 110, 0.85)",
+  gold: "#E8441C",
+  heroCtaBg: "rgba(232,68,28,0.85)",
 
   // ── Cinematic dark surfaces (virtual-tour) ───────────────
   cinematicDark: "#060d16",

@@ -25,11 +25,12 @@ export { SPACING } from "@/lib/constants/spacing"
 export const UI = {
   section: {
     dark: COLORS.navy,
-    darker: COLORS.deepNavy,
-    darkest: COLORS.darkerNavy,
+    darker: COLORS.brandDarker,
+    darkest: COLORS.brandDarkest,
     light: COLORS.beige,
     soft: COLORS.sky,
     white: COLORS.white,
+    peachBg: COLORS.peachBg,
   },
 
   text: {
@@ -107,7 +108,7 @@ export const UI = {
     lightText: COLORS.navy,
 
     dark: COLORS.navy,
-    darkHover: COLORS.deepNavy,
+    darkHover: COLORS.brandDarker,
     darkText: COLORS.white,
   },
 
@@ -168,7 +169,7 @@ export const UI = {
 
 export const CSS_VARS = {
   "--color-navy": COLORS.navy,
-  "--color-deep-navy": COLORS.deepNavy,
+  "--color-deep-dark": COLORS.brandDarker,
   "--color-teal": COLORS.teal,
   "--color-deep-teal": COLORS.deepTeal,
   "--color-sky": COLORS.sky,
@@ -176,5 +177,6 @@ export const CSS_VARS = {
   "--color-beige": COLORS.beige,
   "--color-soft-beige": COLORS.softBeige,
   "--color-white": COLORS.white,
+  "--color-peach-bg": COLORS.peachBg,
   "--radius-common": RADIUS.lg,
 } as const

@@ -197,10 +197,7 @@ export default function Arrival() {
 
                   <p
                     className="mt-1.5 text-xs leading-5"
-                    style={{
-                      color: COLORS.teal,
-                      opacity: 0.8,
-                    }}
+                    style={{ color: "#6B7B8D" }}
                   >
                     Select your arrival point to preview the best route.
                   </p>
@@ -332,10 +329,7 @@ export default function Arrival() {
 
                           <p
                             className="text-[11px] leading-4"
-                            style={{
-                              color: COLORS.teal,
-                              opacity: 0.75,
-                            }}
+                            style={{ color: "#6B7B8D" }}
                           >
                             {option.distance} · {option.route}
                           </p>

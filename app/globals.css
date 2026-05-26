@@ -59,110 +59,112 @@
   --radius-22: 22px;
 }
 
-/* 
-  Brand Palette:
-  Navy: #2F4156
-  Teal: #567C8D
-  Sky Blue: #C8D9E6
-  Beige: #F5EFEB
+/*
+  Brand Palette (upgraded — professional deep blue + vibrant teal + warm gold):
+  Navy:  #1C3A5C  — rich, deep professional blue
+  Teal:  #2A8CAA  — vibrant, modern teal accent
+  Sky:   #BDD5E6  — refined sky blue
+  Beige: #F8F3EC  — warm inviting cream
+  Gold:  #D4A237  — premium warm gold
   White: #FFFFFF
 */
 
 :root {
   color-scheme: light dark;
-  --brand-navy: #2f4156;
-  --brand-teal: #567c8d;
-  --brand-sky: #c8d9e6;
-  --brand-beige: #f5efeb;
+  --brand-navy: #1c3a5c;
+  --brand-teal: #2a8caa;
+  --brand-sky: #bdd5e6;
+  --brand-beige: #f8f3ec;
+  --brand-gold: #d4a237;
   --brand-white: #ffffff;
 
-  --background: #2f4156;
+  --background: #1c3a5c;
   --foreground: #ffffff;
 
-  --card: #f5efeb;
-  --card-foreground: #2f4156;
+  --card: #f8f3ec;
+  --card-foreground: #1c3a5c;
 
-  --popover: #f5efeb;
-  --popover-foreground: #2f4156;
+  --popover: #f8f3ec;
+  --popover-foreground: #1c3a5c;
 
-  --primary: #567c8d;
+  --primary: #2a8caa;
   --primary-foreground: #ffffff;
 
-  --secondary: #c8d9e6;
-  --secondary-foreground: #2f4156;
+  --secondary: #bdd5e6;
+  --secondary-foreground: #1c3a5c;
 
-  --muted: #c8d9e6;
-  --muted-foreground: #567c8d;
+  --muted: #bdd5e6;
+  --muted-foreground: #2a8caa;
 
-  --accent: #567c8d;
+  --accent: #2a8caa;
   --accent-foreground: #ffffff;
 
   --destructive: #ef4444;
 
-  --border: rgba(200, 217, 230, 0.45);
+  --border: rgba(189, 213, 230, 0.45);
   --input: #ffffff;
-  --ring: #567c8d;
+  --ring: #2a8caa;
 
-  --chart-1: #2f4156;
-  --chart-2: #567c8d;
-  --chart-3: #c8d9e6;
-  --chart-4: #f5efeb;
-  --chart-5: #ffffff;
+  --chart-1: #1c3a5c;
+  --chart-2: #2a8caa;
+  --chart-3: #bdd5e6;
+  --chart-4: #f8f3ec;
+  --chart-5: #d4a237;
 
   --radius: 22px;
 
-  --sidebar: #2f4156;
+  --sidebar: #1c3a5c;
   --sidebar-foreground: #ffffff;
-  --sidebar-primary: #567c8d;
+  --sidebar-primary: #2a8caa;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #c8d9e6;
-  --sidebar-accent-foreground: #2f4156;
-  --sidebar-border: rgba(200, 217, 230, 0.35);
-  --sidebar-ring: #567c8d;
+  --sidebar-accent: #bdd5e6;
+  --sidebar-accent-foreground: #1c3a5c;
+  --sidebar-border: rgba(189, 213, 230, 0.35);
+  --sidebar-ring: #2a8caa;
 }
 
 .dark {
-  --background: #2f4156;
+  --background: #1c3a5c;
   --foreground: #ffffff;
 
-  --card: #f5efeb;
-  --card-foreground: #2f4156;
+  --card: #f8f3ec;
+  --card-foreground: #1c3a5c;
 
-  --popover: #f5efeb;
-  --popover-foreground: #2f4156;
+  --popover: #f8f3ec;
+  --popover-foreground: #1c3a5c;
 
-  --primary: #567c8d;
+  --primary: #2a8caa;
   --primary-foreground: #ffffff;
 
-  --secondary: #c8d9e6;
-  --secondary-foreground: #2f4156;
+  --secondary: #bdd5e6;
+  --secondary-foreground: #1c3a5c;
 
-  --muted: rgba(200, 217, 230, 0.18);
-  --muted-foreground: #c8d9e6;
+  --muted: rgba(189, 213, 230, 0.18);
+  --muted-foreground: #bdd5e6;
 
-  --accent: #567c8d;
+  --accent: #2a8caa;
   --accent-foreground: #ffffff;
 
   --destructive: #ef4444;
 
-  --border: rgba(200, 217, 230, 0.35);
+  --border: rgba(189, 213, 230, 0.35);
   --input: rgba(255, 255, 255, 0.12);
-  --ring: #c8d9e6;
+  --ring: #bdd5e6;
 
-  --chart-1: #2f4156;
-  --chart-2: #567c8d;
-  --chart-3: #c8d9e6;
-  --chart-4: #f5efeb;
-  --chart-5: #ffffff;
+  --chart-1: #1c3a5c;
+  --chart-2: #2a8caa;
+  --chart-3: #bdd5e6;
+  --chart-4: #f8f3ec;
+  --chart-5: #d4a237;
 
-  --sidebar: #2f4156;
+  --sidebar: #1c3a5c;
   --sidebar-foreground: #ffffff;
-  --sidebar-primary: #567c8d;
+  --sidebar-primary: #2a8caa;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: rgba(245, 239, 235, 0.08);
+  --sidebar-accent: rgba(248, 243, 236, 0.08);
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgba(200, 217, 230, 0.35);
-  --sidebar-ring: #c8d9e6;
+  --sidebar-border: rgba(189, 213, 230, 0.35);
+  --sidebar-ring: #bdd5e6;
 }
 
 @layer base {
@@ -173,6 +175,8 @@
   html {
     @apply font-sans;
     scroll-behavior: smooth;
+    /* Offset anchor scroll targets below the fixed navbar (~72px) */
+    scroll-padding-top: 80px;
   }
 
   body {
@@ -180,6 +184,8 @@
     background-color: var(--brand-navy);
     color: var(--brand-white);
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
@@ -234,9 +240,35 @@
   }
 }
 
-/* Smooth section transitions */
+/* ── Section layout isolation ────────────────────────────────────────────── */
+/* contain:layout+style lets the browser optimise each section independently */
 section {
   position: relative;
+  contain: layout style;
+}
+
+/* ── Hero CSS animations — no JS required ───────────────────────────────── */
+/* These run before any JS executes, so secondary hero elements animate in   */
+/* naturally while the H1 (immediately visible) becomes the LCP.             */
+
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Badge: 0.1 s delay — first element to animate after H1 */
+.hero-badge-reveal {
+  animation: heroFadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+}
+
+/* Subtitle: 0.18 s delay */
+.hero-subtitle-reveal {
+  animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both;
+}
+
+/* Body copy: 0.28 s delay */
+.hero-body-reveal {
+  animation: heroFadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both;
 }
 
 /* Palette shimmer animation */
@@ -254,64 +286,113 @@ section {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(200, 217, 230, 0.16) 50%,
+    rgba(42, 140, 170, 0.18) 50%,
     transparent 100%
   );
   background-size: 200% 100%;
   animation: shimmer 3s ease-in-out infinite;
 }
 
+/*
+  .shining-text
+  ─────────────
+  Used on headings and the hero H1.  Applies a moving gold-on-white shimmer
+  entirely via CSS — zero JS, zero layout thrash, GPU-composited.
+
+  IMPORTANT: `color: transparent` here is intentional.  The text colour is
+  provided by the gradient via background-clip:text.  Because the H1 still
+  has a `color` property in the inline style (fallback), browsers that don't
+  support background-clip will show the inline colour instead.
+*/
 .shining-text {
-  position: relative;
   background: linear-gradient(
     110deg,
     #ffffff 0%,
-    #ffffff 38%,
-    #e8d5b5 45%,
-    #ffffff 50%,
-    #e8d5b5 55%,
-    #ffffff 62%,
+    #ffffff 35%,
+    #f5d070 42%,
+    #ffe898 47%,
+    #f5d070 52%,
+    #ffffff 59%,
     #ffffff 100%
   );
-  background-size: 200% auto;
+  background-size: 220% auto;
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
-  animation: shimmer 2.5s linear infinite;
+  animation: shimmer 2.8s linear infinite;
   display: inline-block;
   will-change: background-position;
-  transform: translateZ(0); /* Force GPU acceleration */
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 @media (max-width: 768px) {
   .shining-text {
-    animation-duration: 5s;
-    background-size: 300% auto;
+    animation-duration: 5.5s;
+    background-size: 320% auto;
   }
 }
 
-/* Smooth transitions for all interactive elements */
+/* Reduce shimmer for users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  .shining-text {
+    animation: none;
+    color: #ffffff;
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+  }
+}
+
+/* Smooth transitions — restricted to GPU-composited properties only.
+   Avoid `transition: all` which triggers layout recalculations. */
 a,
 button {
-  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transition:
+    color       0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity     0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    transform   0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow  0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Selection color */
 ::selection {
-  background: rgba(200, 217, 230, 0.35);
-  color: #2f4156;
+  background: rgba(42, 140, 170, 0.28);
+  color: #1c3a5c;
 }
 
-/* Signal to browser heuristics that the app natively adapts to dark preferences, disabling forced external filters */
+/* Signal to browser heuristics that the app natively adapts to dark preferences */
 @media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: light dark;
-  }
+  :root { color-scheme: light dark; }
 }
+
+/* ── Scroll-progress bar ─────────────────────────────────────────── */
+/* Use transform: scaleX instead of width to stay on the compositor. */
+.scroll-progress-bar {
+  transform-origin: left center;
+  will-change: transform;
+}
+
+/* ── Image loading skeleton ──────────────────────────────────────── */
+img:not([src]) {
+  background-color: rgba(28, 58, 92, 0.35);
+}
+
+/* ── Focus visible — accessible, GPU-safe ────────────────────────── */
+:focus-visible {
+  outline: 2px solid #2a8caa;
+  outline-offset: 3px;
+}
+
+/* ── No-scrollbar utility ────────────────────────────────────────── */
+.no-scrollbar          { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
 
 /* Custom Button Slide Hover Animations */
 .btn-slide-primary {
-  background: linear-gradient(to right, #2f4156 50%, #567c8d 50%) !important;
+  background: linear-gradient(to right, #1c3a5c 50%, #2a8caa 50%) !important;
   background-size: 200% 100% !important;
   background-position: right bottom !important;
   color: #ffffff !important;
@@ -324,15 +405,32 @@ button {
 }
 
 .btn-slide-secondary {
-  background: linear-gradient(to right, #567c8d 50%, #ffffff 50%) !important;
+  background: linear-gradient(to right, #2a8caa 50%, #ffffff 50%) !important;
   background-size: 200% 100% !important;
   background-position: right bottom !important;
-  color: #567c8d !important;
-  border: 2px solid #567c8d !important;
+  color: #2a8caa !important;
+  border: 2px solid #2a8caa !important;
   transition: background-position 0.4s ease-out, color 0.4s ease-out, transform 0.2s ease-out, box-shadow 0.2s ease-out !important;
 }
 
 .btn-slide-secondary:hover {
   background-position: left bottom !important;
   color: #ffffff !important;
+}
+
+/* ── Footer quick-link hover ─────────────────────────────────────────── */
+/* Gives the text a white color lift on hover; underline is handled inline. */
+.footer-link:hover {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* ── Lenis smooth-scroll — prevent native scroll fighting ────────────── */
+html.lenis {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
 }

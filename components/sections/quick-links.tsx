@@ -56,17 +56,18 @@ export default function QuickLinks() {
 
   return (
     <section
-      className="relative overflow-hidden py-24 md:py-36"
+      className="relative overflow-hidden py-20 md:py-28"
       style={{
         background: UI.section.dark,
         fontFamily: FONT_FAMILY.sans,
       }}
     >
-      {/* Ambient Glow */}
+      {/* Subtle static ambient — no animation */}
       <div
-        className="pointer-events-none absolute left-1/2 top-0 h-[600px] w-[1000px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.05]"
+        className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        aria-hidden
         style={{
-          background: `radial-gradient(ellipse, ${COLORS.teal}, transparent 70%)`,
+          background: `radial-gradient(ellipse, ${OVERLAYS.tealSoft}, transparent 70%)`,
         }}
       />
 
@@ -80,7 +81,7 @@ export default function QuickLinks() {
             ease: [0.22, 1, 0.36, 1],
           }}
           viewport={{ once: true }}
-          className="mb-16 text-center md:mb-20"
+          className="mb-12 text-center md:mb-16"
         >
           <ScrollShineText
             as="h2"
@@ -132,77 +133,63 @@ export default function QuickLinks() {
                 className="h-full"
               >
                 <motion.div
-                  className="group relative flex h-full min-h-[420px] flex-col overflow-hidden rounded-[2rem] p-7 lg:p-8"
+                  className="group relative flex h-full min-h-[390px] flex-col overflow-hidden rounded-[1.5rem] p-7 lg:p-8 transition-shadow duration-300"
                   style={{
                     background: COLORS.panelBg,
                     border: `1px solid ${COLORS.panelBorder}`,
-                    boxShadow: SHADOWS.cardLight,
+                    boxShadow: SHADOWS.cardSubtle,
                   }}
+                  whileHover={{ boxShadow: SHADOWS.cardLight, y: -4 }}
+                  transition={{ duration: 0.25 }}
                 >
-                  {/* Number */}
+                  {/* Watermark number */}
                   <div
-                    className="pointer-events-none absolute right-6 top-5 select-none text-[68px] font-black leading-none"
-                    style={{
-                      color: COLORS.teal,
-                      opacity: 0.08,
-                      fontFamily: FONT_FAMILY.heading,
-                    }}
+                    aria-hidden
+                    className="pointer-events-none absolute right-5 top-4 select-none text-[60px] font-black leading-none"
+                    style={{ color: COLORS.teal, opacity: 0.07, fontFamily: FONT_FAMILY.heading }}
                   >
                     {item.label}
                   </div>
 
                   {/* Icon */}
-                  <div className="relative mb-7">
+                  <div className="mb-6">
                     <div
-                      className="flex h-14 w-14 items-center justify-center rounded-2xl"
+                      className="flex h-12 w-12 items-center justify-center rounded-xl"
                       style={{
                         background: OVERLAYS.tealSoft,
                         border: `1px solid ${OVERLAYS.tealBorderLight}`,
                         color: COLORS.teal,
                       }}
                     >
-                      <Icon className="h-6 w-6" />
+                      <Icon className="h-5 w-5" />
                     </div>
                   </div>
 
                   {/* Title */}
                   <h3
-                    className="mb-4 text-2xl font-semibold leading-tight md:text-[1.65rem]"
-                    style={{
-                      color: COLORS.navy,
-                      fontFamily: FONT_FAMILY.heading,
-                    }}
+                    className="mb-3 text-[1.35rem] font-semibold leading-tight md:text-[1.5rem]"
+                    style={{ color: COLORS.navy, fontFamily: FONT_FAMILY.heading }}
                   >
                     {item.title}
                   </h3>
 
                   {/* Description */}
                   <p
-                    className="mb-8 flex-1 text-sm leading-[1.85]"
-                    style={{
-                      color: COLORS.teal,
-                      opacity: 0.85,
-                    }}
+                    className="mb-8 flex-1 text-[0.875rem] leading-[1.8]"
+                    style={{ color: "#6B7B8D" }}
                   >
                     {item.description}
                   </p>
 
-                  {/* Button */}
+                  {/* CTA */}
                   <AnimatedButton
                     onClick={() => scrollToSection(item.href)}
                     whileTap={{ scale: 0.96 }}
-                    className="relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full py-3.5 text-sm font-black uppercase tracking-[0.14em] transition-all duration-300"
-                    style={{
-                      border: "none",
-                      outline: "none",
-                      boxShadow: "none",
-                    }}
+                    className="flex w-full items-center justify-center gap-2.5 rounded-full py-3.5 text-[13px] font-black uppercase tracking-[0.14em]"
+                    style={{ border: "none", outline: "none", boxShadow: "none" }}
                   >
-                    <span className="relative z-10">
-                      {item.action}
-                    </span>
-
-                    <ArrowRight className="relative z-10 h-4 w-4" />
+                    {item.action}
+                    <ArrowRight className="h-3.5 w-3.5" />
                   </AnimatedButton>
                 </motion.div>
               </motion.div>
